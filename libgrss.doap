@@ -6,7 +6,6 @@
 
   <name xml:lang="en">libgrss</name>
   <shortdesc xml:lang="en">A Glib-based library to manage RSS and Atom feeds</shortdesc>
-  <category rdf:resource="http://api.gnome.org/doap-extensions#other" />
 
   <maintainer>
     <foaf:Person>
