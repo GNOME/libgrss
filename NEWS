@@ -1,0 +1,19 @@
+libgrss 0.3
+==============================================================================
+- Added support for geo:* namespace
+- FeedsPool exposes his own SoupSession, to be reused and tuned by the application
+- Bugfixes
+
+libgrss 0.2
+===============================================================================
+- Added PIE (Atom 0.3) format handler
+- Drop direct dependency of GIO, using LibSoup instead
+- Added new class FeedsStore, to abstract permanent storages
+- Added "feed-fetching" signal to FeedsPool
+- First test implementation of PubSubHub subscriber
+- Added some documentation
+- Varius bugs fix
+
+libgrss 0.1
+===============================================================================
+- First release, including abstraction for feed channel, item, enclosure, and a feeds auto-fetcher.

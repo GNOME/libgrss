@@ -1,0 +1,8 @@
+The simple way to install libgrss is:
+
+./configure
+make
+sudo make install
+
+You can also use the --enable-gtk-doc option with ./configure to generate
+documentation in GtkDoc format.

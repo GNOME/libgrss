@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${exec_prefix}/include
+
+Name: libgrss
+Description: GObject RSS handling library
+Version: @VERSION@
+Libs: -L${libdir} -lgrss-1.0
+Cflags: -I${includedir}/libgrss
+Requires: gobject-2.0 libxml-2.0 libsoup-2.4

@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY version SYSTEM "version.xml">
+]>
+
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
+  <bookinfo>
+    <title>libgrss Reference Manual</title>
+    <releaseinfo>Version &version;</releaseinfo>
+  </bookinfo>
+
+  <part id="libgrss">
+    <title>libgrss Overview</title>
+
+    <partintro>
+
+    <para>
+    libgrss is a GObject library intended to be used to manage syndication
+    feeds in convenient way.
+    </para>
+
+    </partintro>
+
+  </part>
+
+  <part id="libgrss-essentials">
+    <title>Essential Elements</title>
+
+    <xi:include href="xml/feed-channel.xml"/>
+    <xi:include href="xml/feed-item.xml"/>
+    <xi:include href="xml/feed-enclosure.xml"/>
+  </part>
+
+  <part id="libgrss-parser">
+    <title>Feeds Parsing</title>
+
+    <xi:include href="xml/feed-parser.xml"/>
+    <xi:include href="xml/feed-handler.xml"/>
+
+    <chapter id="libgrss-available-parsers">
+      <xi:include href="xml/feed-rss-handler.xml"/>
+      <xi:include href="xml/feed-atom-handler.xml"/>
+      <xi:include href="xml/feed-pie-handler.xml"/>
+    </chapter>
+
+    <xi:include href="xml/ns-handler.xml"/>
+  </part>
+
+  <part id="libgrss-utils">
+    <title>Useful Objects</title>
+
+    <xi:include href="xml/feeds-pool.xml"/>
+    <xi:include href="xml/feeds-subscriber.xml"/>
+    <xi:include href="xml/feeds-store.xml"/>
+  </part>
+
+  <index>
+    <title>Index</title>
+  </index>
+
+  <appendix id="license">
+    <title>License</title>
+
+    <para>
+      This library is free software; you can redistribute it and/or
+      modify it under the terms of the <citetitle>GNU Lesser General Public
+      License</citetitle> as published by the Free Software
+      Foundation; either version 3 of the License, or (at your option)
+      any later version.
+    </para>
+
+    <para>
+      This library is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      <citetitle>GNU General Public License</citetitle> for more details.
+    </para>
+
+    <para>
+      You may obtain a copy of the <citetitle>GNU General Public
+      License</citetitle> from the Free Software Foundation by
+      visiting <ulink type="http" url="http://www.fsf.org">their Web
+      site</ulink>.
+    </para>
+  </appendix>
+
+</book>
