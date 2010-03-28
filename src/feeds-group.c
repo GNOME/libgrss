@@ -31,7 +31,7 @@
  * @short_description: import and export group of channels
  *
  * #FeedsGroup is an utility to import and export list of #FeedChannels in
- * different formats, such as OPML
+ * different formats, such as OPML.
  */
 
 #define FEEDS_GROUP_ERROR		feeds_group_error_quark()
@@ -129,8 +129,19 @@ retrieve_group_handler (FeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
 	return NULL;
 }
 
+/**
+ * feeds_group_parse_file:
+ * @group: a #FeedsGroup
+ * @path: path of the file to parse
+ * @error: location for eventual errors
+ *
+ * Parses the given file to obtain list of listed feeds
+ *
+ * Return value: a list of #FeedChannels, or NULL if an error occours and
+ * @error is set
+ */
 GList*
-feeds_group_parse_file (FeedsGroup *groups, const gchar *path, GError *error)
+feeds_group_parse_file (FeedsGroup *group, const gchar *path, GError *error)
 {
 	gchar *contents;
 	gsize len;
@@ -169,7 +180,7 @@ feeds_group_parse_file (FeedsGroup *groups, const gchar *path, GError *error)
 			break;
 		}
 
-		handler = retrieve_group_handler (groups, doc, cur);
+		handler = retrieve_group_handler (group, doc, cur);
 		if (handler == NULL)
 			break;
 

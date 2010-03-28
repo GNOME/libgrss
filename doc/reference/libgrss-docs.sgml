@@ -30,27 +30,14 @@
     <xi:include href="xml/feed-channel.xml"/>
     <xi:include href="xml/feed-item.xml"/>
     <xi:include href="xml/feed-enclosure.xml"/>
-  </part>
-
-  <part id="libgrss-parser">
-    <title>Feeds Parsing</title>
-
     <xi:include href="xml/feed-parser.xml"/>
-    <xi:include href="xml/feed-handler.xml"/>
-
-    <chapter id="libgrss-available-parsers">
-      <xi:include href="xml/feed-rss-handler.xml"/>
-      <xi:include href="xml/feed-atom-handler.xml"/>
-      <xi:include href="xml/feed-pie-handler.xml"/>
-    </chapter>
-
-    <xi:include href="xml/ns-handler.xml"/>
   </part>
 
   <part id="libgrss-utils">
     <title>Useful Objects</title>
 
     <xi:include href="xml/feeds-pool.xml"/>
+    <xi:include href="xml/feeds-group.xml"/>
     <xi:include href="xml/feeds-subscriber.xml"/>
     <xi:include href="xml/feeds-store.xml"/>
   </part>

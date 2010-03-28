@@ -28,9 +28,7 @@
 
 #include "feed-atom-handler.h"
 #include "utils.h"
-#include "feed-channel.h"
-#include "feed-item.h"
-#include "feed-enclosure.h"
+#include "feed-handler.h"
 #include "ns-handler.h"
 
 #define FEED_ATOM_HANDLER_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEED_ATOM_HANDLER_TYPE, FeedAtomHandlerPrivate))

@@ -21,9 +21,7 @@
 #ifndef __NS_HANDLER_H__
 #define __NS_HANDLER_H__
 
-#include "common.h"
-#include "feed-channel.h"
-#include "feed-item.h"
+#include "libgrss.h"
 
 #define NS_HANDLER_TYPE			(ns_handler_get_type())
 #define NS_HANDLER(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), NS_HANDLER_TYPE, NSHandler))

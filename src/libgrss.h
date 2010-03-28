@@ -21,8 +21,18 @@
 #ifndef __LIBGRSS_H__
 #define __LIBGRSS_H__
 
-#include "feed-item.h"
+#include <libsoup/soup.h>
+
+#include <libxml/xmlerror.h>
+#include <libxml/uri.h>
+#include <libxml/parser.h>
+#include <libxml/entities.h>
+#include <libxml/HTMLparser.h>
+#include <libxml/xpath.h>
+
 #include "feed-channel.h"
+#include "feed-enclosure.h"
+#include "feed-item.h"
 #include "feed-parser.h"
 #include "feeds-store.h"
 #include "feeds-pool.h"

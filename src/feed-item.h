@@ -21,9 +21,7 @@
 #ifndef __FEED_ITEM_H__
 #define __FEED_ITEM_H__
 
-#include "common.h"
-#include "feed-enclosure.h"
-#include "feed-channel.h"
+#include "libgrss.h"
 
 #define FEED_ITEM_TYPE		(feed_item_get_type())
 #define FEED_ITEM(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_ITEM_TYPE, FeedItem))

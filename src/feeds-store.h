@@ -20,9 +20,7 @@
 #ifndef __FEEDS_STORE_H__
 #define __FEEDS_STORE_H__
 
-#include "common.h"
-#include "feed-channel.h"
-#include "feed-item.h"
+#include "libgrss.h"
 
 #define FEEDS_STORE_TYPE		(feeds_store_get_type())
 #define FEEDS_STORE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_STORE_TYPE, FeedsStore))

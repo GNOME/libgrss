@@ -21,8 +21,7 @@
 #ifndef __FEED_HANDLER_H__
 #define __FEED_HANDLER_H__
 
-#include "common.h"
-#include "feed-channel.h"
+#include "libgrss.h"
 #include "ns-handler.h"
 
 #define FEED_HANDLER_TYPE			(feed_handler_get_type ())

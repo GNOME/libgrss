@@ -18,8 +18,8 @@
  * Boston, MA  02110-1301, USA.
  */
 
-#include "feed-enclosure.h"
 #include "utils.h"
+#include "feed-enclosure.h"
 
 #define FEED_ENCLOSURE_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEED_ENCLOSURE_TYPE, FeedEnclosurePrivate))
 

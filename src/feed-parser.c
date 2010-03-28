@@ -39,9 +39,8 @@
  * SECTION: feed-parser
  * @short_description: feed parser
  *
- * The #FeedParser is just a wrapper to the many #FeedHandler available:
- * given a #FeedChannel provides to identify his type and invoke the correct
- * parser
+ * The #FeedParser is a wrapper to the many handlers available: given a
+ * #FeedChannel provides to identify his type and invoke the correct parser.
  */
 
 #define FEED_PARSER_ERROR		feed_parser_error_quark()

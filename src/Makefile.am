@@ -11,26 +11,25 @@ INCLUDES = \
 LDADD = $(LIBGRSS_LT_LDFLAGS) -export-dynamic -rpath $(libdir)
 
 sources_private_h = \
+	feed-atom-handler.h        \
+	feed-handler.h             \
+	feed-rss-handler.h         \
+	feed-pie-handler.h         \
+	feeds-group-handler.h      \
+	feeds-opml-group-handler.h \
+	ns-handler.h               \
 	utils.h
 
 sources_public_h = \
-	common.h                   \
 	libgrss.h                  \
-	feed-atom-handler.h        \
 	feed-channel.h             \
 	feed-enclosure.h           \
-	feed-handler.h             \
 	feed-item.h                \
 	feed-parser.h              \
-	feed-rss-handler.h         \
-	feed-pie-handler.h         \
 	feeds-group.h              \
-	feeds-group-handler.h      \
-	feeds-opml-group-handler.h \
 	feeds-pool.h               \
 	feeds-store.h              \
-	feeds-subscriber.h         \
-	ns-handler.h
+	feeds-subscriber.h
 
 sources_c = \
 	$(marshal_source)          \

@@ -21,8 +21,7 @@
 #ifndef __FEEDS_GROUP_HANDLER_H__
 #define __FEEDS_GROUP_HANDLER_H__
 
-#include "common.h"
-#include "feed-channel.h"
+#include "libgrss.h"
 
 #define FEEDS_GROUP_HANDLER_TYPE		(feeds_group_handler_get_type ())
 #define FEEDS_GROUP_HANDLER(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), FEEDS_GROUP_HANDLER_TYPE, FeedsGroupHandler))

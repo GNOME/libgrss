@@ -21,8 +21,7 @@
 #ifndef __FEED_RSS_HANDLER_H__
 #define __FEED_RSS_HANDLER_H__
 
-#include "common.h"
-#include "feed-handler.h"
+#include "libgrss.h"
 
 #define FEED_RSS_HANDLER_TYPE		(feed_rss_handler_get_type())
 #define FEED_RSS_HANDLER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_RSS_HANDLER_TYPE, FeedRssHandler))

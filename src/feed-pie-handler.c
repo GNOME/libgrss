@@ -25,6 +25,7 @@
  * Copyright (C) 2003-2009 Lars Lindner <lars.lindner@gmail.com>
  */
 
+#include "feed-handler.h"
 #include "feed-pie-handler.h"
 #include "utils.h"
 #include "feed-channel.h"

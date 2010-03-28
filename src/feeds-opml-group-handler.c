@@ -26,6 +26,7 @@
  * Copyright (C) 2006-2010 Lars Lindner <lars.lindner@gmail.com>
  */
 
+#include "feeds-group-handler.h"
 #include "feeds-opml-group-handler.h"
 #include "utils.h"
 #include "feed-channel.h"
@@ -47,12 +48,6 @@ static void feeds_group_handler_interface_init (FeedsGroupHandlerInterface *ifac
 G_DEFINE_TYPE_WITH_CODE (FeedsOpmlGroupHandler, feeds_opml_group_handler, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (FEEDS_GROUP_HANDLER_TYPE,
                                                 feeds_group_handler_interface_init));
-
-static GQuark
-feeds_opml_group_handler_error_quark ()
-{
-	return g_quark_from_static_string ("feeds_opml_group_handler_error");
-}
 
 static void
 feeds_opml_group_handler_finalize (GObject *object)

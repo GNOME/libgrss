@@ -21,9 +21,7 @@
 #ifndef __FEEDS_SUBSCRIBER_H__
 #define __FEEDS_SUBSCRIBER_H__
 
-#include "common.h"
-#include "feed-channel.h"
-#include "feed-item.h"
+#include "libgrss.h"
 
 #define FEEDS_SUBSCRIBER_TYPE		(feeds_subscriber_get_type())
 #define FEEDS_SUBSCRIBER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_SUBSCRIBER_TYPE, FeedsSubscriber))

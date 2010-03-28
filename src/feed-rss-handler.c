@@ -34,6 +34,7 @@
  * Copyright (C) 2001 Ximian, Inc. - Chris Lahey <clahey@ximian.com>
  */
 
+#include "feed-handler.h"
 #include "feed-rss-handler.h"
 #include "utils.h"
 #include "feed-channel.h"

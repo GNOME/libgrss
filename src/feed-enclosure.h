@@ -21,7 +21,7 @@
 #ifndef __FEED_ENCLOSURE_H__
 #define __FEED_ENCLOSURE_H__
 
-#include "common.h"
+#include "libgrss.h"
 
 #define FEED_ENCLOSURE_TYPE		(feed_enclosure_get_type())
 #define FEED_ENCLOSURE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_ENCLOSURE_TYPE, FeedEnclosure))

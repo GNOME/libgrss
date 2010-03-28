@@ -21,7 +21,7 @@
 #ifndef __FEED_CHANNEL_H__
 #define __FEED_CHANNEL_H__
 
-#include "common.h"
+#include "libgrss.h"
 
 #define FEED_CHANNEL_TYPE		(feed_channel_get_type())
 #define FEED_CHANNEL(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_CHANNEL_TYPE, FeedChannel))

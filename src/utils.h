@@ -21,8 +21,18 @@
 #ifndef __UTILS_LIBGRSS_H__
 #define __UTILS_LIBGRSS_H__
 
-#include "common.h"
-#include "feed-channel.h"
+#define _XOPEN_SOURCE	600
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <time.h>
+#include <locale.h>
+#include <ctype.h>
+#include <unistd.h>
+
+#include "libgrss.h"
 
 #define PACKAGE			"libgrss"
 

@@ -21,8 +21,7 @@
 #ifndef __FEEDS_POOL_H__
 #define __FEEDS_POOL_H__
 
-#include "common.h"
-#include "feed-channel.h"
+#include "libgrss.h"
 
 #define FEEDS_POOL_TYPE			(feeds_pool_get_type())
 #define FEEDS_POOL(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_POOL_TYPE, FeedsPool))

@@ -21,8 +21,7 @@
 #ifndef __FEED_PARSER_H__
 #define __FEED_PARSER_H__
 
-#include "common.h"
-#include "feed-channel.h"
+#include "libgrss.h"
 
 #define FEED_PARSER_TYPE		(feed_parser_get_type())
 #define FEED_PARSER(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_PARSER_TYPE, FeedParser))
