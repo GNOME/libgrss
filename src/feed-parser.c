@@ -86,7 +86,7 @@ feed_parser_init (FeedParser *object)
 	object->priv = FEED_PARSER_GET_PRIVATE (object);
 }
 
-static GSList *
+static GSList*
 feed_parsers_get_list (FeedParser *parser)
 {
 	FeedHandler *feed;

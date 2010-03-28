@@ -322,7 +322,7 @@ handle_incoming_notification_cb (SoupServer *server, SoupMessage *msg, const cha
 				server as soon as possible
 		*/
 
-		doc = feed_content_to_xml (msg->request_body->data, strlen (msg->request_body->data));
+		doc = content_to_xml (msg->request_body->data, strlen (msg->request_body->data));
 		error = NULL;
 		items = feed_parser_parse (feed->sub->priv->parser, feed->channel, doc, &error);
 

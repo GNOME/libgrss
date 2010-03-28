@@ -305,13 +305,13 @@ atom10_parse_person_construct (xmlNodePtr cur)
 			if (xmlStrEqual (cur->name, BAD_CAST"email")) {
 				if (email)
 					invalid = TRUE;
-				g_free(email);
+				g_free (email);
 				tmp = (gchar *)xmlNodeListGetString(cur->doc, cur->xmlChildrenNode, 1);
 				email = g_strdup_printf(" - <a href=\"mailto:%s\">%s</a>", tmp, tmp);
 				g_free(tmp);
 			}
 
-			if (xmlStrEqual(cur->name, BAD_CAST"uri")) {
+			if (xmlStrEqual (cur->name, BAD_CAST"uri")) {
 				if (!uri)
 					invalid = TRUE;
 				g_free (uri);
@@ -599,7 +599,7 @@ atom10_parse_entry (FeedHandler *self, FeedChannel *feed, xmlNodePtr cur)
 		}
 
 
-		if (xmlStrcmp(cur->ns->href, ATOM10_NS)) {
+		if (xmlStrcmp (cur->ns->href, ATOM10_NS)) {
 			cur = cur->next;
 			continue;
 		}

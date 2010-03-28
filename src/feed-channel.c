@@ -667,7 +667,7 @@ feed_channel_fetch (FeedChannel *channel)
 	status = soup_session_send_message (session, msg);
 
 	if (status >= 200 && status <= 299) {
-		doc = feed_content_to_xml (msg->response_body->data, msg->response_body->length);
+		doc = content_to_xml (msg->response_body->data, msg->response_body->length);
 
 		if (doc != NULL) {
 			parser = feed_parser_new ();

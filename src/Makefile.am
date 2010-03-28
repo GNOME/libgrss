@@ -14,35 +14,41 @@ sources_private_h = \
 	utils.h
 
 sources_public_h = \
-	common.h            \
-	libgrss.h           \
-	feed-atom-handler.h \
-	feed-channel.h      \
-	feed-enclosure.h    \
-	feed-handler.h      \
-	feed-item.h         \
-	feed-parser.h       \
-	feed-rss-handler.h  \
-	feed-pie-handler.h  \
-	feeds-pool.h        \
-	feeds-store.h       \
-	feeds-subscriber.h  \
+	common.h                   \
+	libgrss.h                  \
+	feed-atom-handler.h        \
+	feed-channel.h             \
+	feed-enclosure.h           \
+	feed-handler.h             \
+	feed-item.h                \
+	feed-parser.h              \
+	feed-rss-handler.h         \
+	feed-pie-handler.h         \
+	feeds-group.h              \
+	feeds-group-handler.h      \
+	feeds-opml-group-handler.h \
+	feeds-pool.h               \
+	feeds-store.h              \
+	feeds-subscriber.h         \
 	ns-handler.h
 
 sources_c = \
-	$(marshal_source)   \
-	feed-atom-handler.c \
-	feed-channel.c      \
-	feed-enclosure.c    \
-	feed-handler.c      \
-	feed-item.c         \
-	feed-parser.c       \
-	feed-rss-handler.c  \
-	feed-pie-handler.c  \
-	feeds-pool.c        \
-	feeds-store.c       \
-	feeds-subscriber.c  \
-	ns-handler.c        \
+	$(marshal_source)          \
+	feed-atom-handler.c        \
+	feed-channel.c             \
+	feed-enclosure.c           \
+	feed-handler.c             \
+	feed-item.c                \
+	feed-parser.c              \
+	feed-rss-handler.c         \
+	feed-pie-handler.c         \
+	feeds-group.c              \
+	feeds-group-handler.c      \
+	feeds-opml-group-handler.c \
+	feeds-pool.c               \
+	feeds-store.c              \
+	feeds-subscriber.c         \
+	ns-handler.c               \
 	utils.c
 
 marshal_source = \

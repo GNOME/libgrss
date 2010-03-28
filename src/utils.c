@@ -285,7 +285,7 @@ xml_process_entities (void *ctxt, const xmlChar *name)
 }
 
 xmlDocPtr
-feed_content_to_xml (const gchar *contents, gsize size)
+content_to_xml (const gchar *contents, gsize size)
 {
 	xmlParserCtxtPtr ctxt;
 	xmlDocPtr doc;

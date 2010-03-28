@@ -275,7 +275,7 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data)
 		g_warning ("Unable to download from %s", feed_channel_get_source (feed->channel));
 	}
 	else {
-		doc = feed_content_to_xml ((const gchar*) msg->response_body->data, msg->response_body->length);
+		doc = content_to_xml ((const gchar*) msg->response_body->data, msg->response_body->length);
 
 		if (doc != NULL) {
 			error = NULL;

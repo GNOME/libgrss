@@ -32,7 +32,7 @@ gchar*		unhtmlize		(gchar *string);
 gchar*		unxmlize		(gchar * string);
 gchar*		xhtml_extract		(xmlNodePtr xml, gint xhtmlMode, const gchar *defaultBase);
 
-xmlDocPtr	feed_content_to_xml	(const gchar *contents, gsize size);
+xmlDocPtr	content_to_xml		(const gchar *contents, gsize size);
 
 time_t		date_parse_RFC822	(const gchar *date);
 time_t		date_parse_ISO8601	(const gchar *date);

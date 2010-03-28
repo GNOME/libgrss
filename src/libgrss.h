@@ -27,5 +27,6 @@
 #include "feeds-store.h"
 #include "feeds-pool.h"
 #include "feeds-subscriber.h"
+#include "feeds-group.h"
 
 #endif /* __LIBGRSS_H__ */
