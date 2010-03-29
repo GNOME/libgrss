@@ -449,16 +449,19 @@ ns_atom10_channel (FeedChannel *feed, xmlNodePtr cur)
 	gchar *relation;
 
 	if (!xmlStrcmp (BAD_CAST "link", cur->name)) {
-		href = (gchar*) xmlGetNsProp (cur, BAD_CAST "href", NULL);
 		relation = (gchar*) xmlGetNsProp (cur, BAD_CAST "rel", NULL);
 
-		if (strcmp (relation, "self") == 0)
-			feed_channel_set_pubsubhub (feed, NULL, href);
-		else if (strcmp (relation, "hub") == 0)
-			feed_channel_set_pubsubhub (feed, href, NULL);
+		if (relation != NULL) {
+			href = (gchar*) xmlGetNsProp (cur, BAD_CAST "href", NULL);
 
-		g_free (relation);
-		g_free (href);
+			if (strcmp (relation, "self") == 0)
+				feed_channel_set_pubsubhub (feed, NULL, href);
+			else if (strcmp (relation, "hub") == 0)
+				feed_channel_set_pubsubhub (feed, href, NULL);
+
+			g_free (relation);
+			g_free (href);
+		}
 	}
 }
 
@@ -635,7 +638,7 @@ ns_handler_channel (NSHandler *handler, FeedChannel *feed, xmlNodePtr cur)
 
 	nsh = retrieve_internal_handler (handler, cur);
 
-	if (nsh != NULL) {
+	if (nsh != NULL && nsh->handle_channel != NULL) {
 		nsh->handle_channel (feed, cur);
 		return TRUE;
 	}
@@ -662,7 +665,7 @@ ns_handler_item (NSHandler *handler, FeedItem *item, xmlNodePtr cur)
 
 	nsh = retrieve_internal_handler (handler, cur);
 
-	if (nsh != NULL) {
+	if (nsh != NULL && nsh->handle_item != NULL) {
 		nsh->handle_item (item, cur);
 		return TRUE;
 	}

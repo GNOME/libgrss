@@ -51,6 +51,7 @@ struct _FeedParserPrivate {
 
 enum {
 	FEED_PARSER_PARSE_ERROR,
+	FEED_PARSER_FORMAT_ERROR
 };
 
 G_DEFINE_TYPE (FeedParser, feed_parser, G_TYPE_OBJECT)
@@ -174,16 +175,18 @@ feed_parser_parse (FeedParser *parser, FeedChannel *feed, xmlDocPtr doc, GError 
 	items = NULL;
 
 	do {
-		g_set_error (error, FEED_PARSER_ERROR, FEED_PARSER_PARSE_ERROR, "Empty document!");
-
-		if ((cur = xmlDocGetRootElement (doc)) == NULL)
+		if ((cur = xmlDocGetRootElement (doc)) == NULL) {
+			g_set_error (error, FEED_PARSER_ERROR, FEED_PARSER_PARSE_ERROR, "Empty document!");
 			break;
+		}
 
 		while (cur && xmlIsBlankNode (cur))
 			cur = cur->next;
 
-		if (!cur)
+		if (!cur) {
+			g_set_error (error, FEED_PARSER_ERROR, FEED_PARSER_PARSE_ERROR, "Empty document!");
 			break;
+		}
 
 		if (!cur->name) {
 			g_set_error (error, FEED_PARSER_ERROR, FEED_PARSER_PARSE_ERROR, "Invalid XML!");
@@ -191,8 +194,10 @@ feed_parser_parse (FeedParser *parser, FeedChannel *feed, xmlDocPtr doc, GError 
 		}
 
 		handler = retrieve_feed_handler (parser, doc, cur);
-		if (handler == NULL)
+		if (handler == NULL) {
+			g_set_error (error, FEED_PARSER_ERROR, FEED_PARSER_FORMAT_ERROR, "Unknow format");
 			break;
+		}
 
 		items = feed_handler_parse (handler, feed, doc, error);
 

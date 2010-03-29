@@ -1,3 +1,10 @@
+libgrss 0.4 (UNRELEASED)
+==============================================================================
+- Added FeedsGroup class, abstraction to parse and produce list of feeds
+- Added OPML files parser
+- Cleanup of headers
+- Bugfixes
+
 libgrss 0.3
 ==============================================================================
 - Added support for geo:* namespace
