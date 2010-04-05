@@ -38,7 +38,7 @@
  * engage a subscription for each #FeedChannel passed with
  * feeds_subscriber_listen(), and waits for direct notifications by the
  * remote hub.
- * For more informations look at http://code.google.com/p/pubsubhubbub/
+ * For more information look at http://code.google.com/p/pubsubhubbub/
  */
 
 typedef enum {
@@ -531,7 +531,7 @@ detect_internet_address (FeedsSubscriber *sub)
 	len = sizeof (myaddr);
 	if (getsockname (sockfd, (struct sockaddr*) &myaddr, &len) != 0) {
 		close (sockfd);
-		g_warning ("Unable to obtain informations about interface exposed to Internet");
+		g_warning ("Unable to obtain information about interface exposed to Internet");
 		return NULL;
 	}
 

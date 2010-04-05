@@ -28,7 +28,7 @@
  * SECTION: feed-item
  * @short_description: a feed item
  *
- * #FeedItem is an abstraction for an item, collects all informations about a
+ * #FeedItem is an abstraction for an item, collects all information about a
  * single element found into a feed
  */
 

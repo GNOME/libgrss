@@ -442,7 +442,7 @@ static void
 ns_atom10_channel (FeedChannel *feed, xmlNodePtr cur)
 {
 	/*
-		Used to manage PubSubHub informations in RSS feeds
+		Used to manage PubSubHub information in RSS feeds
 	*/
 
 	gchar *href;
