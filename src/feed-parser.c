@@ -184,7 +184,7 @@ feed_parser_parse (FeedParser *parser, FeedChannel *feed, xmlDocPtr doc, GError 
 			cur = cur->next;
 
 		if (!cur) {
-			g_set_error (error, FEED_PARSER_ERROR, FEED_PARSER_PARSE_ERROR, "Empty document!");
+			g_set_error (error, FEED_PARSER_ERROR, FEED_PARSER_PARSE_ERROR, "Empty XML document!");
 			break;
 		}
 

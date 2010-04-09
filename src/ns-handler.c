@@ -40,8 +40,8 @@ struct _NSHandlerPrivate {
 };
 
 typedef struct {
-	void	(*handle_channel)	(FeedChannel *channel, xmlNodePtr cur);
-	void	(*handle_item)		(FeedItem *item, xmlNodePtr cur);
+	gboolean	(*handle_channel)	(FeedChannel *channel, xmlNodePtr cur);
+	void		(*handle_item)		(FeedItem *item, xmlNodePtr cur);
 } InternalNsHandler;
 
 G_DEFINE_TYPE (NSHandler, ns_handler, G_TYPE_OBJECT);
@@ -67,19 +67,26 @@ ns_handler_class_init (NSHandlerClass *klass)
 	gobject_class->finalize = ns_handler_finalize;
 }
 
-static void
+static gboolean
 ns_admin_channel (FeedChannel *feed, xmlNodePtr cur)
 {
 	gchar *value;
+	gboolean ret;
 
 	value = (gchar*) xmlGetProp (cur, BAD_CAST "resource");
+	ret = FALSE;
 
-	if (!xmlStrcmp (BAD_CAST "errorReportsTo", cur->name))
+	if (!xmlStrcmp (BAD_CAST "errorReportsTo", cur->name)) {
 		feed_channel_set_webmaster (feed, value);
-	else if (!xmlStrcmp (BAD_CAST "generatorAgent", cur->name))
+		ret = TRUE;
+	}
+	else if (!xmlStrcmp (BAD_CAST "generatorAgent", cur->name)) {
 		feed_channel_set_generator (feed, value);
+		ret = TRUE;
+	}
 
 	g_free (value);
+	return ret;
 }
 
 static void
@@ -132,38 +139,49 @@ ns_dc_item (FeedItem *item, xmlNodePtr cur)
 	}
 }
 
-static void
+static gboolean
 ns_dc_channel (FeedChannel *feed, xmlNodePtr cur)
 {
 	gchar *value;
+	gboolean ret;
 
 	value = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
+	ret = FALSE;
 
 	if (value) {
 		if (!xmlStrcmp (BAD_CAST "title", cur->name)) {
 			feed_channel_set_title (feed, value);
+			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "creator", cur->name)) {
 			feed_channel_set_editor (feed, value);
+			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "subject", cur->name)) {
 			feed_channel_set_category (feed, value);
+			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "description", cur->name)) {
 			feed_channel_set_description (feed, value);
+			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "publisher", cur->name)) {
 			feed_channel_set_webmaster (feed, value);
+			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "contributor", cur->name)) {
 			feed_channel_add_contributor (feed, value);
+			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "rights", cur->name)) {
 			feed_channel_set_copyright (feed, value);
+			ret = TRUE;
 		}
 
 		g_free (value);
 	}
+
+	return ret;
 }
 
 static void
@@ -261,7 +279,7 @@ ns_itunes_item (FeedItem *item, xmlNodePtr cur)
 	}
 }
 
-static void
+static gboolean
 ns_itunes_channel (FeedChannel *feed, xmlNodePtr cur)
 {
 	gchar *tmp;
@@ -275,7 +293,10 @@ ns_itunes_channel (FeedChannel *feed, xmlNodePtr cur)
 			feed_channel_set_description (feed, tmp);
 
 		g_free (tmp);
+		return TRUE;
 	}
+
+	return FALSE;
 }
 
 static void
@@ -360,7 +381,7 @@ ns_media_item (FeedItem *item, xmlNodePtr cur)
 	// FIXME: should we support media:player too?
 }
 
-static void
+static gboolean
 ns_syn_channel (FeedChannel *channel, xmlNodePtr cur)
 {
 	xmlChar	*tmp;
@@ -399,6 +420,7 @@ ns_syn_channel (FeedChannel *channel, xmlNodePtr cur)
 		period /= frequency;
 
 	feed_channel_set_update_interval (channel, period);
+	return TRUE;
 }
 
 static void
@@ -438,7 +460,7 @@ ns_wfw_item (FeedItem *item, xmlNodePtr cur)
 	}
 }
 
-static void
+static gboolean
 ns_atom10_channel (FeedChannel *feed, xmlNodePtr cur)
 {
 	/*
@@ -461,8 +483,11 @@ ns_atom10_channel (FeedChannel *feed, xmlNodePtr cur)
 
 			g_free (relation);
 			g_free (href);
+			return TRUE;
 		}
 	}
+
+	return FALSE;
 }
 
 /*
@@ -638,13 +663,10 @@ ns_handler_channel (NSHandler *handler, FeedChannel *feed, xmlNodePtr cur)
 
 	nsh = retrieve_internal_handler (handler, cur);
 
-	if (nsh != NULL && nsh->handle_channel != NULL) {
-		nsh->handle_channel (feed, cur);
-		return TRUE;
-	}
-	else {
+	if (nsh != NULL && nsh->handle_channel != NULL)
+		return nsh->handle_channel (feed, cur);
+	else
 		return FALSE;
-	}
 }
 
 /**
