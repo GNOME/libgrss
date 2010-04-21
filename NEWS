@@ -1,8 +1,8 @@
-libgrss 0.4 (UNRELEASED)
+libgrss 0.4
 ==============================================================================
 - Added FeedsGroup class, abstraction to parse and produce list of feeds
 - Added OPML files parser
-- Cleanup of headers
+- Cleanup of headers and documentation
 - Bugfixes
 
 libgrss 0.3

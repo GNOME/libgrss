@@ -7,3 +7,5 @@
 - namespace OpenSearch (http://a9.com/-/spec/opensearchrss/1.0/)
 
 - add implementation of PubSubHubBub publisher
+- use libedataserver/EAccount to describe people found in feeds
+- use libchamplain/ChamplainPoint to describe GeoRSS coordinates
