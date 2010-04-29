@@ -84,5 +84,6 @@ void		feed_channel_set_update_interval	(FeedChannel *channel, int minutes);
 int		feed_channel_get_update_interval	(FeedChannel *channel);
 
 gboolean	feed_channel_fetch			(FeedChannel *channel);
+void		feed_channel_fetch_async		(FeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data);
 
 #endif /* __FEED_CHANNEL_H__ */

@@ -126,6 +126,7 @@ retrieve_group_handler (FeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
 		iter = g_slist_next (iter);
 	}
 
+	g_warning ("No suitable parser has been found.");
 	return NULL;
 }
 

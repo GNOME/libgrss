@@ -630,6 +630,42 @@ feed_channel_get_update_interval (FeedChannel *channel)
 	return channel->priv->update_interval;
 }
 
+static gboolean
+quick_and_dirty_parse (FeedChannel *channel, SoupMessage *msg)
+{
+	GList *items;
+	GList *iter;
+	xmlDocPtr doc;
+	FeedParser *parser;
+
+	/*
+		TODO	This function is quite inefficent because parses all
+			the feed with a FeedParser and them waste obtained
+			FeedItems. Perhaps a more aimed function in
+			FeedParser would help...
+	*/
+
+	doc = content_to_xml (msg->response_body->data, msg->response_body->length);
+
+	if (doc != NULL) {
+		parser = feed_parser_new ();
+		items = feed_parser_parse (parser, channel, doc, NULL);
+
+		if (items != NULL) {
+			for (iter = items; iter; iter = g_list_next (iter))
+				g_object_unref (iter->data);
+			g_list_free (items);
+		}
+
+		g_object_unref (parser);
+		xmlFreeDoc (doc);
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
+}
+
 /**
  * feed_channel_fetch:
  * @channel: a #FeedChannel
@@ -647,46 +683,65 @@ feed_channel_fetch (FeedChannel *channel)
 {
 	gboolean ret;
 	guint status;
-	GList *items;
-	GList *iter;
-	xmlDocPtr doc;
 	SoupMessage *msg;
 	SoupSession *session;
-	FeedParser *parser;
 
-	/*
-		TODO	This function is quite inefficent because parses all
-			the feed with a FeedParser and them waste obtained
-			FeedItems. Perhaps a more aimed function in
-			FeedParser would help...
-	*/
-
-	ret = FALSE;
 	session = soup_session_sync_new ();
 	msg = soup_message_new ("GET", feed_channel_get_source (channel));
 	status = soup_session_send_message (session, msg);
 
 	if (status >= 200 && status <= 299) {
-		doc = content_to_xml (msg->response_body->data, msg->response_body->length);
-
-		if (doc != NULL) {
-			parser = feed_parser_new ();
-			items = feed_parser_parse (parser, channel, doc, NULL);
-
-			for (iter = items; iter; iter = g_list_next (iter))
-				g_object_unref (iter->data);
-			g_list_free (items);
-
-			g_object_unref (parser);
-			xmlFreeDoc (doc);
-			ret = TRUE;
-		}
+		ret = quick_and_dirty_parse (channel, msg);
 	}
 	else {
 		g_warning ("Unable to fetch feed from %s: %s", feed_channel_get_source (channel), soup_status_get_phrase (status));
+		ret = FALSE;
 	}
 
 	g_object_unref (session);
 	g_object_unref (msg);
 	return ret;
+}
+
+static void
+feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
+	guint status;
+	GSimpleAsyncResult *result;
+	FeedChannel *channel;
+
+	result = user_data;
+	channel = FEED_CHANNEL (g_async_result_get_source_object (G_ASYNC_RESULT (result)));
+	g_object_get (msg, "status-code", &status, NULL);
+
+	if (status >= 200 && status <= 299) {
+		quick_and_dirty_parse (channel, msg);
+	}
+	else {
+		g_warning ("Unable to download from %s", feed_channel_get_source (channel));
+	}
+
+	g_simple_async_result_complete_in_idle (result);
+	g_object_unref (result);
+}
+
+/**
+ * feed_channel_fetch_async:
+ * @channel: a #FeedChannel
+ * @callback: function to invoke at the end of the download
+ * @user_data: data passed to the callback
+ *
+ * Similar to feed_channel_fetch(), but asyncronous
+ */
+void
+feed_channel_fetch_async (FeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data)
+{
+	GSimpleAsyncResult *result;
+	SoupMessage *msg;
+	SoupSession *session;
+
+	result = g_simple_async_result_new (G_OBJECT (channel), callback, user_data, feed_channel_fetch_async);
+
+	session = soup_session_async_new ();
+	msg = soup_message_new ("GET", feed_channel_get_source (channel));
+	soup_session_queue_message (session, msg, feed_downloaded, result);
 }

@@ -1,3 +1,7 @@
+libgrss 0.5 (UNRELEASED)
+==============================================================================
+- Added function feed_channel_fetch_async()
+
 libgrss 0.4
 ==============================================================================
 - Added FeedsGroup class, abstraction to parse and produce list of feeds
