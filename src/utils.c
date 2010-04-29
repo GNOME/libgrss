@@ -292,7 +292,7 @@ content_to_xml (const gchar *contents, gsize size)
 
 	ctxt = xmlNewParserCtxt ();
 	ctxt->sax->getEntity = xml_process_entities;
-	doc = xmlSAXParseMemory (ctxt->sax, contents, size, 0);
+	doc = xmlSAXParseMemory (ctxt->sax, contents, size, 1);
 	xmlFreeParserCtxt (ctxt);
 
 	return doc;
@@ -306,7 +306,7 @@ file_to_xml (const gchar *path)
 
 	ctxt = xmlNewParserCtxt ();
 	ctxt->sax->getEntity = xml_process_entities;
-	doc = xmlSAXParseFile (ctxt->sax, path, 0);
+	doc = xmlSAXParseFile (ctxt->sax, path, 1);
 	xmlFreeParserCtxt (ctxt);
 
 	return doc;
