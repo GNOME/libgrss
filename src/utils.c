@@ -298,6 +298,20 @@ content_to_xml (const gchar *contents, gsize size)
 	return doc;
 }
 
+xmlDocPtr
+file_to_xml (const gchar *path)
+{
+	xmlParserCtxtPtr ctxt;
+	xmlDocPtr doc;
+
+	ctxt = xmlNewParserCtxt ();
+	ctxt->sax->getEntity = xml_process_entities;
+	doc = xmlSAXParseFile (ctxt->sax, path, 0);
+	xmlFreeParserCtxt (ctxt);
+
+	return doc;
+}
+
 /* in theory, we'd need only the RFC822 timezones here
    in practice, feeds also use other timezones...        */
 static struct {

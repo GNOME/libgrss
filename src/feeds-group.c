@@ -144,27 +144,16 @@ retrieve_group_handler (FeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
 GList*
 feeds_group_parse_file (FeedsGroup *group, const gchar *path, GError *error)
 {
-	gchar *contents;
-	gsize len;
 	GList *items;
-	GError *err;
 	xmlDocPtr doc;
 	xmlNodePtr cur;
 	FeedsGroupHandler *handler;
 
 	items = NULL;
 	doc = NULL;
-	contents = NULL;
 
 	do {
-		err = NULL;
-		if (g_file_get_contents (path, &contents, &len, &err) == FALSE) {
-			g_propagate_error (&error, err);
-			break;
-		}
-
-		doc = content_to_xml (contents, len);
-
+		doc = file_to_xml (path);
 		g_set_error (&error, FEEDS_GROUP_ERROR, FEEDS_GROUP_PARSE_ERROR, "Empty document");
 
 		if ((cur = xmlDocGetRootElement (doc)) == NULL)
@@ -191,9 +180,6 @@ feeds_group_parse_file (FeedsGroup *group, const gchar *path, GError *error)
 
 	if (doc != NULL)
 		xmlFreeDoc (doc);
-
-	if (contents != NULL)
-		g_free (contents);
 
 	return items;
 }
