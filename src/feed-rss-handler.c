@@ -201,7 +201,10 @@ parse_channel (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNode
 				g_free (tmp);
 			}
 		}
-		else if (!xmlStrcmp (cur->name, BAD_CAST"link")) {
+		/*
+			<alink> has been found at least in Xinhua News Agency RSS feeds
+		*/
+		else if (!xmlStrcmp (cur->name, BAD_CAST"link") || !xmlStrcmp (cur->name, BAD_CAST"alink")) {
  			if (NULL != (tmp = unhtmlize ((gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, TRUE)))) {
 				feed_channel_set_homepage (feed, tmp);
 				g_free (tmp);
