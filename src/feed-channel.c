@@ -121,6 +121,53 @@ feed_channel_new ()
 }
 
 /**
+ * feed_channel_new_from_file:
+ * @path: path of the file to parse
+ *
+ * Allocates a new #FeedChannel and init it with contents found in specified
+ * file
+ *
+ * Return value: a #FeedChannel, or NULL if the file in @path is not a valid
+ * document
+ */
+FeedChannel*
+feed_channel_new_from_file (const gchar *path)
+{
+	GList *items;
+	GList *iter;
+	xmlDocPtr doc;
+	FeedParser *parser;
+	FeedChannel *ret;
+
+	/*
+		TODO	This function is quite inefficent because parses all
+			the feed with a FeedParser and then trash obtained
+			FeedItems. Perhaps a more aimed function in
+			FeedParser would help...
+	*/
+
+	ret = NULL;
+	doc = file_to_xml (path);
+
+	if (doc != NULL) {
+		ret = g_object_new (FEED_CHANNEL_TYPE, NULL);
+		parser = feed_parser_new ();
+		items = feed_parser_parse (parser, ret, doc, NULL);
+
+		if (items != NULL) {
+			for (iter = items; iter; iter = g_list_next (iter))
+				g_object_unref (iter->data);
+			g_list_free (items);
+		}
+
+		g_object_unref (parser);
+		xmlFreeDoc (doc);
+	}
+
+	return ret;
+}
+
+/**
  * feed_channel_set_source:
  * @channel: a #FeedChannel
  * @source: URL of the feed

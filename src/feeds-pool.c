@@ -131,9 +131,10 @@ feeds_pool_class_init (FeedsPoolClass *klass)
 	 * @items: list of #FeedItem obtained parsing the feed
 	 *
 	 * Emitted when a #FeedChannel assigned to the @pool has been fetched
-	 * and parsed. If @items may be NULL, if an error occourred while
-	 * fetching and/or parsing. List of @items is freed, and his elements
-	 * are unref'd, when signal ends
+	 * and parsed. All parsed items are exposed in the array, with no
+	 * regards about previously existing elements. @items may be NULL, if
+	 * an error occourred while fetching and/or parsing. List of @items
+	 * is freed, and his elements are unref'd, when signal ends
 	 */
 	signals [FEED_READY] = g_signal_new ("feed-ready", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
 	                                     NULL, NULL, feed_marshal_VOID__OBJECT_POINTER,

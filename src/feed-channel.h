@@ -45,6 +45,7 @@ typedef struct {
 GType		feed_channel_get_type			(void) G_GNUC_CONST;
 
 FeedChannel*	feed_channel_new			();
+FeedChannel*	feed_channel_new_from_file		(const gchar *path);
 
 void		feed_channel_set_source			(FeedChannel *channel, gchar *source);
 const gchar*	feed_channel_get_source			(FeedChannel *channel);
