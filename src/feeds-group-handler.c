@@ -84,7 +84,7 @@ feeds_group_handler_check_format (FeedsGroupHandler *self, xmlDocPtr doc, xmlNod
  * or %NULL if an error occours (and @error is set accordly)
  */
 GList*
-feeds_group_handler_parse (FeedsGroupHandler *self, xmlDocPtr doc, GError *error)
+feeds_group_handler_parse (FeedsGroupHandler *self, xmlDocPtr doc, GError **error)
 {
 	if (IS_FEEDS_GROUP_HANDLER (self) == FALSE)
 		return FALSE;
@@ -105,7 +105,7 @@ feeds_group_handler_parse (FeedsGroupHandler *self, xmlDocPtr doc, GError *error
  * no longer in use, or %NULL if an error occours (and @error is set accordly)
  */
 gchar*
-feeds_group_handler_dump (FeedsGroupHandler *self, GList *channels, GError *error)
+feeds_group_handler_dump (FeedsGroupHandler *self, GList *channels, GError **error)
 {
 	if (IS_FEEDS_GROUP_HANDLER (self) == FALSE)
 		return FALSE;

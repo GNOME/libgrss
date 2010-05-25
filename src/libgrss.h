@@ -29,6 +29,7 @@
 #include <libxml/entities.h>
 #include <libxml/HTMLparser.h>
 #include <libxml/xpath.h>
+#include <libxml/xpathInternals.h>
 
 #include "feed-channel.h"
 #include "feed-enclosure.h"

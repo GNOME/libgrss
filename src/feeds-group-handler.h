@@ -35,14 +35,14 @@ struct _FeedsGroupHandlerInterface {
 	GTypeInterface parent_iface;
 
 	gboolean (*check_format) (FeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur);
-	GList* (*parse) (FeedsGroupHandler *self, xmlDocPtr doc, GError *error);
-	gchar* (*dump) (FeedsGroupHandler *self, GList *channels, GError *error);
+	GList* (*parse) (FeedsGroupHandler *self, xmlDocPtr doc, GError **error);
+	gchar* (*dump) (FeedsGroupHandler *self, GList *channels, GError **error);
 };
 
 GType		feeds_group_handler_get_type		();
 
 gboolean	feeds_group_handler_check_format	(FeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur);
-GList*		feeds_group_handler_parse		(FeedsGroupHandler *self, xmlDocPtr doc, GError *error);
-gchar*		feeds_group_handler_dump		(FeedsGroupHandler *self, GList *channels, GError *error);
+GList*		feeds_group_handler_parse		(FeedsGroupHandler *self, xmlDocPtr doc, GError **error);
+gchar*		feeds_group_handler_dump		(FeedsGroupHandler *self, GList *channels, GError **error);
 
 #endif /* __FEEDS_GROUP_HANDLER_H__ */

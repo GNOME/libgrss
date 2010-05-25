@@ -17,6 +17,7 @@ sources_private_h = \
 	feed-pie-handler.h         \
 	feeds-group-handler.h      \
 	feeds-opml-group-handler.h \
+	feeds-xoxo-group-handler.h \
 	ns-handler.h               \
 	utils.h
 
@@ -47,6 +48,7 @@ sources_c = \
 	feeds-pool.c               \
 	feeds-store.c              \
 	feeds-subscriber.c         \
+	feeds-xoxo-group-handler.c \
 	ns-handler.c               \
 	utils.c
 

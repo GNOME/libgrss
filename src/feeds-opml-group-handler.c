@@ -191,7 +191,7 @@ import_parse_OPML (xmlNodePtr n)
 }
 
 static GList*
-feeds_opml_group_handler_parse (FeedsGroupHandler *self, xmlDocPtr doc, GError *error)
+feeds_opml_group_handler_parse (FeedsGroupHandler *self, xmlDocPtr doc, GError **error)
 {
 	xmlNodePtr cur;
 	GList *items;
@@ -217,8 +217,12 @@ feeds_opml_group_handler_parse (FeedsGroupHandler *self, xmlDocPtr doc, GError *
 }
 
 static gchar*
-feeds_opml_group_handler_dump (FeedsGroupHandler *self, GList *channels, GError *error)
+feeds_opml_group_handler_dump (FeedsGroupHandler *self, GList *channels, GError **error)
 {
+	/**
+		TODO
+	*/
+
 	return NULL;
 }
 

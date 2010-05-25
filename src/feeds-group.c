@@ -23,6 +23,7 @@
 #include "feeds-group-handler.h"
 
 #include "feeds-opml-group-handler.h"
+#include "feeds-xoxo-group-handler.h"
 
 #define FEEDS_GROUP_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEEDS_GROUP_TYPE, FeedsGroupPrivate))
 
@@ -31,7 +32,7 @@
  * @short_description: import and export group of channels
  *
  * #FeedsGroup is an utility to import and export list of #FeedChannels in
- * different formats, such as OPML.
+ * different formats, such as OPML and XOXO.
  */
 
 #define FEEDS_GROUP_ERROR		feeds_group_error_quark()
@@ -88,6 +89,9 @@ feeds_groups_get_list (FeedsGroup *group)
 
 		parser = FEEDS_GROUP_HANDLER (feeds_opml_group_handler_new ());
 		group->priv->handlers = g_slist_append (group->priv->handlers, parser);
+
+		parser = FEEDS_GROUP_HANDLER (feeds_xoxo_group_handler_new ());
+		group->priv->handlers = g_slist_append (group->priv->handlers, parser);
 	}
 
 	return group->priv->handlers;
@@ -142,7 +146,7 @@ retrieve_group_handler (FeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
  * @error is set
  */
 GList*
-feeds_group_parse_file (FeedsGroup *group, const gchar *path, GError *error)
+feeds_group_parse_file (FeedsGroup *group, const gchar *path, GError **error)
 {
 	GList *items;
 	xmlDocPtr doc;
@@ -154,7 +158,7 @@ feeds_group_parse_file (FeedsGroup *group, const gchar *path, GError *error)
 
 	do {
 		doc = file_to_xml (path);
-		g_set_error (&error, FEEDS_GROUP_ERROR, FEEDS_GROUP_PARSE_ERROR, "Empty document");
+		g_set_error (error, FEEDS_GROUP_ERROR, FEEDS_GROUP_PARSE_ERROR, "Empty document");
 
 		if ((cur = xmlDocGetRootElement (doc)) == NULL)
 			break;
@@ -166,7 +170,7 @@ feeds_group_parse_file (FeedsGroup *group, const gchar *path, GError *error)
 			break;
 
 		if (!cur->name) {
-			g_set_error (&error, FEEDS_GROUP_ERROR, FEEDS_GROUP_PARSE_ERROR, "Invalid XML");
+			g_set_error (error, FEEDS_GROUP_ERROR, FEEDS_GROUP_PARSE_ERROR, "Invalid XML");
 			break;
 		}
 

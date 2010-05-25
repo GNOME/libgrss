@@ -46,7 +46,7 @@ GType		feeds_group_get_type		() G_GNUC_CONST;
 
 FeedsGroup*	feeds_group_new			();
 
-GList*		feeds_group_parse_file		(FeedsGroup *group, const gchar *path, GError *error);
+GList*		feeds_group_parse_file		(FeedsGroup *group, const gchar *path, GError **error);
 gboolean	feeds_group_export_file		(FeedsGroup *group, GList *channels, const gchar *path, GError *error);
 
 #endif /* __FEEDS_GROUP_H__ */
