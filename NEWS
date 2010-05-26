@@ -1,6 +1,7 @@
 libgrss 0.5 (UNRELEASED)
 ==============================================================================
 - Added XOXO files parser
+- Added XBEL files parser
 - Added functions feed_channel_fetch_async() and feed_channel_new_from_file()
 
 libgrss 0.4

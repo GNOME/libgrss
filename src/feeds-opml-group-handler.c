@@ -249,13 +249,6 @@ feeds_opml_group_handler_init (FeedsOpmlGroupHandler *object)
 	object->priv = FEEDS_OPML_GROUP_HANDLER_GET_PRIVATE (object);
 }
 
-/**
- * feeds_opml_group_handler_new:
- *
- * Allocates a new #FeedsOpmlGroupHandler
- *
- * Return value: a new #FeedsOpmlGroupHandler
- */
 FeedsOpmlGroupHandler*
 feeds_opml_group_handler_new ()
 {

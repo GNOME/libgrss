@@ -1,7 +1,6 @@
 - dynamic loading for parsing modules
 
 - add RSSCloud support (http://rsscloud.org)
-- add XBEL parser (http://pyxml.sourceforge.net/topics/xbel/)
 
 - namespace OpenSearch (http://a9.com/-/spec/opensearchrss/1.0/)
 

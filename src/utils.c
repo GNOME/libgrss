@@ -301,15 +301,7 @@ content_to_xml (const gchar *contents, gsize size)
 xmlDocPtr
 file_to_xml (const gchar *path)
 {
-	xmlParserCtxtPtr ctxt;
-	xmlDocPtr doc;
-
-	ctxt = xmlNewParserCtxt ();
-	ctxt->sax->getEntity = xml_process_entities;
-	doc = xmlSAXParseFile (ctxt->sax, path, 1);
-	xmlFreeParserCtxt (ctxt);
-
-	return doc;
+	return xmlReadFile (path, NULL, XML_PARSE_RECOVER | XML_PARSE_NOBLANKS);
 }
 
 /* in theory, we'd need only the RFC822 timezones here

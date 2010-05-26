@@ -93,6 +93,10 @@ feeds_xoxo_group_handler_parse (FeedsGroupHandler *self, xmlDocPtr doc, GError *
 
 	xpathCtx = xmlXPathNewContext (doc);
 	xmlXPathRegisterNs (xpathCtx, BAD_CAST"xhtml", BAD_CAST"http://www.w3.org/1999/xhtml");
+
+	/**
+		TODO	This XPath query may be improved to check only "a" tags into the main "ol"
+	*/
 	xpathObj = xmlXPathEvalExpression (BAD_CAST"//xhtml:a[@type='webfeed']", xpathCtx);
 
 	for (i = 0; i < xpathObj->nodesetval->nodeNr; ++i) {
@@ -159,13 +163,6 @@ feeds_xoxo_group_handler_init (FeedsXoxoGroupHandler *object)
 	object->priv = FEEDS_XOXO_GROUP_HANDLER_GET_PRIVATE (object);
 }
 
-/**
- * feeds_xoxo_group_handler_new:
- *
- * Allocates a new #FeedsXoxoGroupHandler
- *
- * Return value: a new #FeedsXoxoGroupHandler
- */
 FeedsXoxoGroupHandler*
 feeds_xoxo_group_handler_new ()
 {

@@ -24,6 +24,7 @@
 
 #include "feeds-opml-group-handler.h"
 #include "feeds-xoxo-group-handler.h"
+#include "feeds-xbel-group-handler.h"
 
 #define FEEDS_GROUP_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEEDS_GROUP_TYPE, FeedsGroupPrivate))
 
@@ -91,6 +92,9 @@ feeds_groups_get_list (FeedsGroup *group)
 		group->priv->handlers = g_slist_append (group->priv->handlers, parser);
 
 		parser = FEEDS_GROUP_HANDLER (feeds_xoxo_group_handler_new ());
+		group->priv->handlers = g_slist_append (group->priv->handlers, parser);
+
+		parser = FEEDS_GROUP_HANDLER (feeds_xbel_group_handler_new ());
 		group->priv->handlers = g_slist_append (group->priv->handlers, parser);
 	}
 
