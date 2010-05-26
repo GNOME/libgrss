@@ -31,6 +31,8 @@
  * #FeedChannel rappresents a single feed which may be fetched and parsed
  */
 
+#define FEEDS_CHANNEL_ERROR		feeds_channel_error_quark()
+
 typedef struct {
 	gchar	*hub;
 	gchar	*self;
@@ -59,7 +61,17 @@ struct _FeedChannelPrivate {
 	int	update_interval;
 };
 
+enum {
+	FEEDS_CHANNEL_FETCH_ERROR,
+};
+
 G_DEFINE_TYPE (FeedChannel, feed_channel, G_TYPE_OBJECT);
+
+static GQuark
+feeds_channel_error_quark ()
+{
+	return g_quark_from_static_string ("feeds_channel_error");
+}
 
 static void
 feed_channel_finalize (GObject *obj)
@@ -764,7 +776,8 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 		quick_and_dirty_parse (channel, msg);
 	}
 	else {
-		g_warning ("Unable to download from %s", feed_channel_get_source (channel));
+		g_simple_async_result_set_error (result, FEEDS_CHANNEL_ERROR, FEEDS_CHANNEL_FETCH_ERROR,
+						 "Unable to download from %s", feed_channel_get_source (channel));
 	}
 
 	g_simple_async_result_complete_in_idle (result);
