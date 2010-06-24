@@ -1,5 +1,5 @@
 m4_define([libgrss_major_version], [0])
-m4_define([libgrss_minor_version], [4])
+m4_define([libgrss_minor_version], [5])
 m4_define([libgrss_micro_version], [0])
 
 m4_define([libgrss_version],

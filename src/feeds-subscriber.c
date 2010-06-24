@@ -29,10 +29,10 @@
 
 /**
  * SECTION: feeds-subscriber
- * @short_description: PubSubHub subscriber
+ * @short_description: PubSubHubbub subscriber
  *
  * #FeedsSubscriber is an alternative for #FeedsPool, able to receive
- * real-time notifications by feeds managed by a PubSubHub hub.
+ * real-time notifications by feeds managed by a PubSubHubbub hub.
  * When the subscriber is executed (with feeds_subscriber_switch()) it opens
  * a server on a local port (configurable with feeds_subscriber_set_port()),
  * engage a subscription for each #FeedChannel passed with
@@ -40,6 +40,14 @@
  * remote hub.
  * For more information look at http://code.google.com/p/pubsubhubbub/
  */
+
+/*
+	TODO	There were an error in refreshing subscriptions, since is the
+		hub which must send refresh requests, not subscriber.
+		That has been removed, but it would be better to provide a
+		control mechanism able to refresh subscriptions from the
+		client side in case of problems by the server side
+*/
 
 typedef enum {
 	SUBSCRIBER_IS_IDLE,
@@ -84,8 +92,6 @@ typedef struct {
 	FEED_SUBSCRIPTION_STATUS	status;
 	int				identifier;
 	gchar				*path;
-
-	gint64				lease_time;
 
 	FeedsSubscriber			*sub;
 } FeedChannelWrap;
@@ -201,7 +207,7 @@ create_listened (FeedsSubscriber *sub, GList *feeds)
 		feed = (FeedChannel*) iter->data;
 
 		if (feed_channel_get_pubsubhub (feed, NULL, NULL) == FALSE) {
-			g_warning ("Feed at %s has not PubSubHub capability", feed_channel_get_source (feed));
+			g_warning ("Feed at %s has not PubSubHubbub capability", feed_channel_get_source (feed));
 			return FALSE;
 		}
 	}
@@ -215,7 +221,6 @@ create_listened (FeedsSubscriber *sub, GList *feeds)
 		g_object_ref (feed);
 		wrap->status = FEED_SUBSCRIPTION_IDLE;
 		wrap->path = NULL;
-		wrap->lease_time = 60;
 		wrap->channel = feed;
 		wrap->sub = sub;
 		list = g_list_prepend (list, wrap);
@@ -298,9 +303,6 @@ handle_incoming_notification_cb (SoupServer *server, SoupMessage *msg, const cha
 		mode = (gchar*) g_hash_table_lookup (query, "hub.mode");
 
 		if (feed->status == FEED_SUBSCRIPTION_SUBSCRIBING && strcmp (mode, "subscribe") == 0) {
-			feed->lease_time = strtoll ((gchar*) g_hash_table_lookup (query, "hub.lease_seconds"), NULL, 10);
-			feed->status = FEED_SUBSCRIPTION_SUBSCRIBED;
-
 			challenge = g_strdup ((gchar*) g_hash_table_lookup (query, "hub.challenge"));
 			soup_message_set_response (msg, "application/x-www-form-urlencoded", SOUP_MEMORY_TAKE, challenge, strlen (challenge));
 
@@ -385,39 +387,11 @@ close_server (FeedsSubscriber *sub)
 	}
 }
 
-static gboolean
-refresh_subscribtions (gpointer data)
-{
-	FeedsSubscriber *sub;
-
-	sub = (FeedsSubscriber*) data;
-	subscribe_feeds (sub);
-	return FALSE;
-}
-
-
 static void
 feeds_subscribed_cb (FeedsSubscriber *sub)
 {
-	gint64 min_lease;
-	GList *iter;
-	FeedChannelWrap *feed;
-
-	if (sub->priv->has_errors_in_subscription == TRUE) {
+	if (sub->priv->has_errors_in_subscription == TRUE)
 		try_another_subscription_policy (sub);
-	}
-	else {
-		min_lease = G_MAXINT64;
-
-		for (iter = sub->priv->feeds_list; iter; iter = g_list_next (iter)) {
-			feed = (FeedChannelWrap*) iter->data;
-
-			if (min_lease > feed->lease_time)
-				min_lease = feed->lease_time;
-		}
-
-		sub->priv->refresh_scheduler = g_timeout_add_seconds (min_lease, refresh_subscribtions, sub);
-	}
 }
 
 static void
@@ -483,67 +457,12 @@ subscribe_feeds (FeedsSubscriber *sub)
 	}
 }
 
-/*
-	Inspired by:
-	GNet - Networking library
-	Copyright (C) 2000-2002  David Helder
-	Copyright (C) 2000-2003  Andrew Lanoix
-	Copyright (C) 2007       Tim-Philipp Müller <tim centricular net>
-*/
 static GInetAddress*
-detect_internet_address (FeedsSubscriber *sub)
+my_detect_internet_address (FeedsSubscriber *sub)
 {
-	int sockfd;
-	gchar ip [100];
-	struct sockaddr_in serv_add;
-	struct sockaddr_storage myaddr;
-	socklen_t len;
+	if (sub->priv->local_addr == NULL)
+		sub->priv->local_addr = detect_internet_address ();
 
-	if (sub->priv->local_addr != NULL)
-		return sub->priv->local_addr;
-
-	/*
-		TODO	This is to be adapted to work also over IPv6
-	*/
-
-	memset (&serv_add, 0, sizeof (serv_add));
-	serv_add.sin_family = AF_INET;
-	serv_add.sin_port = htons (80);
-
-	/*
-		This is the IP for slashdot.com
-	*/
-	if ((inet_pton (AF_INET, "216.34.181.45", &serv_add.sin_addr)) <= 0)
-		return NULL;
-
-	sockfd = socket (AF_INET, SOCK_DGRAM, 0);
-	if (!sockfd) {
-		g_warning ("Unable to open a socket to detect interface exposed to Internet");
-		return NULL;
-	}
-
-	if (connect (sockfd, (struct sockaddr*) &serv_add, sizeof (serv_add)) == -1) {
-		g_warning ("Unable to open a connection to detect interface exposed to Internet");
-		close (sockfd);
-		return NULL;
-	}
-
-	len = sizeof (myaddr);
-	if (getsockname (sockfd, (struct sockaddr*) &myaddr, &len) != 0) {
-		close (sockfd);
-		g_warning ("Unable to obtain information about interface exposed to Internet");
-		return NULL;
-	}
-
-	close (sockfd);
-	memset (ip, 0, sizeof (char) * 100);
-
-	if (inet_ntop (AF_INET, &(((struct sockaddr_in*) &myaddr)->sin_addr), ip, 100) == NULL) {
-		g_warning ("Unable to obtain IP exposed to Internet");
-		return NULL;
-	}
-
-	sub->priv->local_addr = g_inet_address_new_from_string (ip);
 	return sub->priv->local_addr;
 }
 
@@ -555,7 +474,7 @@ create_and_run_server (FeedsSubscriber *sub)
 	SoupAddress *soup_addr;
 	GInetAddress *my_addr;
 
-	my_addr = detect_internet_address (sub);
+	my_addr = my_detect_internet_address (sub);
 	if (my_addr == NULL)
 		return;
 
@@ -647,7 +566,7 @@ init_run_server (FeedsSubscriber *sub)
 		  | has fixed hub | ---- YES ---> | is hub local | ----- YES ---+
 		  +---------------+               +--------------+              |
 		          |                               |                     |
-		          NO -----------------------------+                     |
+		          NO <----------------------------+                     |
 		          |                                                     |
 		+-------------------+           +-----------------+             |
 		| host seems public | -- YES -> | subscribe works | ---- YES ---+
@@ -675,14 +594,14 @@ init_run_server (FeedsSubscriber *sub)
 	if (sub->priv->hub != NULL) {
 		addr = g_inet_address_new_from_string (sub->priv->hub);
 		if (g_inet_address_get_is_link_local (addr) == TRUE) {
-			sub->priv->external_addr = detect_internet_address (sub);
+			sub->priv->external_addr = my_detect_internet_address (sub);
 			done = TRUE;
 			create_and_run_server (sub);
 		}
 	}
 
 	if (done == FALSE) {
-		addr = detect_internet_address (sub);
+		addr = my_detect_internet_address (sub);
 		if (address_seems_public (addr) == TRUE) {
 			sub->priv->external_addr = addr;
 			done = TRUE;

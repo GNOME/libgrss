@@ -464,7 +464,7 @@ static gboolean
 ns_atom10_channel (FeedChannel *feed, xmlNodePtr cur)
 {
 	/*
-		Used to manage PubSubHub information in RSS feeds
+		Used to manage PubSubHubbub information in RSS feeds
 	*/
 
 	gchar *href;

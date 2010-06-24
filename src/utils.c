@@ -547,6 +547,66 @@ date_parse_ISO8601 (const gchar *date)
 	return 0;
 }
 
+/*
+	Inspired by:
+	GNet - Networking library
+	Copyright (C) 2000-2002  David Helder
+	Copyright (C) 2000-2003  Andrew Lanoix
+	Copyright (C) 2007       Tim-Philipp Müller <tim centricular net>
+*/
+GInetAddress*
+detect_internet_address ()
+{
+	int sockfd;
+	gchar ip [100];
+	struct sockaddr_in serv_add;
+	struct sockaddr_storage myaddr;
+	socklen_t len;
+
+	/*
+		TODO	This is to be adapted to work also over IPv6
+	*/
+
+	memset (&serv_add, 0, sizeof (serv_add));
+	serv_add.sin_family = AF_INET;
+	serv_add.sin_port = htons (80);
+
+	/*
+		This is the IP for slashdot.com
+	*/
+	if ((inet_pton (AF_INET, "216.34.181.45", &serv_add.sin_addr)) <= 0)
+		return NULL;
+
+	sockfd = socket (AF_INET, SOCK_DGRAM, 0);
+	if (!sockfd) {
+		g_warning ("Unable to open a socket to detect interface exposed to Internet");
+		return NULL;
+	}
+
+	if (connect (sockfd, (struct sockaddr*) &serv_add, sizeof (serv_add)) == -1) {
+		g_warning ("Unable to open a connection to detect interface exposed to Internet");
+		close (sockfd);
+		return NULL;
+	}
+
+	len = sizeof (myaddr);
+	if (getsockname (sockfd, (struct sockaddr*) &myaddr, &len) != 0) {
+		close (sockfd);
+		g_warning ("Unable to obtain information about interface exposed to Internet");
+		return NULL;
+	}
+
+	close (sockfd);
+	memset (ip, 0, sizeof (char) * 100);
+
+	if (inet_ntop (AF_INET, &(((struct sockaddr_in*) &myaddr)->sin_addr), ip, 100) == NULL) {
+		g_warning ("Unable to obtain IP exposed to Internet");
+		return NULL;
+	}
+
+	return g_inet_address_new_from_string (ip);
+}
+
 gboolean
 address_seems_public (GInetAddress *addr)
 {

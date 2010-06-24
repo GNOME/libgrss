@@ -37,6 +37,7 @@
 #define PACKAGE			"libgrss"
 
 #define FREE_STRING(__str)	if (__str) { g_free (__str); __str = NULL; }
+#define FREE_OBJECT(__obj)	if (__obj) { g_object_unref (__obj); __obj = NULL; }
 
 gchar*		unhtmlize		(gchar *string);
 gchar*		unxmlize		(gchar * string);
@@ -48,6 +49,7 @@ xmlDocPtr	file_to_xml		(const gchar *path);
 time_t		date_parse_RFC822	(const gchar *date);
 time_t		date_parse_ISO8601	(const gchar *date);
 
+GInetAddress*	detect_internet_address	();
 gboolean	address_seems_public	(GInetAddress *addr);
 
 #endif /* __UTILS_LIBGRSS_H__ */

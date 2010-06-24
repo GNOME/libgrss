@@ -45,6 +45,17 @@ feeds_subscriber_switch
 </SECTION>
 
 <SECTION>
+<FILE>feeds-publisher</FILE>
+<TITLE>FeedsPublisher</TITLE>
+FeedsPublisher
+feeds_publisher_new
+feeds_publisher_set_port
+feeds_publisher_set_topics
+feeds_publisher_switch
+feeds_publisher_publish
+</SECTION>
+
+<SECTION>
 <FILE>feed-item</FILE>
 <TITLE>FeedItem</TITLE>
 FeedItem

@@ -30,6 +30,7 @@ sources_public_h = \
 	feed-parser.h              \
 	feeds-group.h              \
 	feeds-pool.h               \
+	feeds-publisher.h          \
 	feeds-store.h              \
 	feeds-subscriber.h
 
@@ -47,6 +48,7 @@ sources_c = \
 	feeds-group-handler.c      \
 	feeds-opml-group-handler.c \
 	feeds-pool.c               \
+	feeds-publisher.c          \
 	feeds-store.c              \
 	feeds-subscriber.c         \
 	feeds-xbel-group-handler.c \

@@ -410,7 +410,7 @@ feed_channel_get_category (FeedChannel *channel)
  * @hub: hub for the feed, or NULL
  * @self: target referencing the feed, or NULL
  *
- * To set information about PubSubHub for the channel. Options can be set
+ * To set information about PubSubHubbub for the channel. Options can be set
  * alternatively, only with hub != %NULL or self != %NULL, and are saved
  * internally to the object: the hub is considered valid
  * (feed_channel_get_pubsubhub() returns %TRUE) only when both parameters has
@@ -441,10 +441,10 @@ feed_channel_set_pubsubhub (FeedChannel *channel, gchar *hub, gchar *self)
  * @hub: location for the hub string, or NULL
  * @self: location for the reference to the feed, or NULL
  *
- * Retrieves information about the PubSub hub of the channel
+ * Retrieves information about the PubSubHubbub hub of the channel
  *
- * Return value: %TRUE if a valid PubSub hub has been set for the @channel,
- * %FALSE otherwise
+ * Return value: %TRUE if a valid PubSubHubbub hub has been set for the
+ * @channel, %FALSE otherwise
  */
 gboolean
 feed_channel_get_pubsubhub (FeedChannel *channel, gchar **hub, gchar **self)
