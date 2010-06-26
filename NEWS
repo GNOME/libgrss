@@ -2,6 +2,7 @@ libgrss 0.5 (UNRELEASED)
 ==============================================================================
 - Added XOXO files parser
 - Added XBEL files parser
+- Added FeedsPublisher to expose feeds contents as files or by local server
 - First test implementation of PubSubHub hub
 - Added functions feed_channel_fetch_async() and feed_channel_new_from_file()
 

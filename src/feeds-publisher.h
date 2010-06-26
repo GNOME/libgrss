@@ -49,9 +49,11 @@ GType			feeds_publisher_get_type	() G_GNUC_CONST;
 
 FeedsPublisher*		feeds_publisher_new		();
 
-void			feeds_publisher_set_port	(FeedsPublisher *pub, int port);
-void			feeds_publisher_set_topics	(FeedsPublisher *pub, GList *topics);
-void			feeds_publisher_switch		(FeedsPublisher *pub, gboolean run);
-void			feeds_publisher_publish		(FeedsPublisher *pub, FeedItem *item);
+void			feeds_publisher_publish		(FeedsPublisher *pub, FeedChannel *channel, GList *items, const gchar *id);
+void			feeds_publisher_publish_file	(FeedsPublisher *pub, FeedChannel *channel, GList *items, const gchar *uri);
+
+void			feeds_publisher_hub_set_port	(FeedsPublisher *pub, int port);
+void			feeds_publisher_hub_set_topics	(FeedsPublisher *pub, GList *topics);
+void			feeds_publisher_hub_switch	(FeedsPublisher *pub, gboolean run);
 
 #endif /* __FEEDS_PUBLISHER_H__ */

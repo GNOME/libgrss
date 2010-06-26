@@ -547,6 +547,17 @@ date_parse_ISO8601 (const gchar *date)
 	return 0;
 }
 
+gchar*
+date_to_ISO8601 (time_t date)
+{
+	gchar text [100];
+	struct tm broken;
+
+	localtime_r (&date, &broken);
+	strftime (text, 100, "%t%Y-%m-%dT%H:%M%t", &broken);
+	return g_strdup (text);
+}
+
 /*
 	Inspired by:
 	GNet - Networking library
