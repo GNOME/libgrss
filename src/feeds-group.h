@@ -23,30 +23,30 @@
 
 #include "libgrss.h"
 
-#define FEEDS_GROUP_TYPE		(feeds_group_get_type())
-#define FEEDS_GROUP(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_GROUP_TYPE, FeedsGroup))
-#define FEEDS_GROUP_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEEDS_GROUP_TYPE, FeedsGroupClass))
+#define FEEDS_GROUP_TYPE		(grss_feeds_group_get_type())
+#define FEEDS_GROUP(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_GROUP_TYPE, GrssFeedsGroup))
+#define FEEDS_GROUP_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEEDS_GROUP_TYPE, GrssFeedsGroupClass))
 #define IS_FEEDS_GROUP(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEEDS_GROUP_TYPE))
 #define IS_FEEDS_GROUP_CLASS(c)		(G_TYPE_CHECK_CLASS_TYPE ((c),  FEEDS_GROUP_TYPE))
-#define FEEDS_GROUP_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEEDS_GROUP_TYPE, FeedsGroupClass))
+#define FEEDS_GROUP_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEEDS_GROUP_TYPE, GrssFeedsGroupClass))
 
-typedef struct _FeedsGroup		FeedsGroup;
-typedef struct _FeedsGroupPrivate	FeedsGroupPrivate;
+typedef struct _GrssFeedsGroup		GrssFeedsGroup;
+typedef struct _GrssFeedsGroupPrivate	GrssFeedsGroupPrivate;
 
-struct _FeedsGroup {
+struct _GrssFeedsGroup {
 	GObject parent;
-	FeedsGroupPrivate *priv;
+	GrssFeedsGroupPrivate *priv;
 };
 
 typedef struct {
 	GObjectClass parent;
-} FeedsGroupClass;
+} GrssFeedsGroupClass;
 
-GType		feeds_group_get_type		() G_GNUC_CONST;
+GType		grss_feeds_group_get_type	() G_GNUC_CONST;
 
-FeedsGroup*	feeds_group_new			();
+GrssFeedsGroup*	grss_feeds_group_new		();
 
-GList*		feeds_group_parse_file		(FeedsGroup *group, const gchar *path, GError **error);
-gboolean	feeds_group_export_file		(FeedsGroup *group, GList *channels, const gchar *path, GError *error);
+GList*		grss_feeds_group_parse_file	(GrssFeedsGroup *group, const gchar *path, GError **error);
+gboolean	grss_feeds_group_export_file	(GrssFeedsGroup *group, GList *channels, const gchar *path, GError *error);
 
 #endif /* __FEEDS_GROUP_H__ */

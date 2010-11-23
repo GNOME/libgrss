@@ -99,11 +99,11 @@ feed_handler_check_format (FeedHandler *self, xmlDocPtr doc, xmlNodePtr cur)
  * Parses the given @doc (obtained fetching @feed) and extracts a list of
  * items
  *
- * Return value: a list of #FeedItem, to be freed when no longer in use, or
+ * Return value: a list of #GrssFeedItem, to be freed when no longer in use, or
  * %NULL if an error occours (and @error is set accordly)
  */
 GList*
-feed_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GError **error)
+feed_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
 {
 	if (IS_FEED_HANDLER (self) == FALSE)
 		return FALSE;

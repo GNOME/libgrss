@@ -46,7 +46,7 @@ GType		ns_handler_get_type	() G_GNUC_CONST;
 
 NSHandler*	ns_handler_new		();
 
-gboolean	ns_handler_channel	(NSHandler *handler, FeedChannel *feed, xmlNodePtr cur);
-gboolean	ns_handler_item		(NSHandler *handler, FeedItem *item, xmlNodePtr cur);
+gboolean	ns_handler_channel	(NSHandler *handler, GrssFeedChannel *feed, xmlNodePtr cur);
+gboolean	ns_handler_item		(NSHandler *handler, GrssFeedItem *item, xmlNodePtr cur);
 
 #endif /* __NS_HANDLER_H__ */

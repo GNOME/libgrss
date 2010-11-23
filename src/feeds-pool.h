@@ -23,36 +23,36 @@
 
 #include "libgrss.h"
 
-#define FEEDS_POOL_TYPE			(feeds_pool_get_type())
-#define FEEDS_POOL(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_POOL_TYPE, FeedsPool))
-#define FEEDS_POOL_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEEDS_POOL_TYPE, FeedsPoolClass))
+#define FEEDS_POOL_TYPE			(grss_feeds_pool_get_type())
+#define FEEDS_POOL(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_POOL_TYPE, GrssFeedsPool))
+#define FEEDS_POOL_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEEDS_POOL_TYPE, GrssFeedsPoolClass))
 #define IS_FEEDS_POOL(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEEDS_POOL_TYPE))
 #define IS_FEEDS_POOL_CLASS(c)		(G_TYPE_CHECK_CLASS_TYPE ((c),  FEEDS_POOL_TYPE))
-#define FEEDS_POOL_GET_CLASS(o)		(G_TYPE_INSTANCE_GET_CLASS ((o), FEEDS_POOL_TYPE, FeedsPoolClass))
+#define FEEDS_POOL_GET_CLASS(o)		(G_TYPE_INSTANCE_GET_CLASS ((o), FEEDS_POOL_TYPE, GrssFeedsPoolClass))
 
-typedef struct _FeedsPool		FeedsPool;
-typedef struct _FeedsPoolPrivate	FeedsPoolPrivate;
+typedef struct _GrssFeedsPool		GrssFeedsPool;
+typedef struct _GrssFeedsPoolPrivate	GrssFeedsPoolPrivate;
 
-struct _FeedsPool {
+struct _GrssFeedsPool {
 	GObject parent;
-	FeedsPoolPrivate *priv;
+	GrssFeedsPoolPrivate *priv;
 };
 
 typedef struct {
 	GObjectClass parent;
 
-	void (*feed_fetching) (FeedsPool *pool, FeedChannel *feed);
-	void (*feed_ready) (FeedsPool *pool, FeedChannel *feed, GList *items);
-} FeedsPoolClass;
+	void (*feed_fetching) (GrssFeedsPool *pool, GrssFeedChannel *feed);
+	void (*feed_ready) (GrssFeedsPool *pool, GrssFeedChannel *feed, GList *items);
+} GrssFeedsPoolClass;
 
-GType		feeds_pool_get_type		() G_GNUC_CONST;
+GType		grss_feeds_pool_get_type		() G_GNUC_CONST;
 
-FeedsPool*	feeds_pool_new			();
+GrssFeedsPool*	grss_feeds_pool_new			();
 
-void		feeds_pool_listen		(FeedsPool *pool, GList *feeds);
-GList*		feeds_pool_get_listened		(FeedsPool *pool);
-int		feeds_pool_get_listened_num	(FeedsPool *pool);
-void		feeds_pool_switch		(FeedsPool *pool, gboolean run);
-SoupSession*	feeds_pool_get_session		(FeedsPool *pool);
+void		grss_feeds_pool_listen			(GrssFeedsPool *pool, GList *feeds);
+GList*		grss_feeds_pool_get_listened		(GrssFeedsPool *pool);
+int		grss_feeds_pool_get_listened_num	(GrssFeedsPool *pool);
+void		grss_feeds_pool_switch			(GrssFeedsPool *pool, gboolean run);
+SoupSession*	grss_feeds_pool_get_session		(GrssFeedsPool *pool);
 
 #endif /* __FEEDS_POOL_H__ */

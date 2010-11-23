@@ -23,26 +23,26 @@
 
 #include "libgrss.h"
 
-#define FEEDS_GROUP_HANDLER_TYPE		(feeds_group_handler_get_type ())
-#define FEEDS_GROUP_HANDLER(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), FEEDS_GROUP_HANDLER_TYPE, FeedsGroupHandler))
+#define FEEDS_GROUP_HANDLER_TYPE		(grss_feeds_group_handler_get_type ())
+#define FEEDS_GROUP_HANDLER(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), FEEDS_GROUP_HANDLER_TYPE, GrssFeedsGroupHandler))
 #define IS_FEEDS_GROUP_HANDLER(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), FEEDS_GROUP_HANDLER_TYPE))
-#define FEEDS_GROUP_HANDLER_GET_INTERFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), FEEDS_GROUP_HANDLER_TYPE, FeedsGroupHandlerInterface))
+#define FEEDS_GROUP_HANDLER_GET_INTERFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), FEEDS_GROUP_HANDLER_TYPE, GrssFeedsGroupHandlerInterface))
 
-typedef struct _FeedsGroupHandler		FeedsGroupHandler;
-typedef struct _FeedsGroupHandlerInterface	FeedsGroupHandlerInterface;
+typedef struct _GrssFeedsGroupHandler		GrssFeedsGroupHandler;
+typedef struct _GrssFeedsGroupHandlerInterface	GrssFeedsGroupHandlerInterface;
 
-struct _FeedsGroupHandlerInterface {
+struct _GrssFeedsGroupHandlerInterface {
 	GTypeInterface parent_iface;
 
-	gboolean (*check_format) (FeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur);
-	GList* (*parse) (FeedsGroupHandler *self, xmlDocPtr doc, GError **error);
-	gchar* (*dump) (FeedsGroupHandler *self, GList *channels, GError **error);
+	gboolean (*check_format) (GrssFeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur);
+	GList* (*parse) (GrssFeedsGroupHandler *self, xmlDocPtr doc, GError **error);
+	gchar* (*dump) (GrssFeedsGroupHandler *self, GList *channels, GError **error);
 };
 
-GType		feeds_group_handler_get_type		();
+GType		grss_feeds_group_handler_get_type	();
 
-gboolean	feeds_group_handler_check_format	(FeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur);
-GList*		feeds_group_handler_parse		(FeedsGroupHandler *self, xmlDocPtr doc, GError **error);
-gchar*		feeds_group_handler_dump		(FeedsGroupHandler *self, GList *channels, GError **error);
+gboolean	grss_feeds_group_handler_check_format	(GrssFeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur);
+GList*		grss_feeds_group_handler_parse		(GrssFeedsGroupHandler *self, xmlDocPtr doc, GError **error);
+gchar*		grss_feeds_group_handler_dump		(GrssFeedsGroupHandler *self, GList *channels, GError **error);
 
 #endif /* __FEEDS_GROUP_HANDLER_H__ */

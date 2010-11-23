@@ -29,17 +29,17 @@
  * SECTION: feeds-xbel-group-handler
  * @short_description: specialized parser for XBEL files
  *
- * #FeedsXbelGroupHandler is a #FeedsGroupHandler specialized for XBEL contents
+ * #FeedsXbelGroupHandler is a #GrssFeedsGroupHandler specialized for XBEL contents
  */
 
 struct FeedsXbelGroupHandlerPrivate {
 	int	rfu;
 };
 
-static void feeds_group_handler_interface_init (FeedsGroupHandlerInterface *iface);
+static void grss_feeds_group_handler_interface_init (GrssFeedsGroupHandlerInterface *iface);
 G_DEFINE_TYPE_WITH_CODE (FeedsXbelGroupHandler, feeds_xbel_group_handler, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (FEEDS_GROUP_HANDLER_TYPE,
-                                                feeds_group_handler_interface_init));
+                                                grss_feeds_group_handler_interface_init));
 
 static void
 feeds_xbel_group_handler_finalize (GObject *object)
@@ -51,7 +51,7 @@ feeds_xbel_group_handler_finalize (GObject *object)
 }
 
 static gboolean
-feeds_xbel_group_handler_check_format (FeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur)
+feeds_xbel_group_handler_check_format (GrssFeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur)
 {
 	if (!xmlStrcmp (cur->name, BAD_CAST"xbel"))
 		return TRUE;
@@ -60,7 +60,7 @@ feeds_xbel_group_handler_check_format (FeedsGroupHandler *self, xmlDocPtr doc, x
 }
 
 static GList*
-feeds_xbel_group_handler_parse (FeedsGroupHandler *self, xmlDocPtr doc, GError **error)
+feeds_xbel_group_handler_parse (GrssFeedsGroupHandler *self, xmlDocPtr doc, GError **error)
 {
 	int i;
 	gchar *str;
@@ -69,7 +69,7 @@ feeds_xbel_group_handler_parse (FeedsGroupHandler *self, xmlDocPtr doc, GError *
 	GList *items;
 	xmlXPathObjectPtr xpathObj;
 	xmlXPathContextPtr xpathCtx;
-	FeedChannel *channel;
+	GrssFeedChannel *channel;
 	FeedsXbelGroupHandler *parser;
 
 	items = NULL;
@@ -89,16 +89,16 @@ feeds_xbel_group_handler_parse (FeedsGroupHandler *self, xmlDocPtr doc, GError *
 			str = (gchar*) xmlGetProp (cur, BAD_CAST"href");
 
 			if (str != NULL && strlen (str) != 0) {
-				channel = feed_channel_new ();
+				channel = grss_feed_channel_new ();
 
-				feed_channel_set_source (channel, str);
+				grss_feed_channel_set_source (channel, str);
 				xmlFree (str);
 
 				if (cur->children != NULL && strcmp ((gchar*) cur->children->name, "title") == 0) {
 					subnode = cur->children;
 					str = (gchar*) xmlNodeListGetString (doc, subnode->xmlChildrenNode, TRUE);
 					if (str != NULL) {
-						feed_channel_set_title (channel, str);
+						grss_feed_channel_set_title (channel, str);
 						g_free (str);
 					}
 				}
@@ -117,7 +117,7 @@ feeds_xbel_group_handler_parse (FeedsGroupHandler *self, xmlDocPtr doc, GError *
 }
 
 static gchar*
-feeds_xbel_group_handler_dump (FeedsGroupHandler *self, GList *channels, GError **error)
+feeds_xbel_group_handler_dump (GrssFeedsGroupHandler *self, GList *channels, GError **error)
 {
 	/**
 		TODO
@@ -127,7 +127,7 @@ feeds_xbel_group_handler_dump (FeedsGroupHandler *self, GList *channels, GError 
 }
 
 static void
-feeds_group_handler_interface_init (FeedsGroupHandlerInterface *iface)
+grss_feeds_group_handler_interface_init (GrssFeedsGroupHandlerInterface *iface)
 {
 	iface->check_format = feeds_xbel_group_handler_check_format;
 	iface->parse = feeds_xbel_group_handler_parse;

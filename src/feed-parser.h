@@ -23,29 +23,29 @@
 
 #include "libgrss.h"
 
-#define FEED_PARSER_TYPE		(feed_parser_get_type())
-#define FEED_PARSER(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_PARSER_TYPE, FeedParser))
-#define FEED_PARSER_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEED_PARSER_TYPE, FeedParserClass))
+#define FEED_PARSER_TYPE		(grss_feed_parser_get_type())
+#define FEED_PARSER(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_PARSER_TYPE, GrssFeedParser))
+#define FEED_PARSER_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEED_PARSER_TYPE, GrssFeedParserClass))
 #define IS_FEED_PARSER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEED_PARSER_TYPE))
 #define IS_FEED_PARSER_CLASS(c)		(G_TYPE_CHECK_CLASS_TYPE ((c),  FEED_PARSER_TYPE))
-#define FEED_PARSER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEED_PARSER_TYPE, FeedParserClass))
+#define FEED_PARSER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEED_PARSER_TYPE, GrssFeedParserClass))
 
-typedef struct _FeedParser		FeedParser;
-typedef struct _FeedParserPrivate	FeedParserPrivate;
+typedef struct _GrssFeedParser		GrssFeedParser;
+typedef struct _GrssFeedParserPrivate	GrssFeedParserPrivate;
 
-struct _FeedParser {
+struct _GrssFeedParser {
 	GObject parent;
-	FeedParserPrivate *priv;
+	GrssFeedParserPrivate *priv;
 };
 
 typedef struct {
 	GObjectClass parent;
-} FeedParserClass;
+} GrssFeedParserClass;
 
-GType		feed_parser_get_type	() G_GNUC_CONST;
+GType		grss_feed_parser_get_type	() G_GNUC_CONST;
 
-FeedParser*	feed_parser_new		();
+GrssFeedParser*	grss_feed_parser_new		();
 
-GList*		feed_parser_parse	(FeedParser *parser, FeedChannel *feed, xmlDocPtr doc, GError **error);
+GList*		grss_feed_parser_parse		(GrssFeedParser *parser, GrssFeedChannel *feed, xmlDocPtr doc, GError **error);
 
 #endif /* __FEED_PARSER_H__ */

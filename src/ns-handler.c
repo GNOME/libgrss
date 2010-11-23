@@ -30,7 +30,7 @@
  * The #NSHandler object is a special extension used by #FeedHandlers to
  * handle more tags in feeds. When unknow XML elements are found they are
  * filtered by the #NSHandler, which check if that rappresent a valid
- * extension and populates the specified #FeedChannel (or #FeedItem) with
+ * extension and populates the specified #GrssFeedChannel (or #GrssFeedItem) with
  * more attributes
  */
 
@@ -40,8 +40,8 @@ struct _NSHandlerPrivate {
 };
 
 typedef struct {
-	gboolean	(*handle_channel)	(FeedChannel *channel, xmlNodePtr cur);
-	void		(*handle_item)		(FeedItem *item, xmlNodePtr cur);
+	gboolean	(*handle_channel)	(GrssFeedChannel *channel, xmlNodePtr cur);
+	void		(*handle_item)		(GrssFeedItem *item, xmlNodePtr cur);
 } InternalNsHandler;
 
 G_DEFINE_TYPE (NSHandler, ns_handler, G_TYPE_OBJECT);
@@ -68,7 +68,7 @@ ns_handler_class_init (NSHandlerClass *klass)
 }
 
 static gboolean
-ns_admin_channel (FeedChannel *feed, xmlNodePtr cur)
+ns_admin_channel (GrssFeedChannel *feed, xmlNodePtr cur)
 {
 	gchar *value;
 	gboolean ret;
@@ -77,11 +77,11 @@ ns_admin_channel (FeedChannel *feed, xmlNodePtr cur)
 	ret = FALSE;
 
 	if (!xmlStrcmp (BAD_CAST "errorReportsTo", cur->name)) {
-		feed_channel_set_webmaster (feed, value);
+		grss_feed_channel_set_webmaster (feed, value);
 		ret = TRUE;
 	}
 	else if (!xmlStrcmp (BAD_CAST "generatorAgent", cur->name)) {
-		feed_channel_set_generator (feed, value);
+		grss_feed_channel_set_generator (feed, value);
 		ret = TRUE;
 	}
 
@@ -90,21 +90,21 @@ ns_admin_channel (FeedChannel *feed, xmlNodePtr cur)
 }
 
 static void
-ns_content_item (FeedItem *item, xmlNodePtr cur)
+ns_content_item (GrssFeedItem *item, xmlNodePtr cur)
 {
 	gchar *tmp;
 
   	if (!xmlStrcmp (cur->name, BAD_CAST "encoded")) {
 		tmp = xhtml_extract (cur, 0, NULL);
 		if (tmp) {
-			feed_item_set_description (item, tmp);
+			grss_feed_item_set_description (item, tmp);
 			g_free (tmp);
 		}
 	}
 }
 
 static void
-ns_dc_item (FeedItem *item, xmlNodePtr cur)
+ns_dc_item (GrssFeedItem *item, xmlNodePtr cur)
 {
 	time_t t;
 	gchar *value;
@@ -114,25 +114,25 @@ ns_dc_item (FeedItem *item, xmlNodePtr cur)
 	if (value) {
 		if (!xmlStrcmp (BAD_CAST "date", cur->name)) {
 			t = date_parse_ISO8601 (value);
-			feed_item_set_publish_time (item, t);
+			grss_feed_item_set_publish_time (item, t);
 		}
 		else if (!xmlStrcmp (BAD_CAST "title", cur->name)) {
-			feed_item_set_title (item, value);
+			grss_feed_item_set_title (item, value);
 		}
 		else if (!xmlStrcmp (BAD_CAST "creator", cur->name)) {
-			feed_item_set_author (item, value);
+			grss_feed_item_set_author (item, value);
 		}
 		else if (!xmlStrcmp (BAD_CAST "subject", cur->name)) {
-			feed_item_add_category (item, value);
+			grss_feed_item_add_category (item, value);
 		}
 		else if (!xmlStrcmp (BAD_CAST "description", cur->name)) {
-			feed_item_set_description (item, value);
+			grss_feed_item_set_description (item, value);
 		}
 		else if (!xmlStrcmp (BAD_CAST "contributor", cur->name)) {
-			feed_item_add_contributor (item, value);
+			grss_feed_item_add_contributor (item, value);
 		}
 		else if (!xmlStrcmp (BAD_CAST "rights", cur->name)) {
-			feed_item_set_copyright (item, value);
+			grss_feed_item_set_copyright (item, value);
 		}
 
 		g_free (value);
@@ -140,7 +140,7 @@ ns_dc_item (FeedItem *item, xmlNodePtr cur)
 }
 
 static gboolean
-ns_dc_channel (FeedChannel *feed, xmlNodePtr cur)
+ns_dc_channel (GrssFeedChannel *feed, xmlNodePtr cur)
 {
 	gchar *value;
 	gboolean ret;
@@ -150,31 +150,31 @@ ns_dc_channel (FeedChannel *feed, xmlNodePtr cur)
 
 	if (value) {
 		if (!xmlStrcmp (BAD_CAST "title", cur->name)) {
-			feed_channel_set_title (feed, value);
+			grss_feed_channel_set_title (feed, value);
 			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "creator", cur->name)) {
-			feed_channel_set_editor (feed, value);
+			grss_feed_channel_set_editor (feed, value);
 			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "subject", cur->name)) {
-			feed_channel_set_category (feed, value);
+			grss_feed_channel_set_category (feed, value);
 			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "description", cur->name)) {
-			feed_channel_set_description (feed, value);
+			grss_feed_channel_set_description (feed, value);
 			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "publisher", cur->name)) {
-			feed_channel_set_webmaster (feed, value);
+			grss_feed_channel_set_webmaster (feed, value);
 			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "contributor", cur->name)) {
-			feed_channel_add_contributor (feed, value);
+			grss_feed_channel_add_contributor (feed, value);
 			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "rights", cur->name)) {
-			feed_channel_set_copyright (feed, value);
+			grss_feed_channel_set_copyright (feed, value);
 			ret = TRUE;
 		}
 
@@ -185,7 +185,7 @@ ns_dc_channel (FeedChannel *feed, xmlNodePtr cur)
 }
 
 static void
-ns_georss_item (FeedItem *item, xmlNodePtr cur)
+ns_georss_item (GrssFeedItem *item, xmlNodePtr cur)
 {
 	gchar *tmp;
 	gchar *sep;
@@ -201,7 +201,7 @@ ns_georss_item (FeedItem *item, xmlNodePtr cur)
 				*sep = '\0';
 				latitude = strtod (tmp, NULL);
 				longitude = strtod (sep + 1, NULL);
-				feed_item_set_geo_point (item, latitude, longitude);
+				grss_feed_item_set_geo_point (item, latitude, longitude);
 			}
 
 			g_free (tmp);
@@ -210,7 +210,7 @@ ns_georss_item (FeedItem *item, xmlNodePtr cur)
 }
 
 static void
-ns_geo_item (FeedItem *item, xmlNodePtr cur)
+ns_geo_item (GrssFeedItem *item, xmlNodePtr cur)
 {
 	gchar *tmp;
 	double latitude;
@@ -234,25 +234,25 @@ ns_geo_item (FeedItem *item, xmlNodePtr cur)
 		}
 	}
 
-	feed_item_set_geo_point (item, latitude, longitude);
+	grss_feed_item_set_geo_point (item, latitude, longitude);
 }
 
 static void
-ns_itunes_item (FeedItem *item, xmlNodePtr cur)
+ns_itunes_item (GrssFeedItem *item, xmlNodePtr cur)
 {
 	gchar *tmp;
 
 	if (!xmlStrcmp (cur->name, BAD_CAST"author")) {
 		tmp = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 		if (tmp) {
-			feed_item_set_author (item, tmp);
+			grss_feed_item_set_author (item, tmp);
 			g_free (tmp);
 		}
 	}
 
 	if (!xmlStrcmp (cur->name, BAD_CAST"summary")) {
 		tmp = xhtml_extract (cur, 0, NULL);
-		feed_item_add_category (item, tmp);
+		grss_feed_item_add_category (item, tmp);
 		g_free (tmp);
 	}
 
@@ -271,7 +271,7 @@ ns_itunes_item (FeedItem *item, xmlNodePtr cur)
 				keyword = g_utf8_next_char (keyword);
 			}
 
-			feed_item_add_category (item, keyword);
+			grss_feed_item_add_category (item, keyword);
 			keyword = tmp;
 		}
 
@@ -280,7 +280,7 @@ ns_itunes_item (FeedItem *item, xmlNodePtr cur)
 }
 
 static gboolean
-ns_itunes_channel (FeedChannel *feed, xmlNodePtr cur)
+ns_itunes_channel (GrssFeedChannel *feed, xmlNodePtr cur)
 {
 	gchar *tmp;
 	const gchar *old;
@@ -288,9 +288,9 @@ ns_itunes_channel (FeedChannel *feed, xmlNodePtr cur)
 	if (!xmlStrcmp (cur->name, BAD_CAST"summary") || !xmlStrcmp (cur->name, BAD_CAST"subtitle")) {
 		tmp = xhtml_extract (cur, 0, NULL);
 
-		old = feed_channel_get_description (feed);
+		old = grss_feed_channel_get_description (feed);
 		if (!old || strlen (old) < strlen (tmp))
-			feed_channel_set_description (feed, tmp);
+			grss_feed_channel_set_description (feed, tmp);
 
 		g_free (tmp);
 		return TRUE;
@@ -300,13 +300,13 @@ ns_itunes_channel (FeedChannel *feed, xmlNodePtr cur)
 }
 
 static void
-ns_media_item (FeedItem *item, xmlNodePtr cur)
+ns_media_item (GrssFeedItem *item, xmlNodePtr cur)
 {
 	gchar *tmp;
 	gchar *tmp2;
 	gchar *tmp3;
-	FeedEnclosure *enclosure;
-	FeedChannel *feed;
+	GrssFeedEnclosure *enclosure;
+	GrssFeedChannel *feed;
 
 	/*
 	   Maximual definition could look like this:
@@ -342,8 +342,8 @@ ns_media_item (FeedItem *item, xmlNodePtr cur)
 			if (lengthStr)
 				length = atol (lengthStr);
 
-			feed = feed_item_get_parent (item);
-			tmp3 = (gchar*) feed_channel_get_homepage (feed);
+			feed = grss_feed_item_get_parent (item);
+			tmp3 = (gchar*) grss_feed_channel_get_homepage (feed);
 
 			if ((strstr (tmp, "://") == NULL) &&
 			    (tmp3 != NULL) &&
@@ -361,13 +361,13 @@ ns_media_item (FeedItem *item, xmlNodePtr cur)
 			}
 			else {
 				/* Never add enclosures for images already contained in the description */
-				tmp2 = (gchar*) feed_item_get_description (item);
+				tmp2 = (gchar*) grss_feed_item_get_description (item);
 
 				if (!(tmp2 && strstr (tmp2, tmp))) {
-					enclosure = feed_enclosure_new (tmp);
-					feed_enclosure_set_format (enclosure, type);
-					feed_enclosure_set_length (enclosure, length);
-					feed_item_add_enclosure (item, enclosure);
+					enclosure = grss_feed_enclosure_new (tmp);
+					grss_feed_enclosure_set_format (enclosure, type);
+					grss_feed_enclosure_set_length (enclosure, length);
+					grss_feed_item_add_enclosure (item, enclosure);
 				}
 			}
 
@@ -382,13 +382,13 @@ ns_media_item (FeedItem *item, xmlNodePtr cur)
 }
 
 static gboolean
-ns_syn_channel (FeedChannel *channel, xmlNodePtr cur)
+ns_syn_channel (GrssFeedChannel *channel, xmlNodePtr cur)
 {
 	xmlChar	*tmp;
 	gint period;
 	gint frequency = 1;
 
-	period = feed_channel_get_update_interval (channel);
+	period = grss_feed_channel_get_update_interval (channel);
 
 	if (!xmlStrcmp (cur->name, BAD_CAST"updatePeriod")) {
 		if (NULL != (tmp = xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1))) {
@@ -419,12 +419,12 @@ ns_syn_channel (FeedChannel *channel, xmlNodePtr cur)
 	if (0 != frequency)
 		period /= frequency;
 
-	feed_channel_set_update_interval (channel, period);
+	grss_feed_channel_set_update_interval (channel, period);
 	return TRUE;
 }
 
 static void
-ns_trackback_item (FeedItem *item, xmlNodePtr cur)
+ns_trackback_item (GrssFeedItem *item, xmlNodePtr cur)
 {
 	gchar *tmp;
 
@@ -441,13 +441,13 @@ ns_trackback_item (FeedItem *item, xmlNodePtr cur)
 		tmp = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 
 	if (tmp) {
-		feed_item_set_related (item, tmp);
+		grss_feed_item_set_related (item, tmp);
 		g_free (tmp);
 	}
 }
 
 static void
-ns_wfw_item (FeedItem *item, xmlNodePtr cur)
+ns_wfw_item (GrssFeedItem *item, xmlNodePtr cur)
 {
 	gchar *uri = NULL;
 
@@ -455,13 +455,13 @@ ns_wfw_item (FeedItem *item, xmlNodePtr cur)
 		uri = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 
 	if (uri) {
-		feed_item_set_comments_url (item, uri);
+		grss_feed_item_set_comments_url (item, uri);
 		g_free (uri);
 	}
 }
 
 static gboolean
-ns_atom10_channel (FeedChannel *feed, xmlNodePtr cur)
+ns_atom10_channel (GrssFeedChannel *feed, xmlNodePtr cur)
 {
 	/*
 		Used to manage PubSubHubbub information in RSS feeds
@@ -477,9 +477,9 @@ ns_atom10_channel (FeedChannel *feed, xmlNodePtr cur)
 			href = (gchar*) xmlGetNsProp (cur, BAD_CAST "href", NULL);
 
 			if (strcmp (relation, "self") == 0)
-				feed_channel_set_pubsubhub (feed, NULL, href);
+				grss_feed_channel_set_pubsubhub (feed, NULL, href);
 			else if (strcmp (relation, "hub") == 0)
-				feed_channel_set_pubsubhub (feed, href, NULL);
+				grss_feed_channel_set_pubsubhub (feed, href, NULL);
 
 			g_free (relation);
 			g_free (href);
@@ -657,7 +657,7 @@ retrieve_internal_handler (NSHandler *handler, xmlNodePtr cur)
  * otherwise
  */
 gboolean
-ns_handler_channel (NSHandler *handler, FeedChannel *feed, xmlNodePtr cur)
+ns_handler_channel (NSHandler *handler, GrssFeedChannel *feed, xmlNodePtr cur)
 {
 	InternalNsHandler *nsh;
 
@@ -681,7 +681,7 @@ ns_handler_channel (NSHandler *handler, FeedChannel *feed, xmlNodePtr cur)
  * otherwise
  */
 gboolean
-ns_handler_item (NSHandler *handler, FeedItem *item, xmlNodePtr cur)
+ns_handler_item (NSHandler *handler, GrssFeedItem *item, xmlNodePtr cur)
 {
 	InternalNsHandler *nsh;
 

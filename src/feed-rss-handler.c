@@ -118,7 +118,7 @@ feed_rss_handler_check_format (FeedHandler *self, xmlDocPtr doc, xmlNodePtr cur)
 }
 
 static void
-parse_channel (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNodePtr cur) {
+parse_channel (FeedRssHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xmlNodePtr cur) {
 	gchar *tmp;
 	time_t t;
 
@@ -142,28 +142,28 @@ parse_channel (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNode
 		if (!xmlStrcmp (cur->name, BAD_CAST"copyright")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				feed_channel_set_copyright (feed, tmp);
+				grss_feed_channel_set_copyright (feed, tmp);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"webMaster") || !xmlStrcmp (cur->name, BAD_CAST"publisher")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				feed_channel_set_webmaster (feed, tmp);
+				grss_feed_channel_set_webmaster (feed, tmp);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"language")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				feed_channel_set_language (feed, tmp);
+				grss_feed_channel_set_language (feed, tmp);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"managingEditor")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				feed_channel_set_editor (feed, tmp);
+				grss_feed_channel_set_editor (feed, tmp);
 				g_free (tmp);
 			}
 		}
@@ -171,33 +171,33 @@ parse_channel (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNode
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
 				t = date_parse_RFC822 (tmp);
-				feed_channel_set_update_time (feed, t);
+				grss_feed_channel_set_update_time (feed, t);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"generator")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				feed_channel_set_generator (feed, tmp);
+				grss_feed_channel_set_generator (feed, tmp);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"pubDate")) {
  			if (NULL != (tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1))) {
 				t = date_parse_RFC822 (tmp);
-				feed_channel_set_publish_time (feed, t);
+				grss_feed_channel_set_publish_time (feed, t);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"ttl")) {
  			if (NULL != (tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, TRUE))) {
-				feed_channel_set_update_interval (feed, atoi (tmp));
+				grss_feed_channel_set_update_interval (feed, atoi (tmp));
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"title")) {
  			if (NULL != (tmp = unhtmlize ((gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, TRUE)))) {
-				feed_channel_set_title (feed, tmp);
+				grss_feed_channel_set_title (feed, tmp);
 				g_free (tmp);
 			}
 		}
@@ -206,14 +206,14 @@ parse_channel (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNode
 		*/
 		else if (!xmlStrcmp (cur->name, BAD_CAST"link") || !xmlStrcmp (cur->name, BAD_CAST"alink")) {
  			if (NULL != (tmp = unhtmlize ((gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, TRUE)))) {
-				feed_channel_set_homepage (feed, tmp);
+				grss_feed_channel_set_homepage (feed, tmp);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"description")) {
  			tmp = xhtml_extract (cur, 0, NULL);
 			if (tmp) {
-				feed_channel_set_description (feed, tmp);
+				grss_feed_channel_set_description (feed, tmp);
 				g_free (tmp);
 			}
 		}
@@ -222,24 +222,24 @@ parse_channel (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNode
 	}
 }
 
-static FeedItem*
-parse_rss_item (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNodePtr cur)
+static GrssFeedItem*
+parse_rss_item (FeedRssHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xmlNodePtr cur)
 {
 	gchar *tmp;
 	gchar *tmp2;
 	gchar *tmp3;
 	time_t t;
-	FeedItem *item;
+	GrssFeedItem *item;
 
 	g_assert (cur != NULL);
 
-	item = feed_item_new (feed);
+	item = grss_feed_item_new (feed);
 
 	/* try to get an item about id */
 	tmp = (gchar*) xmlGetProp (cur, BAD_CAST"about");
 	if (tmp) {
-		feed_item_set_id (item, tmp);
-		feed_item_set_source (item, tmp);
+		grss_feed_item_set_id (item, tmp);
+		grss_feed_item_set_source (item, tmp);
 		g_free (tmp);
 	}
 
@@ -262,21 +262,21 @@ parse_rss_item (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNod
 		if (!xmlStrcmp (cur->name, BAD_CAST"category")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				feed_item_add_category (item, tmp);
+				grss_feed_item_add_category (item, tmp);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"author")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				feed_item_set_author (item, tmp);
+				grss_feed_item_set_author (item, tmp);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"comments")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				feed_item_set_comments_url (item, tmp);
+				grss_feed_item_set_comments_url (item, tmp);
 				g_free (tmp);
 			}
 		}
@@ -284,7 +284,7 @@ parse_rss_item (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNod
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
 				t = date_parse_RFC822 (tmp);
-				feed_item_set_publish_time (item, t);
+				grss_feed_item_set_publish_time (item, t);
 				g_free (tmp);
 			}
 		}
@@ -295,7 +295,7 @@ parse_rss_item (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNod
 			if (tmp) {
 				gchar *type = (gchar*) xmlGetProp (cur, BAD_CAST"type");
 				gssize length = 0;
-				FeedEnclosure *enclosure;
+				GrssFeedEnclosure *enclosure;
 
 				tmp2 = (gchar*) xmlGetProp (cur, BAD_CAST"length");
 				if (tmp2) {
@@ -303,7 +303,7 @@ parse_rss_item (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNod
 					xmlFree (tmp2);
 				}
 
-				tmp3 = (gchar*) feed_channel_get_homepage (feed);
+				tmp3 = (gchar*) grss_feed_channel_get_homepage (feed);
 
 				if ((strstr (tmp, "://") == NULL) &&
 				    (tmp3 != NULL) &&
@@ -314,25 +314,25 @@ parse_rss_item (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNod
 					tmp = tmp2;
 				}
 
-				enclosure = feed_enclosure_new (tmp);
-				feed_enclosure_set_format (enclosure, type);
-				feed_enclosure_set_length (enclosure, length);
-				feed_item_add_enclosure (item, enclosure);
+				enclosure = grss_feed_enclosure_new (tmp);
+				grss_feed_enclosure_set_format (enclosure, type);
+				grss_feed_enclosure_set_length (enclosure, length);
+				grss_feed_item_add_enclosure (item, enclosure);
 
 				xmlFree (tmp);
 				xmlFree (type);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"guid")) {
-			if (!feed_item_get_id (item)) {
+			if (!grss_feed_item_get_id (item)) {
 				tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 				if (tmp) {
 					if (strlen (tmp) > 0) {
-						feed_item_set_id (item, tmp);
+						grss_feed_item_set_id (item, tmp);
 						tmp2 = (gchar*) xmlGetProp (cur, BAD_CAST"isPermaLink");
 
-						if (!feed_item_get_source (item) && (tmp2 == NULL || g_str_equal (tmp2, "true")))
-							feed_item_set_source (item, tmp); /* Per the RSS 2.0 spec. */
+						if (!grss_feed_item_get_source (item) && (tmp2 == NULL || g_str_equal (tmp2, "true")))
+							grss_feed_item_set_source (item, tmp); /* Per the RSS 2.0 spec. */
 						if (tmp2)
 							xmlFree (tmp2);
 					}
@@ -344,14 +344,14 @@ parse_rss_item (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNod
 		else if (!xmlStrcmp (cur->name, BAD_CAST"title")) {
  			tmp = unhtmlize ((gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, TRUE));
 			if (tmp) {
-				feed_item_set_title (item, tmp);
+				grss_feed_item_set_title (item, tmp);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"link")) {
  			tmp = unhtmlize ((gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, TRUE));
 			if (tmp) {
-				feed_item_set_source (item, tmp);
+				grss_feed_item_set_source (item, tmp);
 				g_free (tmp);
 			}
 		}
@@ -359,8 +359,8 @@ parse_rss_item (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNod
  			tmp = xhtml_extract (cur, 0, NULL);
 			if (tmp) {
 				/* don't overwrite content:encoded descriptions... */
-				if (!feed_item_get_description (item))
-					feed_item_set_description (item, tmp);
+				if (!grss_feed_item_get_description (item))
+					grss_feed_item_set_description (item, tmp);
 				g_free (tmp);
 			}
 		}
@@ -369,7 +369,7 @@ parse_rss_item (FeedRssHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNod
 			tmp2 = unhtmlize ((gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1));
 
 			if (tmp) {
-				feed_item_set_real_source (item, g_strchomp (tmp), tmp2 ? g_strchomp (tmp2) : NULL);
+				grss_feed_item_set_real_source (item, g_strchomp (tmp), tmp2 ? g_strchomp (tmp2) : NULL);
 				g_free (tmp);
 			}
 
@@ -406,14 +406,14 @@ parse_image (xmlNodePtr cur) {
 }
 
 static GList*
-feed_rss_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GError **error)
+feed_rss_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
 {
 	gchar *tmp;
 	gboolean rdf;
 	time_t now;
 	GList *items;
 	xmlNodePtr cur;
-	FeedItem *item;
+	GrssFeedItem *item;
 	FeedRssHandler *parser;
 
 	items = NULL;
@@ -477,7 +477,7 @@ feed_rss_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 		/* save link to channel image */
 		if ((!xmlStrcmp (cur->name, BAD_CAST"image"))) {
 			if (NULL != (tmp = parse_image (cur))) {
-				feed_channel_set_image (feed, tmp);
+				grss_feed_channel_set_image (feed, tmp);
 				g_free (tmp);
 			}
 		}
@@ -488,8 +488,8 @@ feed_rss_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 				item = parse_rss_item (parser, feed, doc, iter);
 
 				if (item != NULL) {
-					if (feed_item_get_publish_time (item) == 0)
-						feed_item_set_publish_time (item, now);
+					if (grss_feed_item_get_publish_time (item) == 0)
+						grss_feed_item_set_publish_time (item, now);
 					items = g_list_append (items, item);
 				}
 
@@ -500,8 +500,8 @@ feed_rss_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 			item = parse_rss_item (parser, feed, doc, cur);
 
 			if (item != NULL) {
-				if (feed_item_get_publish_time (item) == 0)
-					feed_item_set_publish_time (item, now);
+				if (grss_feed_item_get_publish_time (item) == 0)
+					grss_feed_item_set_publish_time (item, now);
 				items = g_list_append (items, item);
 			}
 

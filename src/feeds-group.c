@@ -26,19 +26,19 @@
 #include "feeds-xoxo-group-handler.h"
 #include "feeds-xbel-group-handler.h"
 
-#define FEEDS_GROUP_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEEDS_GROUP_TYPE, FeedsGroupPrivate))
+#define FEEDS_GROUP_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEEDS_GROUP_TYPE, GrssFeedsGroupPrivate))
 
 /**
  * SECTION: feeds-group
  * @short_description: import and export group of channels
  *
- * #FeedsGroup is an utility to import and export list of #FeedChannels in
+ * #GrssFeedsGroup is an utility to import and export list of #GrssFeedChannels in
  * different formats, such as OPML and XOXO.
  */
 
-#define FEEDS_GROUP_ERROR		feeds_group_error_quark()
+#define FEEDS_GROUP_ERROR		grss_feeds_group_error_quark()
 
-struct _FeedsGroupPrivate {
+struct _GrssFeedsGroupPrivate {
 	GSList *handlers;
 };
 
@@ -46,42 +46,42 @@ enum {
 	FEEDS_GROUP_PARSE_ERROR,
 };
 
-G_DEFINE_TYPE (FeedsGroup, feeds_group, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GrssFeedsGroup, grss_feeds_group, G_TYPE_OBJECT)
 
 static GQuark
-feeds_group_error_quark ()
+grss_feeds_group_error_quark ()
 {
-	return g_quark_from_static_string ("feeds_group_error");
+	return g_quark_from_static_string ("grss_feeds_group_error");
 }
 
 static void
-feeds_group_finalize (GObject *object)
+grss_feeds_group_finalize (GObject *object)
 {
-	FeedsGroup *group;
+	GrssFeedsGroup *group;
 
 	group = FEEDS_GROUP (object);
-	G_OBJECT_CLASS (feeds_group_parent_class)->finalize (object);
+	G_OBJECT_CLASS (grss_feeds_group_parent_class)->finalize (object);
 }
 
 static void
-feeds_group_class_init (FeedsGroupClass *klass)
+grss_feeds_group_class_init (GrssFeedsGroupClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	g_type_class_add_private (object_class, sizeof (FeedsGroupPrivate));
-	object_class->finalize = feeds_group_finalize;
+	g_type_class_add_private (object_class, sizeof (GrssFeedsGroupPrivate));
+	object_class->finalize = grss_feeds_group_finalize;
 }
 
 static void
-feeds_group_init (FeedsGroup *object)
+grss_feeds_group_init (GrssFeedsGroup *object)
 {
 	object->priv = FEEDS_GROUP_GET_PRIVATE (object);
 }
 
 static GSList*
-feeds_groups_get_list (FeedsGroup *group)
+feeds_groups_get_list (GrssFeedsGroup *group)
 {
-	FeedsGroupHandler *parser;
+	GrssFeedsGroupHandler *parser;
 
 	if (group->priv->handlers == NULL) {
 		/*
@@ -102,33 +102,33 @@ feeds_groups_get_list (FeedsGroup *group)
 }
 
 /**
- * feeds_group_new:
+ * grss_feeds_group_new:
  *
- * Allocates a new #FeedsGroup
+ * Allocates a new #GrssFeedsGroup
  *
- * Return value: a new #FeedsGroup
+ * Return value: a new #GrssFeedsGroup
  */
-FeedsGroup*
-feeds_group_new ()
+GrssFeedsGroup*
+grss_feeds_group_new ()
 {
-	FeedsGroup *group;
+	GrssFeedsGroup *group;
 
 	group = g_object_new (FEEDS_GROUP_TYPE, NULL);
 	return group;
 }
 
-static FeedsGroupHandler*
-retrieve_group_handler (FeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
+static GrssFeedsGroupHandler*
+retrieve_group_handler (GrssFeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
 {
 	GSList *iter;
-	FeedsGroupHandler *handler;
+	GrssFeedsGroupHandler *handler;
 
 	iter = feeds_groups_get_list (group);
 
 	while (iter) {
-		handler = (FeedsGroupHandler*) (iter->data);
+		handler = (GrssFeedsGroupHandler*) (iter->data);
 
-		if (handler && feeds_group_handler_check_format (handler, doc, cur))
+		if (handler && grss_feeds_group_handler_check_format (handler, doc, cur))
 			return handler;
 
 		iter = g_slist_next (iter);
@@ -139,23 +139,23 @@ retrieve_group_handler (FeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
 }
 
 /**
- * feeds_group_parse_file:
- * @group: a #FeedsGroup
+ * grss_feeds_group_parse_file:
+ * @group: a #GrssFeedsGroup
  * @path: path of the file to parse
  * @error: location for eventual errors
  *
  * Parses the given file to obtain list of listed feeds
  *
- * Return value: a list of #FeedChannels, or NULL if an error occours and
+ * Return value: a list of #GrssFeedChannels, or NULL if an error occours and
  * @error is set
  */
 GList*
-feeds_group_parse_file (FeedsGroup *group, const gchar *path, GError **error)
+grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **error)
 {
 	GList *items;
 	xmlDocPtr doc;
 	xmlNodePtr cur;
-	FeedsGroupHandler *handler;
+	GrssFeedsGroupHandler *handler;
 
 	items = NULL;
 	doc = NULL;
@@ -182,7 +182,7 @@ feeds_group_parse_file (FeedsGroup *group, const gchar *path, GError **error)
 		if (handler == NULL)
 			break;
 
-		items = feeds_group_handler_parse (handler, doc, error);
+		items = grss_feeds_group_handler_parse (handler, doc, error);
 
 	} while (0);
 
@@ -193,7 +193,7 @@ feeds_group_parse_file (FeedsGroup *group, const gchar *path, GError **error)
 }
 
 gboolean
-feeds_group_export_file (FeedsGroup *groups, GList *channels, const gchar *path, GError *error)
+grss_feeds_group_export_file (GrssFeedsGroup *groups, GList *channels, const gchar *path, GError *error)
 {
 	return FALSE;
 }

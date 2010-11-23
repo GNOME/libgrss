@@ -45,8 +45,8 @@
 
 #define FEED_PIE_HANDLER_ERROR			feed_pie_handler_error_quark()
 
-typedef void 	(*PieChannelParserFunc)		(xmlNodePtr cur, FeedChannel *feed);
-typedef void 	(*PieItemParserFunc)		(xmlNodePtr cur, FeedItem *item, FeedChannel *feed);
+typedef void 	(*PieChannelParserFunc)		(xmlNodePtr cur, GrssFeedChannel *feed);
+typedef void 	(*PieItemParserFunc)		(xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed);
 
 struct FeedPieHandlerPrivate {
 	NSHandler	*handler;
@@ -203,15 +203,15 @@ parseAuthor (xmlNodePtr cur) {
 	return tmp;
 }
 
-FeedItem*
-parse_entry (FeedPieHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNodePtr cur) {
+GrssFeedItem*
+parse_entry (FeedPieHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xmlNodePtr cur) {
 	xmlChar *xtmp;
 	gchar *tmp2;
 	gchar *tmp;
-	FeedItem *item;
+	GrssFeedItem *item;
 
 	g_assert (NULL != cur);
-	item = feed_item_new (feed);
+	item = grss_feed_item_new (feed);
 
 	cur = cur->xmlChildrenNode;
 
@@ -231,7 +231,7 @@ parse_entry (FeedPieHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNodePt
 
 		if (!xmlStrcmp (cur->name, BAD_CAST"title")) {
 			if (NULL != (tmp = unhtmlize (pie_parse_content_construct (cur)))) {
-				feed_item_set_title (item, tmp);
+				grss_feed_item_set_title (item, tmp);
 				g_free (tmp);
 			}
 		}
@@ -241,7 +241,7 @@ parse_entry (FeedPieHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNodePt
 				xtmp = xmlGetProp (cur, BAD_CAST"rel");
 
 				if (xtmp != NULL && !xmlStrcmp (xtmp, BAD_CAST"alternate"))
-					feed_item_set_source(item, tmp2);
+					grss_feed_item_set_source(item, tmp2);
 				/* else
 					FIXME: Maybe do something with other links? */
 
@@ -251,7 +251,7 @@ parse_entry (FeedPieHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNodePt
 			else {
 				/* 0.2 link : element content is the link, or non-alternate link in 0.3 */
 				if (NULL != (tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1))) {
-					feed_item_set_source (item, tmp);
+					grss_feed_item_set_source (item, tmp);
 					g_free (tmp);
 				}
 			}
@@ -259,48 +259,48 @@ parse_entry (FeedPieHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNodePt
 		else if (!xmlStrcmp (cur->name, BAD_CAST"author")) {
 			/* parse feed author */
 			tmp =  parseAuthor (cur);
-			feed_item_set_author (item, tmp);
+			grss_feed_item_set_author (item, tmp);
 			g_free (tmp);
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"contributor")) {
 			/* parse feed contributors */
 			tmp = parseAuthor (cur);
-			feed_item_add_contributor (item, tmp);
+			grss_feed_item_add_contributor (item, tmp);
 			g_free (tmp);
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"id")) {
 			if (NULL != (tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1))) {
-				feed_item_set_id (item, tmp);
+				grss_feed_item_set_id (item, tmp);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"issued")) {
 			/* FIXME: is <modified> or <issued> or <created> the time tag we want to display? */
  			if (NULL != (tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1))) {
-				feed_item_set_publish_time (item, date_parse_ISO8601 (tmp));
+				grss_feed_item_set_publish_time (item, date_parse_ISO8601 (tmp));
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp(cur->name, BAD_CAST"content")) {
 			/* <content> support */
 			if (NULL != (tmp = pie_parse_content_construct (cur))) {
-				feed_item_set_description (item, tmp);
+				grss_feed_item_set_description (item, tmp);
 				g_free (tmp);
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"summary")) {
 			/* <summary> can be used for short text descriptions, if there is no
 			   <content> description we show the <summary> content */
-			if (!feed_item_get_description (item)) {
+			if (!grss_feed_item_get_description (item)) {
 				if (NULL != (tmp = pie_parse_content_construct (cur))) {
-					feed_item_set_description (item, tmp);
+					grss_feed_item_set_description (item, tmp);
 					g_free (tmp);
 				}
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"copyright")) {
  			if (NULL != (tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1))) {
-				feed_item_set_copyright (item, tmp);
+				grss_feed_item_set_copyright (item, tmp);
 				g_free (tmp);
 			}
 		}
@@ -312,7 +312,7 @@ parse_entry (FeedPieHandler *parser, FeedChannel *feed, xmlDocPtr doc, xmlNodePt
 }
 
 static GList*
-feed_pie_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GError **error)
+feed_pie_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
 {
 	gchar *tmp2;
 	gchar *tmp = NULL;
@@ -321,7 +321,7 @@ feed_pie_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 	time_t now;
 	xmlNodePtr cur;
 	GList *items;
-	FeedItem *item;
+	GrssFeedItem *item;
 	FeedPieHandler *parser;
 
 	items = NULL;
@@ -356,7 +356,7 @@ feed_pie_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 			if (!xmlStrcmp(cur->name, BAD_CAST"title")) {
 				tmp = unhtmlize (pie_parse_content_construct (cur));
 				if (tmp)
-					feed_channel_set_title (feed, tmp);
+					grss_feed_channel_set_title (feed, tmp);
 			}
 			else if (!xmlStrcmp (cur->name, BAD_CAST"link")) {
 				tmp = (gchar*) xmlGetNsProp (cur, BAD_CAST"href", NULL);
@@ -366,7 +366,7 @@ feed_pie_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 					tmp2 = (gchar*) xmlGetNsProp (cur, BAD_CAST"rel", NULL);
 
 					if (tmp2 && g_str_equal (tmp2, "alternate"))
-						feed_channel_set_homepage (feed, tmp);
+						grss_feed_channel_set_homepage (feed, tmp);
 					/* else
 						FIXME: Maybe do something with other links? */
 
@@ -377,7 +377,7 @@ feed_pie_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 					/* 0.2 link : element content is the link, or non-alternate link in 0.3 */
 					tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 					if (tmp) {
-						feed_channel_set_homepage (feed, tmp);
+						grss_feed_channel_set_homepage (feed, tmp);
 						g_free (tmp);
 					}
 				}
@@ -387,14 +387,14 @@ feed_pie_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 				/* parse feed author */
 				tmp = parseAuthor (cur);
 				if (tmp) {
-					feed_channel_set_editor (feed, tmp);
+					grss_feed_channel_set_editor (feed, tmp);
 					g_free (tmp);
 				}
 			}
 			else if (!xmlStrcmp (cur->name, BAD_CAST"tagline")) {
 				tmp = pie_parse_content_construct (cur);
 				if (tmp) {
-					feed_channel_set_description (feed, tmp);
+					grss_feed_channel_set_description (feed, tmp);
 					g_free (tmp);
 				}
 			}
@@ -417,7 +417,7 @@ feed_pie_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 						tmp = tmp3;
 					}
 
-					feed_channel_set_generator (feed, tmp);
+					grss_feed_channel_set_generator (feed, tmp);
 				}
 
 				g_free (tmp);
@@ -425,7 +425,7 @@ feed_pie_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 			else if (!xmlStrcmp (cur->name, BAD_CAST"copyright")) {
 				tmp = pie_parse_content_construct (cur);
 				if (tmp) {
-					feed_channel_set_copyright (feed, tmp);
+					grss_feed_channel_set_copyright (feed, tmp);
 					g_free (tmp);
 				}
 			}
@@ -433,7 +433,7 @@ feed_pie_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 				tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 				if (tmp) {
 					t = date_parse_ISO8601 (tmp);
-					feed_channel_set_update_time (feed, t);
+					grss_feed_channel_set_update_time (feed, t);
 					g_free (tmp);
 				}
 			}
@@ -441,22 +441,22 @@ feed_pie_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GEr
 				tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 				if (tmp) {
 					t = date_parse_ISO8601 (tmp);
-					feed_channel_set_update_time (feed, t);
+					grss_feed_channel_set_update_time (feed, t);
 					g_free(tmp);
 				}
 			}
 			else if (!xmlStrcmp (cur->name, BAD_CAST"contributor")) {
 				tmp = parseAuthor (cur);
 				if (tmp) {
-					feed_channel_add_contributor (feed, tmp);
+					grss_feed_channel_add_contributor (feed, tmp);
 					g_free (tmp);
 				}
 			}
 			else if ((!xmlStrcmp (cur->name, BAD_CAST"entry"))) {
 				item = parse_entry (parser, feed, doc, cur);
 				if (item) {
-					if (feed_item_get_publish_time (item) == 0)
-						feed_item_set_publish_time (item, now);
+					if (grss_feed_item_get_publish_time (item) == 0)
+						grss_feed_item_set_publish_time (item, now);
 					items = g_list_prepend (items, item);
 				}
 			}

@@ -21,61 +21,61 @@
 #include "utils.h"
 #include "feed-enclosure.h"
 
-#define FEED_ENCLOSURE_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEED_ENCLOSURE_TYPE, FeedEnclosurePrivate))
+#define FEED_ENCLOSURE_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEED_ENCLOSURE_TYPE, GrssFeedEnclosurePrivate))
 
 /**
  * SECTION: feed-enclosure
  * @short_description: a component attached to an item
  *
- * #FeedEnclosure describes an external element embedded into a #FeedItem: it
+ * #GrssFeedEnclosure describes an external element embedded into a #GrssFeedItem: it
  * may be an image, a video of other kind of file to be presented with the
  * parent item
  */
 
-struct _FeedEnclosurePrivate {
+struct _GrssFeedEnclosurePrivate {
 	gchar	*url;
 	gchar	*type;
 	gsize	length;
 };
 
-G_DEFINE_TYPE (FeedEnclosure, feed_enclosure, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GrssFeedEnclosure, grss_feed_enclosure, G_TYPE_OBJECT);
 
-static void feed_enclosure_finalize (GObject *obj)
+static void grss_feed_enclosure_finalize (GObject *obj)
 {
-	FeedEnclosure *enclosure;
+	GrssFeedEnclosure *enclosure;
 
 	enclosure = FEED_ENCLOSURE (obj);
 	FREE_STRING (enclosure->priv->url);
 	FREE_STRING (enclosure->priv->type);
 }
 
-static void feed_enclosure_class_init (FeedEnclosureClass *klass)
+static void grss_feed_enclosure_class_init (GrssFeedEnclosureClass *klass)
 {
 	GObjectClass *gobject_class;
 
-	g_type_class_add_private (klass, sizeof (FeedEnclosurePrivate));
+	g_type_class_add_private (klass, sizeof (GrssFeedEnclosurePrivate));
 
 	gobject_class = G_OBJECT_CLASS (klass);
-	gobject_class->finalize = feed_enclosure_finalize;
+	gobject_class->finalize = grss_feed_enclosure_finalize;
 }
 
-static void feed_enclosure_init (FeedEnclosure *node)
+static void grss_feed_enclosure_init (GrssFeedEnclosure *node)
 {
 	node->priv = FEED_ENCLOSURE_GET_PRIVATE (node);
-	memset (node->priv, 0, sizeof (FeedEnclosurePrivate));
+	memset (node->priv, 0, sizeof (GrssFeedEnclosurePrivate));
 }
 
 /**
- * feed_enclosure_new:
+ * grss_feed_enclosure_new:
  * @url: URL of the external element
  *
- * Allocates a new #FeedEnclosure, to be downloaded separately
+ * Allocates a new #GrssFeedEnclosure, to be downloaded separately
  *
- * Return value: a new #FeedEnclosure
+ * Return value: a new #GrssFeedEnclosure
  */
-FeedEnclosure* feed_enclosure_new (gchar *url)
+GrssFeedEnclosure* grss_feed_enclosure_new (gchar *url)
 {
-	FeedEnclosure *ret;
+	GrssFeedEnclosure *ret;
 
 	ret = g_object_new (FEED_ENCLOSURE_TYPE, NULL);
 	ret->priv->url = g_strdup (url);
@@ -83,65 +83,65 @@ FeedEnclosure* feed_enclosure_new (gchar *url)
 }
 
 /**
- * feed_enclosure_get_url:
- * @enclosure: a #FeedEnclosure
+ * grss_feed_enclosure_get_url:
+ * @enclosure: a #GrssFeedEnclosure
  *
  * Retrieves the URL of the @enclosure
  *
  * Return value: the URL where the enclosure may be found
  */
-const gchar* feed_enclosure_get_url (FeedEnclosure *enclosure)
+const gchar* grss_feed_enclosure_get_url (GrssFeedEnclosure *enclosure)
 {
 	return (const gchar*) enclosure->priv->url;
 }
 
 /**
- * feed_enclosure_set_format:
- * @enclosure: a #FeedEnclosure
+ * grss_feed_enclosure_set_format:
+ * @enclosure: a #GrssFeedEnclosure
  * @type: type of content
  *
  * To set the type of the external file
  */
-void feed_enclosure_set_format (FeedEnclosure *enclosure, gchar *type)
+void grss_feed_enclosure_set_format (GrssFeedEnclosure *enclosure, gchar *type)
 {
 	FREE_STRING (enclosure->priv->type);
 	enclosure->priv->type = g_strdup (type);
 }
 
 /**
- * feed_enclosure_get_format:
- * @enclosure: a #FeedEnclosure
+ * grss_feed_enclosure_get_format:
+ * @enclosure: a #GrssFeedEnclosure
  *
  * Retrieves the format of the enclosed file
  *
  * Return value: type of @enclosure
  */
-const gchar* feed_enclosure_get_format (FeedEnclosure *enclosure)
+const gchar* grss_feed_enclosure_get_format (GrssFeedEnclosure *enclosure)
 {
 	return (const gchar*) enclosure->priv->type;
 }
 
 /**
- * feed_enclosure_set_length:
- * @enclosure: a #FeedEnclosure
- * @length: size of the enclosure
+ * grss_feed_enclosure_set_length:
+ * @enclosure: a #GrssFeedEnclosure
+ * @length: size of the enclosure, in bytes
  *
  * To set the size of the embedded @enclosure
  */
-void feed_enclosure_set_length (FeedEnclosure *enclosure, gsize length)
+void grss_feed_enclosure_set_length (GrssFeedEnclosure *enclosure, gsize length)
 {
 	enclosure->priv->length = length;
 }
 
 /**
- * feed_enclosure_get_length:
- * @enclosure: a #FeedEnclosure
+ * grss_feed_enclosure_get_length:
+ * @enclosure: a #GrssFeedEnclosure
  *
  * Retrieves the size of the embedded file
  *
- * Return value: size of the @enclosure
+ * Return value: size of the @enclosure, in bytes
  */
-gsize feed_enclosure_get_length (FeedEnclosure *enclosure)
+gsize grss_feed_enclosure_get_length (GrssFeedEnclosure *enclosure)
 {
 	return enclosure->priv->length;
 }

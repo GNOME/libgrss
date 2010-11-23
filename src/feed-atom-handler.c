@@ -43,8 +43,8 @@
 #define FEED_ATOM_HANDLER_ERROR			feed_atom_handler_error_quark()
 #define ATOM10_NS				BAD_CAST"http://www.w3.org/2005/Atom"
 
-typedef void 	(*AtomChannelParserFunc)	(xmlNodePtr cur, FeedChannel *feed);
-typedef void 	(*AtomItemParserFunc)		(xmlNodePtr cur, FeedItem *item, FeedChannel *feed);
+typedef void 	(*AtomChannelParserFunc)	(xmlNodePtr cur, GrssFeedChannel *feed);
+typedef void 	(*AtomItemParserFunc)		(xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed);
 
 struct FeedAtomHandlerPrivate {
 	NSHandler	*handler;
@@ -344,7 +344,7 @@ atom10_parse_person_construct (xmlNodePtr cur)
 
 /* Note: this function is called for both item and feed context */
 static gchar *
-atom10_parse_link (xmlNodePtr cur, FeedChannel *feed, FeedItem *item)
+atom10_parse_link (xmlNodePtr cur, GrssFeedChannel *feed, GrssFeedItem *item)
 {
 	gchar *href;
 	const gchar *home;
@@ -356,7 +356,7 @@ atom10_parse_link (xmlNodePtr cur, FeedChannel *feed, FeedItem *item)
 		xmlChar *baseURL = xmlNodeGetBase (cur->doc, cur);
 		gchar *url, *relation, *type, *escTitle = NULL, *title;
 
-		home = feed_channel_get_homepage (feed);
+		home = grss_feed_channel_get_homepage (feed);
 
 		if (!baseURL && home && strstr (home, "://"))
 			baseURL = xmlStrdup (BAD_CAST home);
@@ -375,7 +375,7 @@ atom10_parse_link (xmlNodePtr cur, FeedChannel *feed, FeedItem *item)
 		else if (g_str_equal (relation, "replies")) {
 			if (item != NULL && (!type || g_str_equal (type, BAD_CAST"application/atom+xml"))) {
 				gchar *commentUri = (gchar*) common_build_url ((gchar*) url, home);
-				feed_item_set_comments_url (item, commentUri);
+				grss_feed_item_set_comments_url (item, commentUri);
 				g_free (commentUri);
 			}
 		}
@@ -383,34 +383,34 @@ atom10_parse_link (xmlNodePtr cur, FeedChannel *feed, FeedItem *item)
 			if (item != NULL) {
 				gsize length = 0;
 				gchar *lengthStr = (gchar*) xmlGetNsProp (cur, BAD_CAST"length", NULL);
-				FeedEnclosure *enclosure;
+				GrssFeedEnclosure *enclosure;
 
 				if (lengthStr)
 					length = atol (lengthStr);
 				g_free (lengthStr);
 
-				enclosure = feed_enclosure_new (url);
-				feed_enclosure_set_format (enclosure, type);
-				feed_enclosure_set_length (enclosure, length);
-				feed_item_add_enclosure (item, enclosure);
+				enclosure = grss_feed_enclosure_new (url);
+				grss_feed_enclosure_set_format (enclosure, type);
+				grss_feed_enclosure_set_length (enclosure, length);
+				grss_feed_item_add_enclosure (item, enclosure);
 			}
 		}
 		else if (g_str_equal (relation, "related")) {
 			if (item != NULL)
-				feed_item_set_related (item, url);
+				grss_feed_item_set_related (item, url);
 		}
 		else if (g_str_equal (relation, "via")) {
 			/*
-				FIXME	How to handle "via" relation? With feed_item_set_source() ?
+				FIXME	How to handle "via" relation? With grss_feed_item_set_source() ?
 			*/
 		}
 		else if (g_str_equal (relation, "hub")) {
 			if (feed != NULL)
-				feed_channel_set_pubsubhub (feed, url, NULL);
+				grss_feed_channel_set_pubsubhub (feed, url, NULL);
 		}
 		else if (g_str_equal (relation, "self")) {
 			if (feed != NULL)
-				feed_channel_set_pubsubhub (feed, NULL, url);
+				grss_feed_channel_set_pubsubhub (feed, NULL, url);
 		}
 
 		xmlFree (title);
@@ -429,19 +429,19 @@ atom10_parse_link (xmlNodePtr cur, FeedChannel *feed, FeedItem *item)
 }
 
 static void
-atom10_parse_entry_author (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
+atom10_parse_entry_author (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
 	gchar *author;
 
 	author = atom10_parse_person_construct (cur);
 	if (author) {
-		feed_item_set_author (item, author);
+		grss_feed_item_set_author (item, author);
 		g_free (author);
 	}
 }
 
 static void
-atom10_parse_entry_category (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
+atom10_parse_entry_category (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
 	gchar *category = NULL;
 
@@ -451,69 +451,69 @@ atom10_parse_entry_category (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
 
 	if (category) {
 		gchar *escaped = g_markup_escape_text (category, -1);
-		feed_item_add_category (item, escaped);
+		grss_feed_item_add_category (item, escaped);
 		g_free (escaped);
 		xmlFree (category);
 	}
 }
 
 static void
-atom10_parse_entry_content (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
+atom10_parse_entry_content (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
 	gchar *content;
 
 	content = atom10_parse_content_construct (cur);
 	if (content) {
-		feed_item_set_description (item, content);
+		grss_feed_item_set_description (item, content);
 		g_free (content);
 	}
 }
 
 static void
-atom10_parse_entry_contributor (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
+atom10_parse_entry_contributor (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
 	gchar *contributor;
 
 	contributor = atom10_parse_person_construct (cur);
 	if (contributor) {
-		feed_item_add_contributor (item, contributor);
+		grss_feed_item_add_contributor (item, contributor);
 		g_free (contributor);
 	}
 }
 
 static void
-atom10_parse_entry_id (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
+atom10_parse_entry_id (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
 	gchar *id;
 
 	id = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 	if (id) {
 		if (strlen (id) > 0)
-			feed_item_set_id (item, id);
+			grss_feed_item_set_id (item, id);
 		g_free (id);
 	}
 }
 
 static void
-atom10_parse_entry_link (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
+atom10_parse_entry_link (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
 	gchar *href;
 
 	href = atom10_parse_link (cur, feed, item);
 	if (href) {
-		feed_item_set_source (item, href);
+		grss_feed_item_set_source (item, href);
 		g_free (href);
 	}
 }
 
 static void
-atom10_parse_entry_rights (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
+atom10_parse_entry_rights (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
 	gchar *rights;
 
 	rights = atom10_parse_text_construct (cur, FALSE);
 	if (rights) {
-		feed_item_set_copyright (item, rights);
+		grss_feed_item_set_copyright (item, rights);
 		g_free (rights);
 	}
 }
@@ -521,13 +521,13 @@ atom10_parse_entry_rights (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
 /* <summary> can be used for short text descriptions, if there is no
    <content> description we show the <summary> content */
 static void
-atom10_parse_entry_summary (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
+atom10_parse_entry_summary (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
 	gchar *summary;
 
 	summary = atom10_parse_text_construct (cur, TRUE);
 	if (summary) {
-		feed_item_set_description (item, summary);
+		grss_feed_item_set_description (item, summary);
 		g_free (summary);
 	}
 
@@ -535,19 +535,19 @@ atom10_parse_entry_summary (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
 }
 
 static void
-atom10_parse_entry_title (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
+atom10_parse_entry_title (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
 	gchar *title;
 
 	title = atom10_parse_text_construct (cur, FALSE);
 	if (title) {
-		feed_item_set_title (item, title);
+		grss_feed_item_set_title (item, title);
 		g_free (title);
 	}
 }
 
 static void
-atom10_parse_entry_published (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
+atom10_parse_entry_published (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
 	gchar *datestr;
 	time_t t;
@@ -555,9 +555,9 @@ atom10_parse_entry_published (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
 	datestr = (gchar *)xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 
 	/* if pubDate is already set, don't overwrite it */
-	if (datestr && feed_item_get_publish_time (item) == 0) {
+	if (datestr && grss_feed_item_get_publish_time (item) == 0) {
 		t = date_parse_ISO8601 (datestr);
-		feed_item_set_publish_time (item, t);
+		grss_feed_item_set_publish_time (item, t);
 	}
 
 	g_free (datestr);
@@ -565,14 +565,14 @@ atom10_parse_entry_published (xmlNodePtr cur, FeedItem *item, FeedChannel *feed)
 
 /* <content> tag support, FIXME: base64 not supported */
 /* method to parse standard tags for each item element */
-static FeedItem*
-atom10_parse_entry (FeedHandler *self, FeedChannel *feed, xmlNodePtr cur)
+static GrssFeedItem*
+atom10_parse_entry (FeedHandler *self, GrssFeedChannel *feed, xmlNodePtr cur)
 {
 	AtomItemParserFunc func;
 	FeedAtomHandler *parser;
-	FeedItem *item;
+	GrssFeedItem *item;
 
-	item = feed_item_new (feed);
+	item = grss_feed_item_new (feed);
 	parser = FEED_ATOM_HANDLER (self);
 	cur = cur->xmlChildrenNode;
 
@@ -615,19 +615,19 @@ atom10_parse_entry (FeedHandler *self, FeedChannel *feed, xmlNodePtr cur)
 }
 
 static void
-atom10_parse_feed_author (xmlNodePtr cur, FeedChannel *feed)
+atom10_parse_feed_author (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	gchar *author;
 
 	author = atom10_parse_person_construct (cur);
 	if (author) {
-		feed_channel_set_editor (feed, author);
+		grss_feed_channel_set_editor (feed, author);
 		g_free (author);
 	}
 }
 
 static void
-atom10_parse_feed_category (xmlNodePtr cur, FeedChannel *feed)
+atom10_parse_feed_category (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	gchar *label = NULL;
 
@@ -637,27 +637,27 @@ atom10_parse_feed_category (xmlNodePtr cur, FeedChannel *feed)
 
 	if (label) {
 		gchar *escaped = g_markup_escape_text (label, -1);
-		feed_channel_set_category (feed, escaped);
+		grss_feed_channel_set_category (feed, escaped);
 		g_free (escaped);
 		xmlFree (label);
 	}
 }
 
 static void
-atom10_parse_feed_contributor (xmlNodePtr cur, FeedChannel *feed)
+atom10_parse_feed_contributor (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	/* parse feed contributors */
 	gchar *contributer;
 
 	contributer = atom10_parse_person_construct (cur);
 	if (contributer) {
-		feed_channel_add_contributor (feed, contributer);
+		grss_feed_channel_add_contributor (feed, contributer);
 		g_free (contributer);
 	}
 }
 
 static void
-atom10_parse_feed_generator (xmlNodePtr cur, FeedChannel *feed)
+atom10_parse_feed_generator (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	gchar *ret;
 	gchar *version;
@@ -682,33 +682,33 @@ atom10_parse_feed_generator (xmlNodePtr cur, FeedChannel *feed)
 			ret = tmp;
 		}
 
-		feed_channel_set_generator (feed, tmp);
+		grss_feed_channel_set_generator (feed, tmp);
 	}
 
 	g_free (ret);
 }
 
 static void
-atom10_parse_feed_icon (xmlNodePtr cur, FeedChannel *feed)
+atom10_parse_feed_icon (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	gchar *icon_uri;
 
 	icon_uri = (gchar *)xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 	if (icon_uri) {
-		feed_channel_set_icon (feed, icon_uri);
+		grss_feed_channel_set_icon (feed, icon_uri);
 		g_free (icon_uri);
 	}
 }
 
 static void
-atom10_parse_feed_link (xmlNodePtr cur, FeedChannel *feed)
+atom10_parse_feed_link (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	gchar *href;
 
 	href = atom10_parse_link (cur, feed, NULL);
 	if (href) {
 		xmlChar *baseURL = xmlNodeGetBase (cur->doc, xmlDocGetRootElement (cur->doc));
-		feed_channel_set_homepage (feed, href);
+		grss_feed_channel_set_homepage (feed, href);
 
 		/* Set the default base to the feed's HTML URL if not set yet */
 		if (baseURL == NULL)
@@ -721,55 +721,55 @@ atom10_parse_feed_link (xmlNodePtr cur, FeedChannel *feed)
 }
 
 static void
-atom10_parse_feed_logo (xmlNodePtr cur, FeedChannel *feed)
+atom10_parse_feed_logo (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	gchar *logo;
 
 	logo = atom10_parse_text_construct (cur, FALSE);
 	if (logo) {
-		feed_channel_set_image (feed, logo);
+		grss_feed_channel_set_image (feed, logo);
 		g_free (logo);
 	}
 }
 
 static void
-atom10_parse_feed_rights (xmlNodePtr cur, FeedChannel *feed)
+atom10_parse_feed_rights (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	gchar *rights;
 
 	rights = atom10_parse_text_construct (cur, FALSE);
 	if (rights) {
-		feed_channel_set_copyright (feed, rights);
+		grss_feed_channel_set_copyright (feed, rights);
 		g_free (rights);
 	}
 }
 
 static void
-atom10_parse_feed_subtitle (xmlNodePtr cur, FeedChannel *feed)
+atom10_parse_feed_subtitle (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	gchar *subtitle;
 
 	subtitle = atom10_parse_text_construct (cur, TRUE);
 	if (subtitle) {
- 		feed_channel_set_description (feed, subtitle);
+ 		grss_feed_channel_set_description (feed, subtitle);
 		g_free (subtitle);
 	}
 }
 
 static void
-atom10_parse_feed_title (xmlNodePtr cur, FeedChannel *feed)
+atom10_parse_feed_title (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	gchar *title;
 
 	title = atom10_parse_text_construct (cur, FALSE);
 	if (title) {
-		feed_channel_set_title (feed, title);
+		grss_feed_channel_set_title (feed, title);
 		g_free (title);
 	}
 }
 
 static void
-atom10_parse_feed_updated (xmlNodePtr cur, FeedChannel *feed)
+atom10_parse_feed_updated (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	gchar *timestamp;
 	time_t t;
@@ -777,20 +777,20 @@ atom10_parse_feed_updated (xmlNodePtr cur, FeedChannel *feed)
 	timestamp = (gchar *)xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 	if (timestamp) {
 		t = date_parse_ISO8601 (timestamp);
-		feed_channel_set_update_time (feed, t);
+		grss_feed_channel_set_update_time (feed, t);
 		g_free (timestamp);
 	}
 }
 
 static GList*
-feed_atom_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GError **error)
+feed_atom_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
 {
 	time_t now;
 	xmlNodePtr cur;
 	GList *items;
 	AtomChannelParserFunc func;
 	FeedAtomHandler *parser;
-	FeedItem *item;
+	GrssFeedItem *item;
 
 	items = NULL;
 
@@ -842,8 +842,8 @@ feed_atom_handler_parse (FeedHandler *self, FeedChannel *feed, xmlDocPtr doc, GE
 			else if (xmlStrEqual (cur->name, BAD_CAST"entry")) {
 				item = atom10_parse_entry (self, feed, cur);
 				if (item) {
-					if (feed_item_get_publish_time (item) == 0)
-						feed_item_set_publish_time (item, now);
+					if (grss_feed_item_get_publish_time (item) == 0)
+						grss_feed_item_set_publish_time (item, now);
 					items = g_list_append (items, item);
 				}
 			}

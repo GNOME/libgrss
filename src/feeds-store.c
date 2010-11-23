@@ -21,32 +21,32 @@
 #include "utils.h"
 #include "feeds-pool.h"
 
-#define FEEDS_STORE_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_STORE_TYPE, FeedsStorePrivate))
+#define FEEDS_STORE_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_STORE_TYPE, GrssFeedsStorePrivate))
 
 /**
  * SECTION: feeds-store
  * @short_description: abstract class for feeds permanent storage
  *
- * #FeedsStore is a class which abstracts storage of feeds, implementing some
+ * #GrssFeedsStore is a class which abstracts storage of feeds, implementing some
  * behaviours valid for all. Extensions of this must provide implementation
  * of different callbacks so to permit permanent saving of channels and feeds.
  */
 
-G_DEFINE_ABSTRACT_TYPE (FeedsStore, feeds_store, G_TYPE_OBJECT);
+G_DEFINE_ABSTRACT_TYPE (GrssFeedsStore, grss_feeds_store, G_TYPE_OBJECT);
 
-struct _FeedsStorePrivate {
+struct _GrssFeedsStorePrivate {
 	gboolean	running;
-	FeedsPool	*pool;
+	GrssFeedsPool	*pool;
 };
 
 static void
-feeds_store_class_init (FeedsStoreClass *klass)
+grss_feeds_store_class_init (GrssFeedsStoreClass *klass)
 {
-	g_type_class_add_private (klass, sizeof (FeedsStorePrivate));
+	g_type_class_add_private (klass, sizeof (GrssFeedsStorePrivate));
 }
 
 static void
-feeds_store_init (FeedsStore *node)
+grss_feeds_store_init (GrssFeedsStore *node)
 {
 	node->priv = FEEDS_STORE_GET_PRIVATE (node);
 	node->priv->running = FALSE;
@@ -54,40 +54,40 @@ feeds_store_init (FeedsStore *node)
 }
 
 /**
- * feeds_store_get_channels:
- * @store: a #FeedsStore
+ * grss_feeds_store_get_channels:
+ * @store: a #GrssFeedsStore
  *
  * To retrieve list of feeds permanently saved into the store
  *
- * Return value: list of #FeedChannel found in the @store. Do not modify or
+ * Return value: list of #GrssFeedChannel found in the @store. Do not modify or
  * free it
  */
 GList*
-feeds_store_get_channels (FeedsStore *store)
+grss_feeds_store_get_channels (GrssFeedsStore *store)
 {
 	return FEEDS_STORE_GET_CLASS (store)->get_channels (store);
 }
 
 /**
- * feeds_store_get_items_by_channel:
- * @store: a #FeedsStore
+ * grss_feeds_store_get_items_by_channel:
+ * @store: a #GrssFeedsStore
  * @channel: parent feed containing required items
  *
  * To retrieve list of items saved into the store, assigned to the given
  * @channel
  *
- * Return value: list of #FeedItem found in the @store. Do not modify or free
+ * Return value: list of #GrssFeedItem found in the @store. Do not modify or free
  * it
  */
 GList*
-feeds_store_get_items_by_channel (FeedsStore *store, FeedChannel *channel)
+grss_feeds_store_get_items_by_channel (GrssFeedsStore *store, GrssFeedChannel *channel)
 {
 	return FEEDS_STORE_GET_CLASS (store)->get_items_by_channel (store, channel);
 }
 
 /**
- * feeds_store_has_item:
- * @store: a #FeedsStore
+ * grss_feeds_store_has_item:
+ * @store: a #GrssFeedsStore
  * @channel: parent feed containing required item
  * @id: unique ID to look for
  *
@@ -96,53 +96,53 @@ feeds_store_get_items_by_channel (FeedsStore *store, FeedChannel *channel)
  * Return value: %TRUE if the specified item exists, %FALSE otherwise
  */
 gboolean
-feeds_store_has_item (FeedsStore *store, FeedChannel *channel, const gchar *id)
+grss_feeds_store_has_item (GrssFeedsStore *store, GrssFeedChannel *channel, const gchar *id)
 {
 	return FEEDS_STORE_GET_CLASS (store)->has_item (store, channel, id);
 }
 
 /**
- * feeds_store_add_item_in_channel:
- * @store: a #FeedsStore
+ * grss_feeds_store_add_item_in_channel:
+ * @store: a #GrssFeedsStore
  * @channel: parent feed for the new item
  * @item: new item to permanently save
  *
- * To save a new #FeedItem into the @store. It performs a check to grant
+ * To save a new #GrssFeedItem into the @store. It performs a check to grant
  * @item is not already saved
  */
 void
-feeds_store_add_item_in_channel (FeedsStore *store, FeedChannel *channel, FeedItem *item)
+grss_feeds_store_add_item_in_channel (GrssFeedsStore *store, GrssFeedChannel *channel, GrssFeedItem *item)
 {
-	if (feeds_store_has_item (store, channel, feed_item_get_id (item)) == FALSE)
+	if (grss_feeds_store_has_item (store, channel, grss_feed_item_get_id (item)) == FALSE)
 		FEEDS_STORE_GET_CLASS (store)->add_item_in_channel (store, channel, item);
 }
 
 static void
-feed_fetched (FeedsPool *pool, FeedChannel *feed, GList *items, gpointer user_data)
+feed_fetched (GrssFeedsPool *pool, GrssFeedChannel *feed, GList *items, gpointer user_data)
 {
 	GList *iter;
-	FeedItem *item;
-	FeedsStore *store;
+	GrssFeedItem *item;
+	GrssFeedsStore *store;
 
-	store = (FeedsStore*) user_data;
+	store = (GrssFeedsStore*) user_data;
 
 	for (iter = items; iter; iter = g_list_next (iter)) {
-		item = (FeedItem*) iter->data;
-		feeds_store_add_item_in_channel (store, feed, item);
+		item = (GrssFeedItem*) iter->data;
+		grss_feeds_store_add_item_in_channel (store, feed, item);
 	}
 }
 
 /**
- * feeds_store_switch:
- * @store: a #FeedsStore
+ * grss_feeds_store_switch:
+ * @store: a #GrssFeedsStore
  * @run: %TRUE to run the @store, %FALSE to stop
  *
  * This is to permit the @store to auto-update itself: it creates an internal
- * #FeedsPool and listens for his signals, so to implement the whole loop
+ * #GrssFeedsPool and listens for his signals, so to implement the whole loop
  * fetch-parse-save trasparently
  */
 void
-feeds_store_switch (FeedsStore *store, gboolean run)
+grss_feeds_store_switch (GrssFeedsStore *store, gboolean run)
 {
 	GList *channels;
 
@@ -151,17 +151,17 @@ feeds_store_switch (FeedsStore *store, gboolean run)
 
 	if (run == TRUE) {
 		if (store->priv->pool == NULL) {
-			store->priv->pool = feeds_pool_new ();
+			store->priv->pool = grss_feeds_pool_new ();
 			g_signal_connect (store->priv->pool, "feed-ready", G_CALLBACK (feed_fetched), store);
 		}
 
-		channels = feeds_store_get_channels (store);
-		feeds_pool_listen (store->priv->pool, channels);
-		feeds_pool_switch (store->priv->pool, TRUE);
+		channels = grss_feeds_store_get_channels (store);
+		grss_feeds_pool_listen (store->priv->pool, channels);
+		grss_feeds_pool_switch (store->priv->pool, TRUE);
 	}
 	else {
 		if (store->priv->pool != NULL)
-			feeds_pool_switch (store->priv->pool, FALSE);
+			grss_feeds_pool_switch (store->priv->pool, FALSE);
 	}
 
 	store->priv->running = run;

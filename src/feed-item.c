@@ -22,13 +22,13 @@
 #include "feed-item.h"
 #include "feed-channel.h"
 
-#define FEED_ITEM_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEED_ITEM_TYPE, FeedItemPrivate))
+#define FEED_ITEM_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEED_ITEM_TYPE, GrssFeedItemPrivate))
 
 /**
  * SECTION: feed-item
  * @short_description: a feed item
  *
- * #FeedItem is an abstraction for an item, collects all information about a
+ * #GrssFeedItem is an abstraction for an item, collects all information about a
  * single element found into a feed
  */
 
@@ -41,8 +41,8 @@ typedef struct {
 	double		lon;
 } GeoInfo;
 
-struct _FeedItemPrivate {
-	FeedChannel	*parent;
+struct _GrssFeedItemPrivate {
+	GrssFeedChannel	*parent;
 
 	gchar		*id;
 	gchar		*title;
@@ -64,13 +64,13 @@ struct _FeedItemPrivate {
 	GList		*enclosures;
 };
 
-G_DEFINE_TYPE (FeedItem, feed_item, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GrssFeedItem, grss_feed_item, G_TYPE_OBJECT);
 
 static void
-feed_item_finalize (GObject *obj)
+grss_feed_item_finalize (GObject *obj)
 {
 	GList *iter;
-	FeedItem *item;
+	GrssFeedItem *item;
 
 	item = FEED_ITEM (obj);
 	FREE_STRING (item->priv->id);
@@ -104,35 +104,35 @@ feed_item_finalize (GObject *obj)
 }
 
 static void
-feed_item_class_init (FeedItemClass *klass)
+grss_feed_item_class_init (GrssFeedItemClass *klass)
 {
 	GObjectClass *gobject_class;
 
-	g_type_class_add_private (klass, sizeof (FeedItemPrivate));
+	g_type_class_add_private (klass, sizeof (GrssFeedItemPrivate));
 
 	gobject_class = G_OBJECT_CLASS (klass);
-	gobject_class->finalize = feed_item_finalize;
+	gobject_class->finalize = grss_feed_item_finalize;
 }
 
 static void
-feed_item_init (FeedItem *node)
+grss_feed_item_init (GrssFeedItem *node)
 {
 	node->priv = FEED_ITEM_GET_PRIVATE (node);
-	memset (node->priv, 0, sizeof (FeedItemPrivate));
+	memset (node->priv, 0, sizeof (GrssFeedItemPrivate));
 }
 
 /**
- * feed_item_new:
+ * grss_feed_item_new:
  * @parent: the feed from which the new item belongs
  *
- * To allocate a new empty #FeedItem
+ * To allocate a new empty #GrssFeedItem
  *
- * Return value: a new #FeedItem
+ * Return value: a new #GrssFeedItem
  */
-FeedItem*
-feed_item_new (FeedChannel *parent)
+GrssFeedItem*
+grss_feed_item_new (GrssFeedChannel *parent)
 {
-	FeedItem *item;
+	GrssFeedItem *item;
 
 	item = FEED_ITEM (g_object_new (FEED_ITEM_TYPE, NULL));
 	item->priv->parent = parent;
@@ -141,29 +141,29 @@ feed_item_new (FeedChannel *parent)
 }
 
 /**
- * feed_item_get_parent:
- * @item: a #FeedItem
+ * grss_feed_item_get_parent:
+ * @item: a #GrssFeedItem
  *
  * Retrieves the feed from which the item belongs
  *
- * Return value: the parent feed, as set in feed_item_new()
+ * Return value: the parent feed, as set in grss_feed_item_new()
  */
-FeedChannel*
-feed_item_get_parent (FeedItem *item)
+GrssFeedChannel*
+grss_feed_item_get_parent (GrssFeedItem *item)
 {
 	return item->priv->parent;
 }
 
 /**
- * feed_item_set_id:
- * @item: a #FeedItem
+ * grss_feed_item_set_id:
+ * @item: a #GrssFeedItem
  * @id: the new ID to set
  *
  * To set the ID of the @item. This parameter has not a particular format: it
  * is just a string used to identify in unique way the item
  */
 void
-feed_item_set_id (FeedItem *item, gchar *id)
+grss_feed_item_set_id (GrssFeedItem *item, gchar *id)
 {
 	gchar *iter;
 
@@ -180,91 +180,91 @@ feed_item_set_id (FeedItem *item, gchar *id)
 }
 
 /**
- * feed_item_get_id:
- * @item: #FeedItem from which retrieve the ID
+ * grss_feed_item_get_id:
+ * @item: #GrssFeedItem from which retrieve the ID
  *
  * Retrieves the ID assigned to the @item. If no ID was set with
- * feed_item_set_id() this returns the same of feed_item_get_source().
+ * grss_feed_item_set_id() this returns the same of grss_feed_item_get_source().
  * Pay attention to the fact this library do not check uniqueness of assigned
  * IDs
  *
  * Return value: ID of the item
  */
 const gchar*
-feed_item_get_id (FeedItem *item)
+grss_feed_item_get_id (GrssFeedItem *item)
 {
 	if (item->priv->id != NULL)
 		return (const gchar*) item->priv->id;
 	else
-		return feed_item_get_source (item);
+		return grss_feed_item_get_source (item);
 }
 
 /**
- * feed_item_set_title:
- * @item: a #FeedItem
+ * grss_feed_item_set_title:
+ * @item: a #GrssFeedItem
  * @title: title of the item
  *
  * To set a title to the @item
  */
 void
-feed_item_set_title (FeedItem *item, gchar *title)
+grss_feed_item_set_title (GrssFeedItem *item, gchar *title)
 {
 	FREE_STRING (item->priv->title);
 	item->priv->title = g_strdup (title);
 }
 
 /**
- * feed_item_get_title:
- * @item: a #FeedItem
+ * grss_feed_item_get_title:
+ * @item: a #GrssFeedItem
  *
  * Retrieves the title assigned to @item
  *
  * Return value: title of the element
  */
 const gchar*
-feed_item_get_title (FeedItem *item)
+grss_feed_item_get_title (GrssFeedItem *item)
 {
 	return (const gchar*) item->priv->title;
 }
 
 /**
- * feed_item_set_description:
- * @item: a #FeedItem
+ * grss_feed_item_set_description:
+ * @item: a #GrssFeedItem
  * @description: content of the item
  *
  * To set the description of @item. Usually "description" means his content
  */
 void
-feed_item_set_description (FeedItem *item, gchar *description)
+grss_feed_item_set_description (GrssFeedItem *item, gchar *description)
 {
 	FREE_STRING (item->priv->description);
 	item->priv->description = g_strdup (description);
 }
 
 /**
- * feed_item_get_description:
- * @item: a #FeedItem
+ * grss_feed_item_get_description:
+ * @item: a #GrssFeedItem
  *
  * Retrieves the description of the @item
  *
  * Return value: description of @item
  */
 const gchar*
-feed_item_get_description (FeedItem *item)
+grss_feed_item_get_description (GrssFeedItem *item)
 {
 	return (const gchar*) item->priv->description;
 }
 
 /**
- * feed_item_add_category:
- * @item: a #FeedItem
+ * grss_feed_item_add_category:
+ * @item: a #GrssFeedItem
  * @category: a new category to assign to the item
  *
  * Adds a category to the @item. The complete list can be obtained with
- * feed_item_get_categories()
+ * grss_feed_item_get_categories()
  */
 void
-feed_item_add_category (FeedItem *item, gchar *category)
+grss_feed_item_add_category (GrssFeedItem *item, gchar *category)
 {
 	gchar *cat;
 
@@ -277,8 +277,8 @@ feed_item_add_category (FeedItem *item, gchar *category)
 }
 
 /**
- * feed_item_get_categories:
- * @item: a #FeedItem
+ * grss_feed_item_get_categories:
+ * @item: a #GrssFeedItem
  *
  * Retrieves list of categories assigned to the @item
  *
@@ -286,42 +286,42 @@ feed_item_add_category (FeedItem *item, gchar *category)
  * modify this list
  */
 const GList*
-feed_item_get_categories (FeedItem *item)
+grss_feed_item_get_categories (GrssFeedItem *item)
 {
 	return (const GList*) item->priv->categories;
 }
 
 /**
- * feed_item_set_source:
- * @item: a #FeedItem
+ * grss_feed_item_set_source:
+ * @item: a #GrssFeedItem
  * @source: URL of the item
  *
  * To set the source of the @item
  */
 void
-feed_item_set_source (FeedItem *item, gchar *source)
+grss_feed_item_set_source (GrssFeedItem *item, gchar *source)
 {
 	FREE_STRING (item->priv->source);
 	item->priv->source = g_strdup (source);
 }
 
 /**
- * feed_item_get_source:
- * @item: a #FeedItem
+ * grss_feed_item_get_source:
+ * @item: a #GrssFeedItem
  *
  * Retrieves the URL where the @item can be found
  *
  * Return value: URL of the item, or NULL
  */
 const gchar*
-feed_item_get_source (FeedItem *item)
+grss_feed_item_get_source (GrssFeedItem *item)
 {
 	return (const gchar*) item->priv->source;
 }
 
 /**
- * feed_item_set_real_source:
- * @item: a #FeedItem
+ * grss_feed_item_set_real_source:
+ * @item: a #GrssFeedItem
  * @realsource: URL of the real source for the item
  * @title: title of the real source
  *
@@ -329,7 +329,7 @@ feed_item_get_source (FeedItem *item)
  * aggregators to explicit the origin of a content reproduced in them
  */
 void
-feed_item_set_real_source (FeedItem *item, gchar *realsource, gchar *title)
+grss_feed_item_set_real_source (GrssFeedItem *item, gchar *realsource, gchar *title)
 {
 	FREE_STRING (item->priv->real_source_url);
 	item->priv->real_source_url = g_strdup (realsource);
@@ -338,15 +338,15 @@ feed_item_set_real_source (FeedItem *item, gchar *realsource, gchar *title)
 }
 
 /**
- * feed_item_get_real_source:
- * @item: a #FeedItem
+ * grss_feed_item_get_real_source:
+ * @item: a #GrssFeedItem
  * @realsource: will be assigned to the URL of the real source, or NULL
  * @title: will be assigned to the title of the real source, or NULL
  *
  * Retrieves references to the real source of @item
  */
 void
-feed_item_get_real_source (FeedItem *item, const gchar **realsource, const gchar **title)
+grss_feed_item_get_real_source (GrssFeedItem *item, const gchar **realsource, const gchar **title)
 {
 	if (realsource != NULL)
 		*realsource = item->priv->real_source_url;
@@ -355,98 +355,98 @@ feed_item_get_real_source (FeedItem *item, const gchar **realsource, const gchar
 }
 
 /**
- * feed_item_set_related:
- * @item: a #FeedItem
+ * grss_feed_item_set_related:
+ * @item: a #GrssFeedItem
  * @related: reference to a related post
  *
  * To set reference to a post related to @item
  */
 void
-feed_item_set_related (FeedItem *item, gchar *related)
+grss_feed_item_set_related (GrssFeedItem *item, gchar *related)
 {
 	FREE_STRING (item->priv->related);
 	item->priv->related = g_strdup (related);
 }
 
 /**
- * feed_item_get_related:
- * @item: a #FeedItem
+ * grss_feed_item_get_related:
+ * @item: a #GrssFeedItem
  *
  * Retrieves indication about posts related to @item
  *
  * Return value: related posts, or NULL
  */
 const gchar*
-feed_item_get_related (FeedItem *item)
+grss_feed_item_get_related (GrssFeedItem *item)
 {
 	return (const gchar*) item->priv->related;
 }
 
 /**
- * feed_item_set_copyright:
- * @item: a #FeedItem
+ * grss_feed_item_set_copyright:
+ * @item: a #GrssFeedItem
  * @copyright: copyright declaration for the item
  *
  * To set a copyright reference to @item
  */
 void
-feed_item_set_copyright (FeedItem *item, gchar *copyright)
+grss_feed_item_set_copyright (GrssFeedItem *item, gchar *copyright)
 {
 	FREE_STRING (item->priv->copyright);
 	item->priv->copyright = g_strdup (copyright);
 }
 
 /**
- * feed_item_get_copyright:
- * @item: a #FeedItem
+ * grss_feed_item_get_copyright:
+ * @item: a #GrssFeedItem
  *
  * Retrieves copyright reference for the @item
  *
  * Return value: copyright mark, or NULL
  */
 const gchar*
-feed_item_get_copyright (FeedItem *item)
+grss_feed_item_get_copyright (GrssFeedItem *item)
 {
 	return (const gchar*) item->priv->copyright;
 }
 
 /**
- * feed_item_set_author:
- * @item: a #FeedItem
+ * grss_feed_item_set_author:
+ * @item: a #GrssFeedItem
  * @author: name of the author
  *
  * To assign an author to the @item
  */
 void
-feed_item_set_author (FeedItem *item, gchar *author)
+grss_feed_item_set_author (GrssFeedItem *item, gchar *author)
 {
 	FREE_STRING (item->priv->author);
 	item->priv->author = g_strdup (author);
 }
 
 /**
- * feed_item_get_author:
- * @item: a #FeedItem
+ * grss_feed_item_get_author:
+ * @item: a #GrssFeedItem
  *
  * Retrieves the author of @item
  *
  * Return value: author of the item, or NULL
  */
 const gchar*
-feed_item_get_author (FeedItem *item)
+grss_feed_item_get_author (GrssFeedItem *item)
 {
 	return (const gchar*) item->priv->author;
 }
 
 /**
- * feed_item_add_contributor:
- * @item: a #FeedItem
+ * grss_feed_item_add_contributor:
+ * @item: a #GrssFeedItem
  * @contributor: name of the contributor for the item
  *
  * To add a contributor to the @item
  */
 void
-feed_item_add_contributor (FeedItem *item, gchar *contributor)
+grss_feed_item_add_contributor (GrssFeedItem *item, gchar *contributor)
 {
 	gchar *con;
 
@@ -459,50 +459,50 @@ feed_item_add_contributor (FeedItem *item, gchar *contributor)
 }
 
 /**
- * feed_item_get_contributors:
- * @item: a #FeedItem
+ * grss_feed_item_get_contributors:
+ * @item: a #GrssFeedItem
  *
  * Retrieves contributors for @item
  *
  * Return value: list of contributors to the item
  */
 const GList*
-feed_item_get_contributors (FeedItem *item)
+grss_feed_item_get_contributors (GrssFeedItem *item)
 {
 	return (const GList*) item->priv->contributors;
 }
 
 /**
- * feed_item_set_comments_url:
- * @item: a #FeedItem
+ * grss_feed_item_set_comments_url:
+ * @item: a #GrssFeedItem
  * @url: URL where to retrieve comments to the item
  *
  * To assign the URL where to fetch comments for the item
  */
 void
-feed_item_set_comments_url (FeedItem *item, gchar *url)
+grss_feed_item_set_comments_url (GrssFeedItem *item, gchar *url)
 {
 	FREE_STRING (item->priv->comments_url);
 	item->priv->comments_url = g_strdup (url);
 }
 
 /**
- * feed_item_get_comments_url:
- * @item: a #FeedItem
+ * grss_feed_item_get_comments_url:
+ * @item: a #GrssFeedItem
  *
  * Retrieves the URL where to catch comments to the @item
  *
  * Return value: URL to parse to read comments for @item, or NULL
  */
 const gchar*
-feed_item_get_comments_url (FeedItem *item)
+grss_feed_item_get_comments_url (GrssFeedItem *item)
 {
 	return (const gchar*) item->priv->comments_url;
 }
 
 /**
- * feed_item_set_geo_point:
- * @item: a #FeedItem
+ * grss_feed_item_set_geo_point:
+ * @item: a #GrssFeedItem
  * @latitude: latitude of the point, or -1 to leave the previous one
  * @longitude: longitude of the point, or -1 to leave the previous one
  *
@@ -512,7 +512,7 @@ feed_item_get_comments_url (FeedItem *item)
  * single step. If both are -1, nothing happens
  */
 void
-feed_item_set_geo_point (FeedItem *item, double latitude, double longitude)
+grss_feed_item_set_geo_point (GrssFeedItem *item, double latitude, double longitude)
 {
 	if (latitude == -1 && longitude == -1)
 		return;
@@ -527,8 +527,8 @@ feed_item_set_geo_point (FeedItem *item, double latitude, double longitude)
 }
 
 /**
- * feed_item_get_geo_point:
- * @item: a #FeedItem
+ * grss_feed_item_get_geo_point:
+ * @item: a #GrssFeedItem
  * @latitude: will be assigned to the latitude of the point, or NULL
  * @longitude: will be assigned to the longitude of the point, or NULL
  *
@@ -539,7 +539,7 @@ feed_item_set_geo_point (FeedItem *item, double latitude, double longitude)
  * reference
  */
 gboolean
-feed_item_get_geo_point (FeedItem *item, double *latitude, double *longitude)
+grss_feed_item_get_geo_point (GrssFeedItem *item, double *latitude, double *longitude)
 {
 	if (latitude)
 		*latitude = item->priv->geo.lat;
@@ -550,45 +550,45 @@ feed_item_get_geo_point (FeedItem *item, double *latitude, double *longitude)
 }
 
 /**
- * feed_item_set_publish_time:
- * @item: a #FeedItem
+ * grss_feed_item_set_publish_time:
+ * @item: a #GrssFeedItem
  * @publish: publishing timestamp of the item
  *
  * To set the publish time of the item
  */
 void
-feed_item_set_publish_time (FeedItem *item, time_t publish)
+grss_feed_item_set_publish_time (GrssFeedItem *item, time_t publish)
 {
 	item->priv->pub_time = publish;
 }
 
 /**
- * feed_item_get_publish_time:
- * @item: a #FeedItem
+ * grss_feed_item_get_publish_time:
+ * @item: a #GrssFeedItem
  *
  * Retrieves the publish time of the item. By default this value is the
- * current timestamp assigned when creating the #FeedItem, and may be changed
- * with feed_item_set_publish_time()
+ * current timestamp assigned when creating the #GrssFeedItem, and may be changed
+ * with grss_feed_item_set_publish_time()
  *
  * Return value: publish time of @item
  */
 time_t
-feed_item_get_publish_time (FeedItem *item)
+grss_feed_item_get_publish_time (GrssFeedItem *item)
 {
 	return item->priv->pub_time;
 }
 
 /**
- * feed_item_add_enclosure:
- * @item: a #FeedItem
- * @enclosure: a #FeedEnclosure to add to the item
+ * grss_feed_item_add_enclosure:
+ * @item: a #GrssFeedItem
+ * @enclosure: a #GrssFeedEnclosure to add to the item
  *
  * Adds an enclosure to the @item. That external elements may be references
  * to images, videos, or other contents (usually multimedial) embedded in the
  * element
  */
 void
-feed_item_add_enclosure (FeedItem *item, FeedEnclosure *enclosure)
+grss_feed_item_add_enclosure (GrssFeedItem *item, GrssFeedEnclosure *enclosure)
 {
 	if (item->priv->enclosures == NULL)
 		item->priv->enclosures = g_list_prepend (item->priv->enclosures, enclosure);
@@ -597,16 +597,16 @@ feed_item_add_enclosure (FeedItem *item, FeedEnclosure *enclosure)
 }
 
 /**
- * feed_item_get_enclosures:
- * @item: a #FeedItem
+ * grss_feed_item_get_enclosures:
+ * @item: a #GrssFeedItem
  *
- * Retrieves the list of enclosures added with feed_item_add_enclosure()
+ * Retrieves the list of enclosures added with grss_feed_item_add_enclosure()
  *
- * Return value: a list of #FeedEnclosure. This is a direct reference to the
+ * Return value: a list of #GrssFeedEnclosure. This is a direct reference to the
  * internal list, do not free or modify it
  */
 const GList*
-feed_item_get_enclosures (FeedItem *item)
+grss_feed_item_get_enclosures (GrssFeedItem *item)
 {
 	return item->priv->enclosures;
 }

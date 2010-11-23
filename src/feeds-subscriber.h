@@ -23,35 +23,35 @@
 
 #include "libgrss.h"
 
-#define FEEDS_SUBSCRIBER_TYPE		(feeds_subscriber_get_type())
-#define FEEDS_SUBSCRIBER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_SUBSCRIBER_TYPE, FeedsSubscriber))
-#define FEEDS_SUBSCRIBER_CLASS(c)	(G_TYPE_CHECK_CLASS_CAST ((c), FEEDS_SUBSCRIBER_TYPE, FeedsSubscriberClass))
+#define FEEDS_SUBSCRIBER_TYPE		(grss_feeds_subscriber_get_type())
+#define FEEDS_SUBSCRIBER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriber))
+#define FEEDS_SUBSCRIBER_CLASS(c)	(G_TYPE_CHECK_CLASS_CAST ((c), FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriberClass))
 #define IS_FEEDS_SUBSCRIBER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEEDS_SUBSCRIBER_TYPE))
 #define IS_FEEDS_SUBSCRIBER_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  FEEDS_SUBSCRIBER_TYPE))
-#define FEEDS_SUBSCRIBER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEEDS_SUBSCRIBER_TYPE, FeedsSubscriberClass))
+#define FEEDS_SUBSCRIBER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriberClass))
 
-typedef struct _FeedsSubscriber		FeedsSubscriber;
-typedef struct _FeedsSubscriberPrivate	FeedsSubscriberPrivate;
+typedef struct _GrssFeedsSubscriber		GrssFeedsSubscriber;
+typedef struct _GrssFeedsSubscriberPrivate	GrssFeedsSubscriberPrivate;
 
-struct _FeedsSubscriber {
+struct _GrssFeedsSubscriber {
 	GObject parent;
-	FeedsSubscriberPrivate *priv;
+	GrssFeedsSubscriberPrivate *priv;
 };
 
 typedef struct {
 	GObjectClass parent;
 
-	void (*notification_received) (FeedsSubscriber *sub, FeedChannel *feed, FeedItem *item);
-} FeedsSubscriberClass;
+	void (*notification_received) (GrssFeedsSubscriber *sub, GrssFeedChannel *feed, GrssFeedItem *item);
+} GrssFeedsSubscriberClass;
 
-GType			feeds_subscriber_get_type	() G_GNUC_CONST;
+GType			grss_feeds_subscriber_get_type		() G_GNUC_CONST;
 
-FeedsSubscriber*	feeds_subscriber_new		();
+GrssFeedsSubscriber*	grss_feeds_subscriber_new		();
 
-gboolean		feeds_subscriber_listen		(FeedsSubscriber *sub, GList *feeds);
-GList*			feeds_subscriber_get_listened	(FeedsSubscriber *sub);
-void			feeds_subscriber_set_port	(FeedsSubscriber *sub, int port);
-void			feeds_subscriber_set_hub	(FeedsSubscriber *sub, gchar *hub);
-void			feeds_subscriber_switch		(FeedsSubscriber *sub, gboolean run);
+gboolean		grss_feeds_subscriber_listen		(GrssFeedsSubscriber *sub, GList *feeds);
+GList*			grss_feeds_subscriber_get_listened	(GrssFeedsSubscriber *sub);
+void			grss_feeds_subscriber_set_port		(GrssFeedsSubscriber *sub, int port);
+void			grss_feeds_subscriber_set_hub		(GrssFeedsSubscriber *sub, gchar *hub);
+void			grss_feeds_subscriber_switch		(GrssFeedsSubscriber *sub, gboolean run);
 
 #endif /* __FEEDS_SUBSCRIBER_H__ */

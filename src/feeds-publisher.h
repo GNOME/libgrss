@@ -23,37 +23,37 @@
 
 #include "libgrss.h"
 
-#define FEEDS_PUBLISHER_TYPE		(feeds_publisher_get_type())
-#define FEEDS_PUBLISHER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_PUBLISHER_TYPE, FeedsPublisher))
-#define FEEDS_PUBLISHER_CLASS(c)	(G_TYPE_CHECK_CLASS_CAST ((c), FEEDS_PUBLISHER_TYPE, FeedsPublisherClass))
+#define FEEDS_PUBLISHER_TYPE		(grss_feeds_publisher_get_type())
+#define FEEDS_PUBLISHER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_PUBLISHER_TYPE, GrssFeedsPublisher))
+#define FEEDS_PUBLISHER_CLASS(c)	(G_TYPE_CHECK_CLASS_CAST ((c), FEEDS_PUBLISHER_TYPE, GrssFeedsPublisherClass))
 #define IS_FEEDS_PUBLISHER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEEDS_PUBLISHER_TYPE))
 #define IS_FEEDS_PUBLISHER_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  FEEDS_PUBLISHER_TYPE))
-#define FEEDS_PUBLISHER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEEDS_PUBLISHER_TYPE, FeedsPublisherClass))
+#define FEEDS_PUBLISHER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEEDS_PUBLISHER_TYPE, GrssFeedsPublisherClass))
 
-typedef struct _FeedsPublisher		FeedsPublisher;
-typedef struct _FeedsPublisherPrivate	FeedsPublisherPrivate;
+typedef struct _GrssFeedsPublisher		GrssFeedsPublisher;
+typedef struct _GrssFeedsPublisherPrivate	GrssFeedsPublisherPrivate;
 
-struct _FeedsPublisher {
+struct _GrssFeedsPublisher {
 	GObject parent;
-	FeedsPublisherPrivate *priv;
+	GrssFeedsPublisherPrivate *priv;
 };
 
 typedef struct {
 	GObjectClass parent;
 
-	void (*new_subscription) (FeedsPublisher *pub, FeedChannel *topic, gchar *callback);
-	void (*delete_subscription) (FeedsPublisher *pub, FeedChannel *topic, gchar *callback);
-} FeedsPublisherClass;
+	void (*new_subscription) (GrssFeedsPublisher *pub, GrssFeedChannel *topic, gchar *callback);
+	void (*delete_subscription) (GrssFeedsPublisher *pub, GrssFeedChannel *topic, gchar *callback);
+} GrssFeedsPublisherClass;
 
-GType			feeds_publisher_get_type	() G_GNUC_CONST;
+GType			grss_feeds_publisher_get_type		() G_GNUC_CONST;
 
-FeedsPublisher*		feeds_publisher_new		();
+GrssFeedsPublisher*	grss_feeds_publisher_new		();
 
-void			feeds_publisher_publish		(FeedsPublisher *pub, FeedChannel *channel, GList *items, const gchar *id);
-void			feeds_publisher_publish_file	(FeedsPublisher *pub, FeedChannel *channel, GList *items, const gchar *uri);
+void			grss_feeds_publisher_publish		(GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *id);
+void			grss_feeds_publisher_publish_file	(GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *uri);
 
-void			feeds_publisher_hub_set_port	(FeedsPublisher *pub, int port);
-void			feeds_publisher_hub_set_topics	(FeedsPublisher *pub, GList *topics);
-void			feeds_publisher_hub_switch	(FeedsPublisher *pub, gboolean run);
+void			grss_feeds_publisher_hub_set_port	(GrssFeedsPublisher *pub, int port);
+void			grss_feeds_publisher_hub_set_topics	(GrssFeedsPublisher *pub, GList *topics);
+void			grss_feeds_publisher_hub_switch		(GrssFeedsPublisher *pub, gboolean run);
 
 #endif /* __FEEDS_PUBLISHER_H__ */

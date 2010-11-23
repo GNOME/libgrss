@@ -1,5 +1,6 @@
 libgrss 0.5 (UNRELEASED)
 ==============================================================================
+- Complete API break: all object and function names moved to "grss" namespace
 - Added XOXO files parser
 - Added XBEL files parser
 - Added FeedsPublisher to expose feeds contents as files or by local server

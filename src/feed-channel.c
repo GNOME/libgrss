@@ -22,13 +22,13 @@
 #include "feed-channel.h"
 #include "feed-parser.h"
 
-#define FEED_CHANNEL_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEED_CHANNEL_TYPE, FeedChannelPrivate))
+#define FEED_CHANNEL_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEED_CHANNEL_TYPE, GrssFeedChannelPrivate))
 
 /**
  * SECTION: feed-channel
  * @short_description: a feed
  *
- * #FeedChannel rappresents a single feed which may be fetched and parsed
+ * #GrssFeedChannel rappresents a single feed which may be fetched and parsed
  */
 
 #define FEEDS_CHANNEL_ERROR		feeds_channel_error_quark()
@@ -38,7 +38,7 @@ typedef struct {
 	gchar	*self;
 } PubSub;
 
-struct _FeedChannelPrivate {
+struct _GrssFeedChannelPrivate {
 	gchar	*source;
 
 	gchar	*title;
@@ -65,7 +65,7 @@ enum {
 	FEEDS_CHANNEL_FETCH_ERROR,
 };
 
-G_DEFINE_TYPE (FeedChannel, feed_channel, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GrssFeedChannel, grss_feed_channel, G_TYPE_OBJECT);
 
 static GQuark
 feeds_channel_error_quark ()
@@ -74,10 +74,10 @@ feeds_channel_error_quark ()
 }
 
 static void
-feed_channel_finalize (GObject *obj)
+grss_feed_channel_finalize (GObject *obj)
 {
 	GList *iter;
-	FeedChannel *chan;
+	GrssFeedChannel *chan;
 
 	chan = FEED_CHANNEL (obj);
 	FREE_STRING (chan->priv->title);
@@ -102,60 +102,60 @@ feed_channel_finalize (GObject *obj)
 }
 
 static void
-feed_channel_class_init (FeedChannelClass *klass)
+grss_feed_channel_class_init (GrssFeedChannelClass *klass)
 {
 	GObjectClass *gobject_class;
 
-	g_type_class_add_private (klass, sizeof (FeedChannelPrivate));
+	g_type_class_add_private (klass, sizeof (GrssFeedChannelPrivate));
 
 	gobject_class = G_OBJECT_CLASS (klass);
-	gobject_class->finalize = feed_channel_finalize;
+	gobject_class->finalize = grss_feed_channel_finalize;
 }
 
 static void
-feed_channel_init (FeedChannel *node)
+grss_feed_channel_init (GrssFeedChannel *node)
 {
 	node->priv = FEED_CHANNEL_GET_PRIVATE (node);
-	memset (node->priv, 0, sizeof (FeedChannelPrivate));
+	memset (node->priv, 0, sizeof (GrssFeedChannelPrivate));
 }
 
 /**
- * feed_channel_new:
+ * grss_feed_channel_new:
  *
- * Allocates a new #FeedChannel
+ * Allocates a new #GrssFeedChannel
  *
- * Return value: a #FeedChannel
+ * Return value: a #GrssFeedChannel
  */
-FeedChannel*
-feed_channel_new ()
+GrssFeedChannel*
+grss_feed_channel_new ()
 {
 	return g_object_new (FEED_CHANNEL_TYPE, NULL);
 }
 
 /**
- * feed_channel_new_from_file:
+ * grss_feed_channel_new_from_file:
  * @path: path of the file to parse
  *
- * Allocates a new #FeedChannel and init it with contents found in specified
+ * Allocates a new #GrssFeedChannel and init it with contents found in specified
  * file
  *
- * Return value: a #FeedChannel, or NULL if the file in @path is not a valid
+ * Return value: a #GrssFeedChannel, or NULL if the file in @path is not a valid
  * document
  */
-FeedChannel*
-feed_channel_new_from_file (const gchar *path)
+GrssFeedChannel*
+grss_feed_channel_new_from_file (const gchar *path)
 {
 	GList *items;
 	GList *iter;
 	xmlDocPtr doc;
-	FeedParser *parser;
-	FeedChannel *ret;
+	GrssFeedParser *parser;
+	GrssFeedChannel *ret;
 
 	/*
 		TODO	This function is quite inefficent because parses all
-			the feed with a FeedParser and then trash obtained
-			FeedItems. Perhaps a more aimed function in
-			FeedParser would help...
+			the feed with a GrssFeedParser and then trash obtained
+			GrssFeedItems. Perhaps a more aimed function in
+			GrssFeedParser would help...
 	*/
 
 	ret = NULL;
@@ -163,8 +163,8 @@ feed_channel_new_from_file (const gchar *path)
 
 	if (doc != NULL) {
 		ret = g_object_new (FEED_CHANNEL_TYPE, NULL);
-		parser = feed_parser_new ();
-		items = feed_parser_parse (parser, ret, doc, NULL);
+		parser = grss_feed_parser_new ();
+		items = grss_feed_parser_parse (parser, ret, doc, NULL);
 
 		if (items != NULL) {
 			for (iter = items; iter; iter = g_list_next (iter))
@@ -180,162 +180,162 @@ feed_channel_new_from_file (const gchar *path)
 }
 
 /**
- * feed_channel_set_source:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_source:
+ * @channel: a #GrssFeedChannel
  * @source: URL of the feed
  *
  * To assign the URL where to fetch the feed
  */
 void
-feed_channel_set_source (FeedChannel *channel, gchar *source)
+grss_feed_channel_set_source (GrssFeedChannel *channel, gchar *source)
 {
 	FREE_STRING (channel->priv->source);
 	channel->priv->source = g_strdup (source);
 }
 
 /**
- * feed_channel_get_source:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_source:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves URL where to fetch the @channel
  *
  * Return value: URL of the channel
  */
 const gchar*
-feed_channel_get_source (FeedChannel *channel)
+grss_feed_channel_get_source (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->source;
 }
 
 /**
- * feed_channel_set_title:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_title:
+ * @channel: a #GrssFeedChannel
  * @title: title of the feed
  *
  * To set a title to the @channel
  */
 void
-feed_channel_set_title (FeedChannel *channel, gchar *title)
+grss_feed_channel_set_title (GrssFeedChannel *channel, gchar *title)
 {
 	FREE_STRING (channel->priv->title);
 	channel->priv->title = g_strdup (title);
 }
 
 /**
- * feed_channel_get_title:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_title:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves title of the @channel
  *
  * Return value: title of the feed, or NULL
  */
 const gchar*
-feed_channel_get_title (FeedChannel *channel)
+grss_feed_channel_get_title (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->title;
 }
 
 /**
- * feed_channel_set_homepage:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_homepage:
+ * @channel: a #GrssFeedChannel
  * @homepage: homepage for the main website
  *
  * To set the homepage of the site the @channel belongs
  */
 void
-feed_channel_set_homepage (FeedChannel *channel, gchar *homepage)
+grss_feed_channel_set_homepage (GrssFeedChannel *channel, gchar *homepage)
 {
 	FREE_STRING (channel->priv->homepage);
 	channel->priv->homepage = g_strdup (homepage);
 }
 
 /**
- * feed_channel_get_homepage:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_homepage:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves the homepage of the site for which @channel is the feed
  *
  * Return value: reference homepage of the feed, or NULL
  */
 const gchar*
-feed_channel_get_homepage (FeedChannel *channel)
+grss_feed_channel_get_homepage (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->homepage;
 }
 
 /**
- * feed_channel_set_description:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_description:
+ * @channel: a #GrssFeedChannel
  * @description: description of the feed
  *
  * To set the description of @channel
  */
 void
-feed_channel_set_description (FeedChannel *channel, gchar *description)
+grss_feed_channel_set_description (GrssFeedChannel *channel, gchar *description)
 {
 	FREE_STRING (channel->priv->description);
 	channel->priv->description = g_strdup (description);
 }
 
 /**
- * feed_channel_get_description:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_description:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves the description of @channel
  *
  * Return value: description of the feed, or NULL
  */
 const gchar*
-feed_channel_get_description (FeedChannel *channel)
+grss_feed_channel_get_description (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->description;
 }
 
 /**
- * feed_channel_set_image:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_image:
+ * @channel: a #GrssFeedChannel
  * @image: URL of the image
  *
  * To set a rappresentative image to @channel
  */
 void
-feed_channel_set_image (FeedChannel *channel, gchar *image)
+grss_feed_channel_set_image (GrssFeedChannel *channel, gchar *image)
 {
 	FREE_STRING (channel->priv->image);
 	channel->priv->image = g_strdup (image);
 }
 
 /**
- * feed_channel_get_image:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_image:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves the URL of the image assigned to the channel
  *
  * Return value: URL of the image, or NULL
  */
 const gchar*
-feed_channel_get_image (FeedChannel *channel)
+grss_feed_channel_get_image (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->image;
 }
 
 /**
- * feed_channel_set_icon:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_icon:
+ * @channel: a #GrssFeedChannel
  * @icon: URL where to retrieve the favicon
  *
  * To set the URL of the icon rappresenting @channel
  */
 void
-feed_channel_set_icon (FeedChannel *channel, gchar *icon)
+grss_feed_channel_set_icon (GrssFeedChannel *channel, gchar *icon)
 {
 	FREE_STRING (channel->priv->icon);
 	channel->priv->icon = g_strdup (icon);
 }
 
 /**
- * feed_channel_get_icon:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_icon:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves URL of the favicon of the channel (and/or the website for which
  * this is the feed)
@@ -343,81 +343,81 @@ feed_channel_set_icon (FeedChannel *channel, gchar *icon)
  * Return value: URL of the favicon, or NULL
  */
 const gchar*
-feed_channel_get_icon (FeedChannel *channel)
+grss_feed_channel_get_icon (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->icon;
 }
 
 /**
- * feed_channel_set_language:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_language:
+ * @channel: a #GrssFeedChannel
  * @language: string holding the language of the feed
  *
  * To set the language of @channel
  */
 void
-feed_channel_set_language (FeedChannel *channel, gchar *language)
+grss_feed_channel_set_language (GrssFeedChannel *channel, gchar *language)
 {
 	FREE_STRING (channel->priv->language);
 	channel->priv->language = g_strdup (language);
 }
 
 /**
- * feed_channel_get_language:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_language:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves the language of the @channel
  *
  * Return value: string rappresenting the language of channel
  */
 const gchar*
-feed_channel_get_language (FeedChannel *channel)
+grss_feed_channel_get_language (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->language;
 }
 
 /**
- * feed_channel_set_category:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_category:
+ * @channel: a #GrssFeedChannel
  * @category: category of the feed
  *
  * To set the category of the @channel
  */
 void
-feed_channel_set_category (FeedChannel *channel, gchar *category)
+grss_feed_channel_set_category (GrssFeedChannel *channel, gchar *category)
 {
 	FREE_STRING (channel->priv->category);
 	channel->priv->category = g_strdup (category);
 }
 
 /**
- * feed_channel_get_category:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_category:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves category of the @channel
  *
  * Return value: category of the feed, or NULL
  */
 const gchar*
-feed_channel_get_category (FeedChannel *channel)
+grss_feed_channel_get_category (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->category;
 }
 
 /**
- * feed_channel_set_pubsubhub:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_pubsubhub:
+ * @channel: a #GrssFeedChannel
  * @hub: hub for the feed, or NULL
  * @self: target referencing the feed, or NULL
  *
  * To set information about PubSubHubbub for the channel. Options can be set
  * alternatively, only with hub != %NULL or self != %NULL, and are saved
  * internally to the object: the hub is considered valid
- * (feed_channel_get_pubsubhub() returns %TRUE) only when both parameters has
+ * (grss_feed_channel_get_pubsubhub() returns %TRUE) only when both parameters has
  * been set. To unset the hub, pass %NULL for both parameters
  */
 void
-feed_channel_set_pubsubhub (FeedChannel *channel, gchar *hub, gchar *self)
+grss_feed_channel_set_pubsubhub (GrssFeedChannel *channel, gchar *hub, gchar *self)
 {
 	if (hub == NULL && self == NULL) {
 		FREE_STRING (channel->priv->pubsub.hub);
@@ -436,8 +436,8 @@ feed_channel_set_pubsubhub (FeedChannel *channel, gchar *hub, gchar *self)
 }
 
 /**
- * feed_channel_get_pubsubhub:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_pubsubhub:
+ * @channel: a #GrssFeedChannel
  * @hub: location for the hub string, or NULL
  * @self: location for the reference to the feed, or NULL
  *
@@ -447,7 +447,7 @@ feed_channel_set_pubsubhub (FeedChannel *channel, gchar *hub, gchar *self)
  * @channel, %FALSE otherwise
  */
 gboolean
-feed_channel_get_pubsubhub (FeedChannel *channel, gchar **hub, gchar **self)
+grss_feed_channel_get_pubsubhub (GrssFeedChannel *channel, gchar **hub, gchar **self)
 {
 	if (hub != NULL)
 		*hub = channel->priv->pubsub.hub;
@@ -458,70 +458,70 @@ feed_channel_get_pubsubhub (FeedChannel *channel, gchar **hub, gchar **self)
 }
 
 /**
- * feed_channel_set_copyright:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_copyright:
+ * @channel: a #GrssFeedChannel
  * @copyright: copyright of the channel
  *
  * To set the copyright of the feed
  */
 void
-feed_channel_set_copyright (FeedChannel *channel, gchar *copyright)
+grss_feed_channel_set_copyright (GrssFeedChannel *channel, gchar *copyright)
 {
 	FREE_STRING (channel->priv->copyright);
 	channel->priv->copyright = g_strdup (copyright);
 }
 
 /**
- * feed_channel_get_copyright:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_copyright:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves indications about the copyright
  *
  * Return value: copyright of the @channel, or NULL
  */
 const gchar*
-feed_channel_get_copyright (FeedChannel *channel)
+grss_feed_channel_get_copyright (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->copyright;
 }
 
 /**
- * feed_channel_set_editor:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_editor:
+ * @channel: a #GrssFeedChannel
  * @editor: editor of the feed
  *
  * To set the editor of the @channel
  */
 void
-feed_channel_set_editor (FeedChannel *channel, gchar *editor)
+grss_feed_channel_set_editor (GrssFeedChannel *channel, gchar *editor)
 {
 	FREE_STRING (channel->priv->editor);
 	channel->priv->editor = g_strdup (editor);
 }
 
 /**
- * feed_channel_get_editor:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_editor:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves reference to the editor or the @channel
  *
  * Return value: editor of the feed, or NULL
  */
 const gchar*
-feed_channel_get_editor (FeedChannel *channel)
+grss_feed_channel_get_editor (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->editor;
 }
 
 /**
- * feed_channel_add_contributor:
- * @channel: a #FeedChannel
+ * grss_feed_channel_add_contributor:
+ * @channel: a #GrssFeedChannel
  * @contributor: contributor of the feed
  *
  * To add a contributor to the @channel
  */
 void
-feed_channel_add_contributor (FeedChannel *channel, gchar *contributor)
+grss_feed_channel_add_contributor (GrssFeedChannel *channel, gchar *contributor)
 {
 	gchar *con;
 
@@ -534,181 +534,181 @@ feed_channel_add_contributor (FeedChannel *channel, gchar *contributor)
 }
 
 /**
- * feed_channel_get_contributors:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_contributors:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves reference to the contributors of the @channel
  *
  * Return value: list of contributors to the channel, or NULL
  */
 const GList*
-feed_channel_get_contributor (FeedChannel *channel)
+grss_feed_channel_get_contributor (GrssFeedChannel *channel)
 {
 	return (const GList*) channel->priv->contributors;
 }
 
 /**
- * feed_channel_set_webmaster:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_webmaster:
+ * @channel: a #GrssFeedChannel
  * @webmaster: webmaster of the feed
  *
  * To assign a webmaster to the @channel
  */
 void
-feed_channel_set_webmaster (FeedChannel *channel, gchar *webmaster)
+grss_feed_channel_set_webmaster (GrssFeedChannel *channel, gchar *webmaster)
 {
 	FREE_STRING (channel->priv->webmaster);
 	channel->priv->webmaster = g_strdup (webmaster);
 }
 
 /**
- * feed_channel_get_webmaster:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_webmaster:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves reference to the webmaster of the feed
  *
  * Return value: webmaster of @channel, or NULL
  */
 const gchar*
-feed_channel_get_webmaster (FeedChannel *channel)
+grss_feed_channel_get_webmaster (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->webmaster;
 }
 
 /**
- * feed_channel_set_generator:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_generator:
+ * @channel: a #GrssFeedChannel
  * @generator: software generator of the feed
  *
  * To set information about the software generator of @channel
  */
 void
-feed_channel_set_generator (FeedChannel *channel, gchar *generator)
+grss_feed_channel_set_generator (GrssFeedChannel *channel, gchar *generator)
 {
 	FREE_STRING (channel->priv->generator);
 	channel->priv->generator = g_strdup (generator);
 }
 
 /**
- * feed_channel_get_generator:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_generator:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves information about the feed's software generator
  *
  * Return value: generator of @channel, or NULL
  */
 const gchar*
-feed_channel_get_generator (FeedChannel *channel)
+grss_feed_channel_get_generator (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->generator;
 }
 
 /**
- * feed_channel_set_publish_time:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_publish_time:
+ * @channel: a #GrssFeedChannel
  * @publish: timestamp of publishing
  *
  * To set the time of publishing for the feed
  */
 void
-feed_channel_set_publish_time (FeedChannel *channel, time_t publish)
+grss_feed_channel_set_publish_time (GrssFeedChannel *channel, time_t publish)
 {
 	channel->priv->pub_time = publish;
 }
 
 /**
- * feed_channel_get_publish_time:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_publish_time:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves the publishing time of @channel
  *
  * Return value: time of feed's publish
  */
 time_t
-feed_channel_get_publish_time (FeedChannel *channel)
+grss_feed_channel_get_publish_time (GrssFeedChannel *channel)
 {
 	return channel->priv->pub_time;
 }
 
 /**
- * feed_channel_set_update_time:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_update_time:
+ * @channel: a #GrssFeedChannel
  * @update: update time of the feed
  *
  * To set the latest update time of @channel
  */
 void
-feed_channel_set_update_time (FeedChannel *channel, time_t update)
+grss_feed_channel_set_update_time (GrssFeedChannel *channel, time_t update)
 {
 	channel->priv->update_time = update;
 }
 
 /**
- * feed_channel_get_update_time:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_update_time:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves the update time of @channel
  *
  * Return value: time of the feed's latest update. If this value was not set
- * (with feed_channel_set_update_time()) returns
- * feed_channel_get_publish_time()
+ * (with grss_feed_channel_set_update_time()) returns
+ * grss_feed_channel_get_publish_time()
  */
 time_t
-feed_channel_get_update_time (FeedChannel *channel)
+grss_feed_channel_get_update_time (GrssFeedChannel *channel)
 {
 	return channel->priv->update_time;
 }
 
 /**
- * feed_channel_set_update_interval:
- * @channel: a #FeedChannel
+ * grss_feed_channel_set_update_interval:
+ * @channel: a #GrssFeedChannel
  * @minutes: update interval, in minutes
  *
  * To set the update interval for @channel
  */
 void
-feed_channel_set_update_interval (FeedChannel *channel, int minutes)
+grss_feed_channel_set_update_interval (GrssFeedChannel *channel, int minutes)
 {
 	channel->priv->update_interval = minutes;
 }
 
 /**
- * feed_channel_get_update_interval:
- * @channel: a #FeedChannel
+ * grss_feed_channel_get_update_interval:
+ * @channel: a #GrssFeedChannel
  *
  * Retrieves the update interval for the feed. Pay attention to the fact the
  * value can be unset, and the function returns 0: in this case the caller
  * must manually set a default update interval with
- * feed_channel_set_update_interval()
+ * grss_feed_channel_set_update_interval()
  *
  * Return value: update interval for the @channel, in minutes
  */
 int
-feed_channel_get_update_interval (FeedChannel *channel)
+grss_feed_channel_get_update_interval (GrssFeedChannel *channel)
 {
 	return channel->priv->update_interval;
 }
 
 static gboolean
-quick_and_dirty_parse (FeedChannel *channel, SoupMessage *msg)
+quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg)
 {
 	GList *items;
 	GList *iter;
 	xmlDocPtr doc;
-	FeedParser *parser;
+	GrssFeedParser *parser;
 
 	/*
 		TODO	This function is quite inefficent because parses all
-			the feed with a FeedParser and them waste obtained
-			FeedItems. Perhaps a more aimed function in
-			FeedParser would help...
+			the feed with a GrssFeedParser and them waste obtained
+			GrssFeedItems. Perhaps a more aimed function in
+			GrssFeedParser would help...
 	*/
 
 	doc = content_to_xml (msg->response_body->data, msg->response_body->length);
 
 	if (doc != NULL) {
-		parser = feed_parser_new ();
-		items = feed_parser_parse (parser, channel, doc, NULL);
+		parser = grss_feed_parser_new ();
+		items = grss_feed_parser_parse (parser, channel, doc, NULL);
 
 		if (items != NULL) {
 			for (iter = items; iter; iter = g_list_next (iter))
@@ -726,19 +726,19 @@ quick_and_dirty_parse (FeedChannel *channel, SoupMessage *msg)
 }
 
 /**
- * feed_channel_fetch:
- * @channel: a #FeedChannel
+ * grss_feed_channel_fetch:
+ * @channel: a #GrssFeedChannel
  *
- * Utility to fetch and populate a #FeedChannel for the first time, and init
+ * Utility to fetch and populate a #GrssFeedChannel for the first time, and init
  * all his internal values. Only the source URL has to be set in @channel
- * (with feed_channel_set_source()). Be aware this function is sync, do not
+ * (with grss_feed_channel_set_source()). Be aware this function is sync, do not
  * returns until the feed isn't downloaded and parsed
  *
  * Return value: %TRUE if the feed is correctly fetched and parsed, %FALSE
  * otherwise
  */
 gboolean
-feed_channel_fetch (FeedChannel *channel)
+grss_feed_channel_fetch (GrssFeedChannel *channel)
 {
 	gboolean ret;
 	guint status;
@@ -746,14 +746,14 @@ feed_channel_fetch (FeedChannel *channel)
 	SoupSession *session;
 
 	session = soup_session_sync_new ();
-	msg = soup_message_new ("GET", feed_channel_get_source (channel));
+	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
 	status = soup_session_send_message (session, msg);
 
 	if (status >= 200 && status <= 299) {
 		ret = quick_and_dirty_parse (channel, msg);
 	}
 	else {
-		g_warning ("Unable to fetch feed from %s: %s", feed_channel_get_source (channel), soup_status_get_phrase (status));
+		g_warning ("Unable to fetch feed from %s: %s", grss_feed_channel_get_source (channel), soup_status_get_phrase (status));
 		ret = FALSE;
 	}
 
@@ -766,7 +766,7 @@ static void
 feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 	guint status;
 	GSimpleAsyncResult *result;
-	FeedChannel *channel;
+	GrssFeedChannel *channel;
 
 	result = user_data;
 	channel = FEED_CHANNEL (g_async_result_get_source_object (G_ASYNC_RESULT (result)));
@@ -777,7 +777,7 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 	}
 	else {
 		g_simple_async_result_set_error (result, FEEDS_CHANNEL_ERROR, FEEDS_CHANNEL_FETCH_ERROR,
-						 "Unable to download from %s", feed_channel_get_source (channel));
+						 "Unable to download from %s", grss_feed_channel_get_source (channel));
 	}
 
 	g_simple_async_result_complete_in_idle (result);
@@ -785,23 +785,23 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 }
 
 /**
- * feed_channel_fetch_async:
- * @channel: a #FeedChannel
+ * grss_feed_channel_fetch_async:
+ * @channel: a #GrssFeedChannel
  * @callback: function to invoke at the end of the download
  * @user_data: data passed to the callback
  *
- * Similar to feed_channel_fetch(), but asyncronous
+ * Similar to grss_feed_channel_fetch(), but asyncronous
  */
 void
-feed_channel_fetch_async (FeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data)
+grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data)
 {
 	GSimpleAsyncResult *result;
 	SoupMessage *msg;
 	SoupSession *session;
 
-	result = g_simple_async_result_new (G_OBJECT (channel), callback, user_data, feed_channel_fetch_async);
+	result = g_simple_async_result_new (G_OBJECT (channel), callback, user_data, grss_feed_channel_fetch_async);
 
 	session = soup_session_async_new ();
-	msg = soup_message_new ("GET", feed_channel_get_source (channel));
+	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
 	soup_session_queue_message (session, msg, feed_downloaded, result);
 }

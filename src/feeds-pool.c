@@ -23,31 +23,31 @@
 #include "feed-parser.h"
 #include "feed-marshal.h"
 
-#define FEEDS_POOL_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_POOL_TYPE, FeedsPoolPrivate))
+#define FEEDS_POOL_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_POOL_TYPE, GrssFeedsPoolPrivate))
 
 /**
  * SECTION: feeds-pool
  * @short_description: feeds auto-fetcher
  *
- * The #FeedsPool permits to automatically "listen" for more feeds: it
+ * The #GrssFeedsPool permits to automatically "listen" for more feeds: it
  * provides to fetch them on regular intervals (as defined by
- * feed_channel_get_update_interval() for each channel), parse them with
- * #FeedParser, and emits signals when feeds are ready
+ * grss_feed_channel_get_update_interval() for each channel), parse them with
+ * #GrssFeedParser, and emits signals when feeds are ready
  */
 
-struct _FeedsPoolPrivate {
+struct _GrssFeedsPoolPrivate {
 	gboolean	running;
 	GList		*feeds_list;
 	SoupSession	*soupsession;
-	FeedParser	*parser;
+	GrssFeedParser	*parser;
 	guint		scheduler;
 };
 
 typedef struct {
 	time_t		next_fetch;
-	FeedChannel	*channel;
-	FeedsPool	*pool;
-} FeedChannelWrap;
+	GrssFeedChannel	*channel;
+	GrssFeedsPool	*pool;
+} GrssFeedChannelWrap;
 
 enum {
 	FEED_FETCHING,
@@ -57,17 +57,17 @@ enum {
 
 static guint signals [LAST_SIGNAL] = {0};
 
-G_DEFINE_TYPE (FeedsPool, feeds_pool, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GrssFeedsPool, grss_feeds_pool, G_TYPE_OBJECT);
 
 static void
-remove_currently_listened (FeedsPool *pool)
+remove_currently_listened (GrssFeedsPool *pool)
 {
 	GList *iter;
-	FeedChannelWrap *wrap;
+	GrssFeedChannelWrap *wrap;
 
 	if (pool->priv->feeds_list != NULL) {
 		for (iter = pool->priv->feeds_list; iter; iter = g_list_next (iter)) {
-			wrap = (FeedChannelWrap*) iter->data;
+			wrap = (GrssFeedChannelWrap*) iter->data;
 			g_object_unref (wrap->channel);
 			g_free (wrap);
 		}
@@ -77,7 +77,7 @@ remove_currently_listened (FeedsPool *pool)
 }
 
 static void
-feed_handled_cb (FeedsPool *pool, FeedChannel *feed, GList *items)
+feed_handled_cb (GrssFeedsPool *pool, GrssFeedChannel *feed, GList *items)
 {
 	GList *iter;
 
@@ -89,35 +89,35 @@ feed_handled_cb (FeedsPool *pool, FeedChannel *feed, GList *items)
 }
 
 static void
-feeds_pool_finalize (GObject *obj)
+grss_feeds_pool_finalize (GObject *obj)
 {
-	FeedsPool *pool;
+	GrssFeedsPool *pool;
 
 	pool = FEEDS_POOL (obj);
-	feeds_pool_switch (pool, FALSE);
+	grss_feeds_pool_switch (pool, FALSE);
 	remove_currently_listened (pool);
 	g_object_unref (pool->priv->parser);
 	g_object_unref (pool->priv->soupsession);
 }
 
 static void
-feeds_pool_class_init (FeedsPoolClass *klass)
+grss_feeds_pool_class_init (GrssFeedsPoolClass *klass)
 {
 	GObjectClass *gobject_class;
 
-	g_type_class_add_private (klass, sizeof (FeedsPoolPrivate));
+	g_type_class_add_private (klass, sizeof (GrssFeedsPoolPrivate));
 
 	gobject_class = G_OBJECT_CLASS (klass);
-	gobject_class->finalize = feeds_pool_finalize;
+	gobject_class->finalize = grss_feeds_pool_finalize;
 
 	klass->feed_ready = feed_handled_cb;
 
 	/**
-	 * FeedsPool::feed-fetching:
-	 * @pool: the #FeedsPool emitting the signal
-	 * @feed: the #FeedChannel which is going to be fetched
+	 * GrssFeedsPool::feed-fetching:
+	 * @pool: the #GrssFeedsPool emitting the signal
+	 * @feed: the #GrssFeedChannel which is going to be fetched
 	 *
-	 * Emitted when the @pool starts fetching a new #FeedChannel. To be
+	 * Emitted when the @pool starts fetching a new #GrssFeedChannel. To be
 	 * used to know the internal status of the component
 	 */
 	signals [FEED_FETCHING] = g_signal_new ("feed-fetching", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
@@ -125,12 +125,12 @@ feeds_pool_class_init (FeedsPoolClass *klass)
 	                                        G_TYPE_NONE, 1, G_TYPE_OBJECT);
 
 	/**
-	 * FeedsPool::feed-ready:
-	 * @pool: the #FeedsPool emitting the signal
-	 * @feed: the #FeedChannel which has been fetched and parsed
-	 * @items: list of #FeedItem obtained parsing the feed
+	 * GrssFeedsPool::feed-ready:
+	 * @pool: the #GrssFeedsPool emitting the signal
+	 * @feed: the #GrssFeedChannel which has been fetched and parsed
+	 * @items: list of #GrssFeedItem obtained parsing the feed
 	 *
-	 * Emitted when a #FeedChannel assigned to the @pool has been fetched
+	 * Emitted when a #GrssFeedChannel assigned to the @pool has been fetched
 	 * and parsed. All parsed items are exposed in the array, with no
 	 * regards about previously existing elements. @items may be NULL, if
 	 * an error occourred while fetching and/or parsing. List of @items
@@ -142,41 +142,41 @@ feeds_pool_class_init (FeedsPoolClass *klass)
 }
 
 static void
-feeds_pool_init (FeedsPool *node)
+grss_feeds_pool_init (GrssFeedsPool *node)
 {
 	node->priv = FEEDS_POOL_GET_PRIVATE (node);
-	memset (node->priv, 0, sizeof (FeedsPoolPrivate));
-	node->priv->parser = feed_parser_new ();
+	memset (node->priv, 0, sizeof (GrssFeedsPoolPrivate));
+	node->priv->parser = grss_feed_parser_new ();
 	node->priv->soupsession = soup_session_async_new ();
 }
 
 /**
- * feeds_pool_new:
+ * grss_feeds_pool_new:
  *
- * Allocates a new #FeedsPool
+ * Allocates a new #GrssFeedsPool
  *
- * Return value: a new #FeedsPool
+ * Return value: a new #GrssFeedsPool
  */
-FeedsPool*
-feeds_pool_new ()
+GrssFeedsPool*
+grss_feeds_pool_new ()
 {
 	return g_object_new (FEEDS_POOL_TYPE, NULL);
 }
 
 static void
-create_listened (FeedsPool *pool, GList *feeds)
+create_listened (GrssFeedsPool *pool, GList *feeds)
 {
 	GList *list;
 	GList *iter;
-	FeedChannel *feed;
-	FeedChannelWrap *wrap;
+	GrssFeedChannel *feed;
+	GrssFeedChannelWrap *wrap;
 
 	list = NULL;
 
 	for (iter = feeds; iter; iter = g_list_next (iter)) {
 		feed = FEED_CHANNEL (iter->data);
 
-		wrap = g_new0 (FeedChannelWrap, 1);
+		wrap = g_new0 (GrssFeedChannelWrap, 1);
 		g_object_ref (feed);
 		wrap->channel = feed;
 		wrap->pool = pool;
@@ -187,43 +187,43 @@ create_listened (FeedsPool *pool, GList *feeds)
 }
 
 /**
- * feeds_pool_listen:
- * @pool: a #FeedsPool
- * @feeds: a list of #FeedChannel
+ * grss_feeds_pool_listen:
+ * @pool: a #GrssFeedsPool
+ * @feeds: a list of #GrssFeedChannel
  *
  * To set the list of feeds to be managed by the pool. The previous list, if
- * any, is invalidated. After invokation to the function, feeds_pool_switch()
+ * any, is invalidated. After invokation to the function, grss_feeds_pool_switch()
  * must be call to run the auto-fetching (always, also if previous state was
  * "running").
- * The list in @feeds can be freed after calling this; linked #FeedChannel
+ * The list in @feeds can be freed after calling this; linked #GrssFeedChannel
  * are g_object_ref'd here
  */
 void
-feeds_pool_listen (FeedsPool *pool, GList *feeds)
+grss_feeds_pool_listen (GrssFeedsPool *pool, GList *feeds)
 {
 	gboolean original_status;
 
 	original_status = pool->priv->running;
-	feeds_pool_switch (pool, FALSE);
+	grss_feeds_pool_switch (pool, FALSE);
 	remove_currently_listened (pool);
 	create_listened (pool, feeds);
-	feeds_pool_switch (pool, original_status);
+	grss_feeds_pool_switch (pool, original_status);
 }
 
 /**
- * feeds_pool_get_listened:
- * @pool: a #FeedsPool
+ * grss_feeds_pool_get_listened:
+ * @pool: a #GrssFeedsPool
  *
  * Returns the list of feeds currently managed by the @pool. Please consider
  * this function has to build the list that returns, and of course this is a
  * time and resources consuming task: if you only need to know how many feeds
- * are currently handled, check feeds_pool_get_listened_num()
+ * are currently handled, check grss_feeds_pool_get_listened_num()
  *
- * Return value: a list of #FeedChannel, to be freed with g_list_free() when
+ * Return value: a list of #GrssFeedChannel, to be freed with g_list_free() when
  * no longer in use. Do not modify elements found in this list
  */
 GList*
-feeds_pool_get_listened (FeedsPool *pool)
+grss_feeds_pool_get_listened (GrssFeedsPool *pool)
 {
 	GList *ret;
 	GList *iter;
@@ -231,23 +231,23 @@ feeds_pool_get_listened (FeedsPool *pool)
 	ret = NULL;
 
 	for (iter = pool->priv->feeds_list; iter; iter = g_list_next (iter))
-		ret = g_list_prepend (ret, ((FeedChannelWrap*)iter->data)->channel);
+		ret = g_list_prepend (ret, ((GrssFeedChannelWrap*)iter->data)->channel);
 
 	return g_list_reverse (ret);
 }
 
 /**
- * feeds_pool_get_listened:
- * @pool: a #FeedsPool
+ * grss_feeds_pool_get_listened:
+ * @pool: a #GrssFeedsPool
  *
  * Returns number of feeds under the @pool control, as provided by
- * feeds_pool_listen(). To get the complete list of those feeds, check
- * feeds_pool_get_listened()
+ * grss_feeds_pool_listen(). To get the complete list of those feeds, check
+ * grss_feeds_pool_get_listened()
  *
- * Return value: number of feeds currently managed by the #FeedsPool
+ * Return value: number of feeds currently managed by the #GrssFeedsPool
  */
 int
-feeds_pool_get_listened_num (FeedsPool *pool)
+grss_feeds_pool_get_listened_num (GrssFeedsPool *pool)
 {
 	if (pool->priv->feeds_list == NULL)
 		return 0;
@@ -262,29 +262,29 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data)
 	GList *items;
 	GError *error;
 	xmlDocPtr doc;
-	FeedChannelWrap *feed;
+	GrssFeedChannelWrap *feed;
 
-	feed = (FeedChannelWrap*) user_data;
+	feed = (GrssFeedChannelWrap*) user_data;
 	if (feed->pool->priv->running == FALSE)
 		return;
 
 	items = NULL;
-	feed->next_fetch = time (NULL) + (feed_channel_get_update_interval (feed->channel) * 60);
+	feed->next_fetch = time (NULL) + (grss_feed_channel_get_update_interval (feed->channel) * 60);
 	g_object_get (msg, "status-code", &status, NULL);
 
 	if (status < 200 || status > 299) {
-		g_warning ("Unable to download from %s", feed_channel_get_source (feed->channel));
+		g_warning ("Unable to download from %s", grss_feed_channel_get_source (feed->channel));
 	}
 	else {
 		doc = content_to_xml ((const gchar*) msg->response_body->data, msg->response_body->length);
 
 		if (doc != NULL) {
 			error = NULL;
-			items = feed_parser_parse (feed->pool->priv->parser, feed->channel, doc, &error);
+			items = grss_feed_parser_parse (feed->pool->priv->parser, feed->channel, doc, &error);
 			xmlFreeDoc (doc);
 
 			if (items == NULL && error) {
-				g_warning ("Unable to parse feed at %s: %s", feed_channel_get_source (feed->channel), error->message);
+				g_warning ("Unable to parse feed at %s: %s", grss_feed_channel_get_source (feed->channel), error->message);
 				g_error_free (error);
 			}
 		}
@@ -294,12 +294,12 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data)
 }
 
 static void
-fetch_feed (FeedChannelWrap *feed)
+fetch_feed (GrssFeedChannelWrap *feed)
 {
 	SoupMessage *msg;
 
 	g_signal_emit (feed->pool, signals [FEED_FETCHING], 0, feed->channel, NULL);
-	msg = soup_message_new ("GET", feed_channel_get_source (feed->channel));
+	msg = soup_message_new ("GET", grss_feed_channel_get_source (feed->channel));
 	soup_session_queue_message (feed->pool->priv->soupsession, msg, feed_downloaded, feed);
 }
 
@@ -308,10 +308,10 @@ fetch_feeds (gpointer data)
 {
 	time_t now;
 	GList *iter;
-	FeedsPool *pool;
-	FeedChannelWrap *feed;
+	GrssFeedsPool *pool;
+	GrssFeedChannelWrap *feed;
 
-	pool = (FeedsPool*) data;
+	pool = (GrssFeedsPool*) data;
 
 	if (pool->priv->running == FALSE) {
 		return FALSE;
@@ -320,7 +320,7 @@ fetch_feeds (gpointer data)
 	now = time (NULL);
 
 	for (iter = pool->priv->feeds_list; iter; iter = g_list_next (iter)) {
-		feed = (FeedChannelWrap*) iter->data;
+		feed = (GrssFeedChannelWrap*) iter->data;
 		if (feed->next_fetch <= now)
 			fetch_feed (feed);
 	}
@@ -329,12 +329,12 @@ fetch_feeds (gpointer data)
 }
 
 static void
-run_scheduler (FeedsPool *pool)
+run_scheduler (GrssFeedsPool *pool)
 {
 	int interval;
 	int min_interval;
 	GList *iter;
-	FeedChannelWrap *feed;
+	GrssFeedChannelWrap *feed;
 
 	if (pool->priv->feeds_list == NULL)
 		return;
@@ -342,12 +342,12 @@ run_scheduler (FeedsPool *pool)
 	min_interval = G_MAXINT;
 
 	for (iter = pool->priv->feeds_list; iter; iter = g_list_next (iter)) {
-		feed = (FeedChannelWrap*) iter->data;
-		interval = feed_channel_get_update_interval (feed->channel);
+		feed = (GrssFeedChannelWrap*) iter->data;
+		interval = grss_feed_channel_get_update_interval (feed->channel);
 
 		if (interval == 0) {
 			interval = 30;
-			feed_channel_set_update_interval (feed->channel, interval);
+			grss_feed_channel_set_update_interval (feed->channel, interval);
 		}
 
 		if (min_interval > interval)
@@ -361,15 +361,15 @@ run_scheduler (FeedsPool *pool)
 }
 
 /**
- * feeds_pool_switch:
- * @pool: a #FeedsPool
+ * grss_feeds_pool_switch:
+ * @pool: a #GrssFeedsPool
  * @run: TRUE to run the pool, FALSE to pause it
  *
  * Permits to pause or resume the @pool fetching feeds. If @run is #TRUE, the
  * @pool starts immediately
  */
 void
-feeds_pool_switch (FeedsPool *pool, gboolean run)
+grss_feeds_pool_switch (GrssFeedsPool *pool, gboolean run)
 {
 	if (pool->priv->running != run) {
 		pool->priv->running = run;
@@ -385,15 +385,15 @@ feeds_pool_switch (FeedsPool *pool, gboolean run)
 }
 
 /**
- * feeds_pool_get_session:
- * @pool: a #FeedsPool
+ * grss_feeds_pool_get_session:
+ * @pool: a #GrssFeedsPool
  *
  * To access the internal #SoupSession used by the @pool to fetch items
  *
  * Return value: istance of #SoupSession. Do not free it
  */
 SoupSession*
-feeds_pool_get_session (FeedsPool *pool)
+grss_feeds_pool_get_session (GrssFeedsPool *pool)
 {
 	return pool->priv->soupsession;
 }

@@ -25,18 +25,18 @@
 
 #define DEFAULT_SERVER_PORT   8444
 
-#define FEEDS_SUBSCRIBER_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_SUBSCRIBER_TYPE, FeedsSubscriberPrivate))
+#define FEEDS_SUBSCRIBER_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriberPrivate))
 
 /**
  * SECTION: feeds-subscriber
  * @short_description: PubSubHubbub subscriber
  *
- * #FeedsSubscriber is an alternative for #FeedsPool, able to receive
+ * #GrssFeedsSubscriber is an alternative for #GrssFeedsPool, able to receive
  * real-time notifications by feeds managed by a PubSubHubbub hub.
- * When the subscriber is executed (with feeds_subscriber_switch()) it opens
- * a server on a local port (configurable with feeds_subscriber_set_port()),
- * engage a subscription for each #FeedChannel passed with
- * feeds_subscriber_listen(), and waits for direct notifications by the
+ * When the subscriber is executed (with grss_feeds_subscriber_switch()) it opens
+ * a server on a local port (configurable with grss_feeds_subscriber_set_port()),
+ * engage a subscription for each #GrssFeedChannel passed with
+ * grss_feeds_subscriber_listen(), and waits for direct notifications by the
  * remote hub.
  * For more information look at http://code.google.com/p/pubsubhubbub/
  */
@@ -55,12 +55,12 @@ typedef enum {
 	SUBSCRIBER_CHECKING_PUBLIC_IP
 } SUBSCRIBER_INIT_STATUS;
 
-static void	subscribe_feeds			(FeedsSubscriber *sub);
-static void	try_another_subscription_policy	(FeedsSubscriber *sub);
+static void	subscribe_feeds			(GrssFeedsSubscriber *sub);
+static void	try_another_subscription_policy	(GrssFeedsSubscriber *sub);
 
-typedef void (*SubscriberJobCallback) (FeedsSubscriber *subscriber);
+typedef void (*SubscriberJobCallback) (GrssFeedsSubscriber *subscriber);
 
-struct _FeedsSubscriberPrivate {
+struct _GrssFeedsSubscriberPrivate {
 	gboolean		running;
 
 	SUBSCRIBER_INIT_STATUS	initing_status;
@@ -73,7 +73,7 @@ struct _FeedsSubscriberPrivate {
 	gchar			*hub;
 	SoupSession		*soupsession;
 
-	FeedParser		*parser;
+	GrssFeedParser		*parser;
 	GList			*feeds_list;
 
 	guint			refresh_scheduler;
@@ -87,19 +87,19 @@ typedef enum {
 } FEED_SUBSCRIPTION_STATUS;
 
 typedef struct {
-	FeedChannel			*channel;
+	GrssFeedChannel			*channel;
 
 	FEED_SUBSCRIPTION_STATUS	status;
 	int				identifier;
 	gchar				*path;
 
-	FeedsSubscriber			*sub;
-} FeedChannelWrap;
+	GrssFeedsSubscriber			*sub;
+} GrssFeedChannelWrap;
 
 typedef struct {
 	int			counter;
 	SubscriberJobCallback	callback;
-	FeedsSubscriber		*subscriber;
+	GrssFeedsSubscriber		*subscriber;
 } SubscriberJob;
 
 enum {
@@ -109,17 +109,17 @@ enum {
 
 static guint signals [LAST_SIGNAL] = {0};
 
-G_DEFINE_TYPE (FeedsSubscriber, feeds_subscriber, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GrssFeedsSubscriber, grss_feeds_subscriber, G_TYPE_OBJECT);
 
 static void
-remove_currently_listened (FeedsSubscriber *sub)
+remove_currently_listened (GrssFeedsSubscriber *sub)
 {
 	GList *iter;
-	FeedChannelWrap *wrap;
+	GrssFeedChannelWrap *wrap;
 
 	if (sub->priv->feeds_list != NULL) {
 		for (iter = sub->priv->feeds_list; iter; iter = g_list_next (iter)) {
-			wrap = (FeedChannelWrap*) iter->data;
+			wrap = (GrssFeedChannelWrap*) iter->data;
 			g_free (wrap->path);
 			g_object_unref (wrap->channel);
 			g_free (wrap);
@@ -130,40 +130,40 @@ remove_currently_listened (FeedsSubscriber *sub)
 }
 
 static void
-notification_handled_cb (FeedsSubscriber *sub, FeedChannel *feed, FeedItem *item)
+notification_handled_cb (GrssFeedsSubscriber *sub, GrssFeedChannel *feed, GrssFeedItem *item)
 {
 	g_object_unref (item);
 }
 
 static void
-feeds_subscriber_finalize (GObject *obj)
+grss_feeds_subscriber_finalize (GObject *obj)
 {
-	FeedsSubscriber *sub;
+	GrssFeedsSubscriber *sub;
 
 	sub = FEEDS_SUBSCRIBER (obj);
-	feeds_subscriber_switch (sub, FALSE);
+	grss_feeds_subscriber_switch (sub, FALSE);
 	remove_currently_listened (sub);
 	FREE_STRING (sub->priv->hub);
 	g_object_unref (sub->priv->parser);
 }
 
 static void
-feeds_subscriber_class_init (FeedsSubscriberClass *klass)
+grss_feeds_subscriber_class_init (GrssFeedsSubscriberClass *klass)
 {
 	GObjectClass *gobject_class;
 
-	g_type_class_add_private (klass, sizeof (FeedsSubscriberPrivate));
+	g_type_class_add_private (klass, sizeof (GrssFeedsSubscriberPrivate));
 
 	gobject_class = G_OBJECT_CLASS (klass);
-	gobject_class->finalize = feeds_subscriber_finalize;
+	gobject_class->finalize = grss_feeds_subscriber_finalize;
 
 	klass->notification_received = notification_handled_cb;
 
 	/**
-	 * FeedsSubscriber::notification-received:
-	 * @pool: the #FeedsSubscriber emitting the signal
-	 * @feed: the #FeedChannel which has been updated
-	 * @item: the #FeedItem received
+	 * GrssFeedsSubscriber::notification-received:
+	 * @pool: the #GrssFeedsSubscriber emitting the signal
+	 * @feed: the #GrssFeedChannel which has been updated
+	 * @item: the #GrssFeedItem received
 	 *
 	 * Emitted when a notification has been received and parsed. The
 	 * @item is unref'd at the end of signal
@@ -174,40 +174,40 @@ feeds_subscriber_class_init (FeedsSubscriberClass *klass)
 }
 
 static void
-feeds_subscriber_init (FeedsSubscriber *node)
+grss_feeds_subscriber_init (GrssFeedsSubscriber *node)
 {
 	node->priv = FEEDS_SUBSCRIBER_GET_PRIVATE (node);
-	memset (node->priv, 0, sizeof (FeedsSubscriberPrivate));
-	node->priv->parser = feed_parser_new ();
+	memset (node->priv, 0, sizeof (GrssFeedsSubscriberPrivate));
+	node->priv->parser = grss_feed_parser_new ();
 	node->priv->port = DEFAULT_SERVER_PORT;
 }
 
 /**
- * feeds_subscriber_new:
+ * grss_feeds_subscriber_new:
  *
- * Allocates a new #FeedsSubscriber
+ * Allocates a new #GrssFeedsSubscriber
  *
- * Return value: a new #FeedsSubscriber
+ * Return value: a new #GrssFeedsSubscriber
  */
-FeedsSubscriber*
-feeds_subscriber_new ()
+GrssFeedsSubscriber*
+grss_feeds_subscriber_new ()
 {
 	return g_object_new (FEEDS_SUBSCRIBER_TYPE, NULL);
 }
 
 static gboolean
-create_listened (FeedsSubscriber *sub, GList *feeds)
+create_listened (GrssFeedsSubscriber *sub, GList *feeds)
 {
 	GList *list;
 	GList *iter;
-	FeedChannel *feed;
-	FeedChannelWrap *wrap;
+	GrssFeedChannel *feed;
+	GrssFeedChannelWrap *wrap;
 
 	for (iter = feeds; iter; iter = g_list_next (iter)) {
-		feed = (FeedChannel*) iter->data;
+		feed = (GrssFeedChannel*) iter->data;
 
-		if (feed_channel_get_pubsubhub (feed, NULL, NULL) == FALSE) {
-			g_warning ("Feed at %s has not PubSubHubbub capability", feed_channel_get_source (feed));
+		if (grss_feed_channel_get_pubsubhub (feed, NULL, NULL) == FALSE) {
+			g_warning ("Feed at %s has not PubSubHubbub capability", grss_feed_channel_get_source (feed));
 			return FALSE;
 		}
 	}
@@ -215,9 +215,9 @@ create_listened (FeedsSubscriber *sub, GList *feeds)
 	list = NULL;
 
 	for (iter = feeds; iter; iter = g_list_next (iter)) {
-		feed = (FeedChannel*) iter->data;
+		feed = (GrssFeedChannel*) iter->data;
 
-		wrap = g_new0 (FeedChannelWrap, 1);
+		wrap = g_new0 (GrssFeedChannelWrap, 1);
 		g_object_ref (feed);
 		wrap->status = FEED_SUBSCRIPTION_IDLE;
 		wrap->path = NULL;
@@ -231,37 +231,37 @@ create_listened (FeedsSubscriber *sub, GList *feeds)
 }
 
 /**
- * feeds_subscriber_listen:
- * @sub: a #FeedsSubscriber
- * @feeds: a list of #FeedChannel
+ * grss_feeds_subscriber_listen:
+ * @sub: a #GrssFeedsSubscriber
+ * @feeds: a list of #GrssFeedChannel
  *
  * To set the list of feeds to be managed by @sub. The previous list, if any,
- * is invalidated. After invokation to the function, feeds_subscriber_switch()
+ * is invalidated. After invokation to the function, grss_feeds_subscriber_switch()
  * must be call to run the subscription.
- * The list in @feeds can be freed after calling this; linked #FeedChannel
+ * The list in @feeds can be freed after calling this; linked #GrssFeedChannel
  * are g_object_ref'd here
  *
- * Return value: %TRUE if all #FeedChannels involved in @feeds are valid
- * (feed_channel_get_pubsubhub() returns %TRUE), %FALSE otherwise
+ * Return value: %TRUE if all #GrssFeedChannels involved in @feeds are valid
+ * (grss_feed_channel_get_pubsubhub() returns %TRUE), %FALSE otherwise
  */
 gboolean
-feeds_subscriber_listen (FeedsSubscriber *sub, GList *feeds)
+grss_feeds_subscriber_listen (GrssFeedsSubscriber *sub, GList *feeds)
 {
 	remove_currently_listened (sub);
 	return create_listened (sub, feeds);
 }
 
 /**
- * feeds_subscriber_get_listened:
- * @sub: a #FeedsSubscriber
+ * grss_feeds_subscriber_get_listened:
+ * @sub: a #GrssFeedsSubscriber
  *
  * Returns the list of feeds currently managed by @sub
  *
- * Return value: a list of #FeedChannel, to be freed with g_list_free() when
+ * Return value: a list of #GrssFeedChannel, to be freed with g_list_free() when
  * no longer in use. Do not modify elements found in this list
  */
 GList*
-feeds_subscriber_get_listened (FeedsSubscriber *sub)
+grss_feeds_subscriber_get_listened (GrssFeedsSubscriber *sub)
 {
 	GList *ret;
 	GList *iter;
@@ -269,7 +269,7 @@ feeds_subscriber_get_listened (FeedsSubscriber *sub)
 	ret = NULL;
 
 	for (iter = sub->priv->feeds_list; iter; iter = g_list_next (iter))
-		ret = g_list_prepend (ret, ((FeedChannelWrap*)iter->data)->channel);
+		ret = g_list_prepend (ret, ((GrssFeedChannelWrap*)iter->data)->channel);
 
 	return g_list_reverse (ret);
 }
@@ -295,9 +295,9 @@ handle_incoming_notification_cb (SoupServer *server, SoupMessage *msg, const cha
 	GList *items;
 	GError *error;
 	xmlDocPtr doc;
-	FeedChannelWrap *feed;
+	GrssFeedChannelWrap *feed;
 
-	feed = (FeedChannelWrap*) user_data;
+	feed = (GrssFeedChannelWrap*) user_data;
 
 	if (query != NULL) {
 		mode = (gchar*) g_hash_table_lookup (query, "hub.mode");
@@ -326,15 +326,15 @@ handle_incoming_notification_cb (SoupServer *server, SoupMessage *msg, const cha
 
 		doc = content_to_xml (msg->request_body->data, strlen (msg->request_body->data));
 		error = NULL;
-		items = feed_parser_parse (feed->sub->priv->parser, feed->channel, doc, &error);
+		items = grss_feed_parser_parse (feed->sub->priv->parser, feed->channel, doc, &error);
 
 		if (items == NULL) {
-			g_warning ("Unable to parse notification from %s: %s", feed_channel_get_source (feed->channel), error->message);
+			g_warning ("Unable to parse notification from %s: %s", grss_feed_channel_get_source (feed->channel), error->message);
 			g_error_free (error);
 		}
 		else {
 			for (iter = items; iter; iter = g_list_next (iter))
-				g_signal_emit (feed->sub, signals [NOTIFICATION_RECEIVED], 0, feed->channel, (FeedItem*) iter->data, NULL);
+				g_signal_emit (feed->sub, signals [NOTIFICATION_RECEIVED], 0, feed->channel, (GrssFeedItem*) iter->data, NULL);
 			g_list_free (items);
 		}
 
@@ -347,26 +347,26 @@ handle_incoming_notification_cb (SoupServer *server, SoupMessage *msg, const cha
 }
 
 static void
-unregister_handlers (FeedsSubscriber *sub)
+unregister_handlers (GrssFeedsSubscriber *sub)
 {
 	GList *iter;
-	FeedChannelWrap *feed;
+	GrssFeedChannelWrap *feed;
 
 	for (iter = sub->priv->feeds_list; iter; iter = g_list_next (iter)) {
-		feed = (FeedChannelWrap*) iter->data;
+		feed = (GrssFeedChannelWrap*) iter->data;
 		soup_server_remove_handler (sub->priv->server, feed->path);
 	}
 }
 
 static void
-register_handlers (FeedsSubscriber *sub)
+register_handlers (GrssFeedsSubscriber *sub)
 {
 	register int i;
 	GList *iter;
-	FeedChannelWrap *feed;
+	GrssFeedChannelWrap *feed;
 
 	for (i = 1, iter = sub->priv->feeds_list; iter; iter = g_list_next (iter), i++) {
-		feed = (FeedChannelWrap*) iter->data;
+		feed = (GrssFeedChannelWrap*) iter->data;
 		feed->identifier = i;
 		feed->status = FEED_SUBSCRIPTION_SUBSCRIBING;
 
@@ -377,7 +377,7 @@ register_handlers (FeedsSubscriber *sub)
 }
 
 static void
-close_server (FeedsSubscriber *sub)
+close_server (GrssFeedsSubscriber *sub)
 {
 	if (sub->priv->server != NULL) {
 		unregister_handlers (sub);
@@ -388,7 +388,7 @@ close_server (FeedsSubscriber *sub)
 }
 
 static void
-feeds_subscribed_cb (FeedsSubscriber *sub)
+feeds_subscribed_cb (GrssFeedsSubscriber *sub)
 {
 	if (sub->priv->has_errors_in_subscription == TRUE)
 		try_another_subscription_policy (sub);
@@ -412,14 +412,14 @@ subscribe_response_cb (SoupSession *session, SoupMessage *msg, gpointer user_dat
 }
 
 static void
-subscribe_feed (FeedsSubscriber *sub, FeedChannelWrap *feed, SubscriberJob *job)
+subscribe_feed (GrssFeedsSubscriber *sub, GrssFeedChannelWrap *feed, SubscriberJob *job)
 {
 	gchar *body;
 	gchar *pubsubhub;
 	gchar *feed_reference;
 	SoupMessage *msg;
 
-	if (feed_channel_get_pubsubhub (feed->channel, &pubsubhub, &feed_reference) == FALSE)
+	if (grss_feed_channel_get_pubsubhub (feed->channel, &pubsubhub, &feed_reference) == FALSE)
 		return;
 
 	if (sub->priv->hub != NULL)
@@ -435,10 +435,10 @@ subscribe_feed (FeedsSubscriber *sub, FeedChannelWrap *feed, SubscriberJob *job)
 }
 
 static void
-subscribe_feeds (FeedsSubscriber *sub)
+subscribe_feeds (GrssFeedsSubscriber *sub)
 {
 	GList *iter;
-	FeedChannelWrap *feed;
+	GrssFeedChannelWrap *feed;
 	SubscriberJob *job;
 
 	if (sub->priv->feeds_list == NULL)
@@ -452,13 +452,13 @@ subscribe_feeds (FeedsSubscriber *sub)
 	sub->priv->has_errors_in_subscription = FALSE;
 
 	for (iter = sub->priv->feeds_list; iter; iter = g_list_next (iter)) {
-		feed = (FeedChannelWrap*) iter->data;
+		feed = (GrssFeedChannelWrap*) iter->data;
 		subscribe_feed (sub, feed, job);
 	}
 }
 
 static GInetAddress*
-my_detect_internet_address (FeedsSubscriber *sub)
+my_detect_internet_address (GrssFeedsSubscriber *sub)
 {
 	if (sub->priv->local_addr == NULL)
 		sub->priv->local_addr = detect_internet_address ();
@@ -467,7 +467,7 @@ my_detect_internet_address (FeedsSubscriber *sub)
 }
 
 static void
-create_and_run_server (FeedsSubscriber *sub)
+create_and_run_server (GrssFeedsSubscriber *sub)
 {
 	gchar *ip;
 	struct sockaddr_in low_addr;
@@ -497,9 +497,9 @@ create_and_run_server (FeedsSubscriber *sub)
 static void
 external_ip_received_cb (SoupSession *session, SoupMessage *msg, gpointer data)
 {
-	FeedsSubscriber *sub;
+	GrssFeedsSubscriber *sub;
 
-	sub = (FeedsSubscriber*) data;
+	sub = (GrssFeedsSubscriber*) data;
 
 	sub->priv->external_addr = g_inet_address_new_from_string (msg->response_body->data);
 	if (sub->priv->external_addr == NULL) {
@@ -511,7 +511,7 @@ external_ip_received_cb (SoupSession *session, SoupMessage *msg, gpointer data)
 }
 
 static void
-subscribe_with_external_ip (FeedsSubscriber *sub)
+subscribe_with_external_ip (GrssFeedsSubscriber *sub)
 {
 	SoupMessage *msg;
 
@@ -526,7 +526,7 @@ subscribe_with_external_ip (FeedsSubscriber *sub)
 }
 
 static void
-try_another_subscription_policy (FeedsSubscriber *sub)
+try_another_subscription_policy (GrssFeedsSubscriber *sub)
 {
 	switch (sub->priv->initing_status) {
 		case SUBSCRIBER_TRYING_LOCAL_IP:
@@ -542,7 +542,7 @@ try_another_subscription_policy (FeedsSubscriber *sub)
 }
 
 static void
-init_run_server (FeedsSubscriber *sub)
+init_run_server (GrssFeedsSubscriber *sub)
 {
 	gboolean done;
 	GInetAddress *addr;
@@ -615,7 +615,7 @@ init_run_server (FeedsSubscriber *sub)
 }
 
 static void
-feeds_unsubscribed_cb (FeedsSubscriber *sub)
+feeds_unsubscribed_cb (GrssFeedsSubscriber *sub)
 {
 	close_server (sub);
 	g_object_unref (sub->priv->soupsession);
@@ -632,14 +632,14 @@ unsubscribe_response_cb (SoupSession *session, SoupMessage *msg, gpointer user_d
 }
 
 static void
-unsubscribe_feed (FeedsSubscriber *sub, FeedChannelWrap *feed, SubscriberJob *job)
+unsubscribe_feed (GrssFeedsSubscriber *sub, GrssFeedChannelWrap *feed, SubscriberJob *job)
 {
 	gchar *body;
 	gchar *pubsubhub;
 	gchar *feed_reference;
 	SoupMessage *msg;
 
-	if (feed_channel_get_pubsubhub (feed->channel, &pubsubhub, &feed_reference) == FALSE) {
+	if (grss_feed_channel_get_pubsubhub (feed->channel, &pubsubhub, &feed_reference) == FALSE) {
 		check_complete_job (job);
 		return;
 	}
@@ -659,10 +659,10 @@ unsubscribe_feed (FeedsSubscriber *sub, FeedChannelWrap *feed, SubscriberJob *jo
 }
 
 static void
-unsubscribe_feeds (FeedsSubscriber *sub)
+unsubscribe_feeds (GrssFeedsSubscriber *sub)
 {
 	GList *iter;
-	FeedChannelWrap *wrap;
+	GrssFeedChannelWrap *wrap;
 	SubscriberJob *job;
 
 	job = g_new0 (SubscriberJob, 1);
@@ -671,7 +671,7 @@ unsubscribe_feeds (FeedsSubscriber *sub)
 	job->subscriber = sub;
 
 	for (iter = sub->priv->feeds_list; iter; iter = g_list_next (iter)) {
-		wrap = (FeedChannelWrap*) iter->data;
+		wrap = (GrssFeedChannelWrap*) iter->data;
 		unsubscribe_feed (sub, wrap, job);
 	}
 
@@ -679,14 +679,14 @@ unsubscribe_feeds (FeedsSubscriber *sub)
 }
 
 static void
-stop_server (FeedsSubscriber *sub)
+stop_server (GrssFeedsSubscriber *sub)
 {
 	unsubscribe_feeds (sub);
 }
 
 /**
- * feeds_subscriber_set_port:
- * @sub: a #FeedsSubscriber
+ * grss_feeds_subscriber_set_port:
+ * @sub: a #GrssFeedsSubscriber
  * @port: new listening port for the server
  *
  * To customize the port opened by the local server to catch incoming
@@ -696,28 +696,28 @@ stop_server (FeedsSubscriber *sub)
  * certain ports
  */
 void
-feeds_subscriber_set_port (FeedsSubscriber *sub, int port)
+grss_feeds_subscriber_set_port (GrssFeedsSubscriber *sub, int port)
 {
 	if (port != sub->priv->port) {
 		sub->priv->port = port;
 
 		if (sub->priv->running == TRUE) {
-			feeds_subscriber_switch (sub, FALSE);
-			feeds_subscriber_switch (sub, TRUE);
+			grss_feeds_subscriber_switch (sub, FALSE);
+			grss_feeds_subscriber_switch (sub, TRUE);
 		}
 	}
 }
 
 /**
- * feeds_subscriber_set_hub:
- * @sub: a #FeedsSubscriber
+ * grss_feeds_subscriber_set_hub:
+ * @sub: a #GrssFeedsSubscriber
  * @hub: URL of the custom hub
  *
  * To customize the default hub to which send subscriptions. If this value is
  * set, hubs from specific feeds are ignored
  */
 void
-feeds_subscriber_set_hub (FeedsSubscriber *sub, gchar *hub)
+grss_feeds_subscriber_set_hub (GrssFeedsSubscriber *sub, gchar *hub)
 {
 	FREE_STRING (sub->priv->hub);
 	if (hub != NULL)
@@ -725,14 +725,14 @@ feeds_subscriber_set_hub (FeedsSubscriber *sub, gchar *hub)
 }
 
 /**
- * feeds_subscriber_switch:
- * @sub: a #FeedsSubscriber
+ * grss_feeds_subscriber_switch:
+ * @sub: a #GrssFeedsSubscriber
  * @run: TRUE to run the subscriber, FALSE to pause it
  *
  * Permits to pause or resume @sub listening for events
  */
 void
-feeds_subscriber_switch (FeedsSubscriber *sub, gboolean run)
+grss_feeds_subscriber_switch (GrssFeedsSubscriber *sub, gboolean run)
 {
 	if (sub->priv->running != run) {
 		sub->priv->running = run;

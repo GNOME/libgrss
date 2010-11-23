@@ -33,19 +33,19 @@
 #include "feed-atom-handler.h"
 #include "feed-pie-handler.h"
 
-#define FEED_PARSER_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEED_PARSER_TYPE, FeedParserPrivate))
+#define FEED_PARSER_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEED_PARSER_TYPE, GrssFeedParserPrivate))
 
 /**
  * SECTION: feed-parser
  * @short_description: feed parser
  *
- * The #FeedParser is a wrapper to the many handlers available: given a
- * #FeedChannel provides to identify his type and invoke the correct parser.
+ * The #GrssFeedParser is a wrapper to the many handlers available: given a
+ * #GrssFeedChannel provides to identify his type and invoke the correct parser.
  */
 
-#define FEED_PARSER_ERROR		feed_parser_error_quark()
+#define FEED_PARSER_ERROR		grss_feed_parser_error_quark()
 
-struct _FeedParserPrivate {
+struct _GrssFeedParserPrivate {
 	GSList *handlers;
 };
 
@@ -54,40 +54,40 @@ enum {
 	FEED_PARSER_FORMAT_ERROR
 };
 
-G_DEFINE_TYPE (FeedParser, feed_parser, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GrssFeedParser, grss_feed_parser, G_TYPE_OBJECT)
 
 static GQuark
-feed_parser_error_quark ()
+grss_feed_parser_error_quark ()
 {
-	return g_quark_from_static_string ("feed_parser_error");
+	return g_quark_from_static_string ("grss_feed_parser_error");
 }
 
 static void
-feed_parser_finalize (GObject *object)
+grss_feed_parser_finalize (GObject *object)
 {
-	FeedParser *parser;
+	GrssFeedParser *parser;
 
 	parser = FEED_PARSER (object);
-	G_OBJECT_CLASS (feed_parser_parent_class)->finalize (object);
+	G_OBJECT_CLASS (grss_feed_parser_parent_class)->finalize (object);
 }
 
 static void
-feed_parser_class_init (FeedParserClass *klass)
+grss_feed_parser_class_init (GrssFeedParserClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	g_type_class_add_private (object_class, sizeof (FeedParserPrivate));
-	object_class->finalize = feed_parser_finalize;
+	g_type_class_add_private (object_class, sizeof (GrssFeedParserPrivate));
+	object_class->finalize = grss_feed_parser_finalize;
 }
 
 static void
-feed_parser_init (FeedParser *object)
+grss_feed_parser_init (GrssFeedParser *object)
 {
 	object->priv = FEED_PARSER_GET_PRIVATE (object);
 }
 
 static GSList*
-feed_parsers_get_list (FeedParser *parser)
+feed_parsers_get_list (GrssFeedParser *parser)
 {
 	FeedHandler *feed;
 	NSHandler *ns;
@@ -116,23 +116,23 @@ feed_parsers_get_list (FeedParser *parser)
 }
 
 /**
- * feed_parser_new:
+ * grss_feed_parser_new:
  *
- * Allocates a new #FeedParser
+ * Allocates a new #GrssFeedParser
  *
- * Return value: a new #FeedParser
+ * Return value: a new #GrssFeedParser
  */
-FeedParser*
-feed_parser_new ()
+GrssFeedParser*
+grss_feed_parser_new ()
 {
-	FeedParser *parser;
+	GrssFeedParser *parser;
 
 	parser = g_object_new (FEED_PARSER_TYPE, NULL);
 	return parser;
 }
 
 static FeedHandler*
-retrieve_feed_handler (FeedParser *parser, xmlDocPtr doc, xmlNodePtr cur)
+retrieve_feed_handler (GrssFeedParser *parser, xmlDocPtr doc, xmlNodePtr cur)
 {
 	GSList *iter;
 	FeedHandler *handler;
@@ -152,21 +152,21 @@ retrieve_feed_handler (FeedParser *parser, xmlDocPtr doc, xmlNodePtr cur)
 }
 
 /**
- * feed_parser_parse:
- * @parser: a #FeedParser
- * @feed: a #FeedChannel to be parsed
+ * grss_feed_parser_parse:
+ * @parser: a #GrssFeedParser
+ * @feed: a #GrssFeedChannel to be parsed
  * @doc: XML document extracted from the contents of the feed, which must
  * already been fetched
  * @error: location for eventual errors
  *
  * Parses the given XML @doc, belonging to the given @feed, to obtain a list
- * of #FeedItem
+ * of #GrssFeedItem
  *
- * Return value: a list of #FeedItem, to be freed when no longer in use, or
+ * Return value: a list of #GrssFeedItem, to be freed when no longer in use, or
  * NULL if an error occours and @error is set
  */
 GList*
-feed_parser_parse (FeedParser *parser, FeedChannel *feed, xmlDocPtr doc, GError **error)
+grss_feed_parser_parse (GrssFeedParser *parser, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
 {
 	xmlNodePtr cur;
 	GList *items;

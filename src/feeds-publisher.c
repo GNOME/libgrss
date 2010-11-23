@@ -27,13 +27,13 @@
 #define DEFAULT_SERVER_PORT   		80
 #define DEFAULT_REFRESH_CHECK_INTERVAL	60
 
-#define FEEDS_PUBLISHER_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_PUBLISHER_TYPE, FeedsPublisherPrivate))
+#define FEEDS_PUBLISHER_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_PUBLISHER_TYPE, GrssFeedsPublisherPrivate))
 
 /**
  * SECTION: feeds-publisher
  * @short_description: feed writer and PubSubHubbub publisher
  *
- * #FeedsPublisher may be used to expose contents for any given #FeedChannel,
+ * #GrssFeedsPublisher may be used to expose contents for any given #GrssFeedChannel,
  * both writing a file to be dispatched by the local webserver or providing
  * himself to distribute it, and implements a server able to receive
  * subscriptions by PubSubHubbub clients and deliver them new contents in
@@ -43,7 +43,7 @@
 static void	subscribe_verify_cb	(SoupSession *session, SoupMessage *msg, gpointer user_data);
 static void	verify_delivery_cb	(SoupSession *session, SoupMessage *msg, gpointer user_data);
 
-struct _FeedsPublisherPrivate {
+struct _GrssFeedsPublisherPrivate {
 	gboolean		running;
 
 	int			port;
@@ -58,7 +58,7 @@ struct _FeedsPublisherPrivate {
 };
 
 typedef struct {
-	FeedChannel		*channel;
+	GrssFeedChannel		*channel;
 	GList			*subscribers;
 	GList			*items_delivered;
 	guint			resend_handler;
@@ -70,7 +70,7 @@ typedef enum {
 } SUBSCRIBER_STATUS;
 
 typedef struct {
-	FeedsPublisher		*parent;
+	GrssFeedsPublisher	*parent;
 	SUBSCRIBER_STATUS	status;
 	gchar			*topic;
 	ValidTopic		*topic_struct;
@@ -91,7 +91,7 @@ enum {
 
 static guint signals [LAST_SIGNAL] = {0};
 
-G_DEFINE_TYPE (FeedsPublisher, feeds_publisher, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GrssFeedsPublisher, grss_feeds_publisher, G_TYPE_OBJECT);
 
 static void
 destroy_remote_subscriber (RemoteSubscriber *client)
@@ -136,37 +136,37 @@ topic_remove_helper (gpointer key, gpointer value, gpointer user_data)
 }
 
 static void
-remove_current_topics (FeedsPublisher *pub)
+remove_current_topics (GrssFeedsPublisher *pub)
 {
 	g_hash_table_foreach_remove (pub->priv->topics, topic_remove_helper, NULL);
 }
 
 static void
-feeds_publisher_finalize (GObject *obj)
+grss_feeds_publisher_finalize (GObject *obj)
 {
-	FeedsPublisher *pub;
+	GrssFeedsPublisher *pub;
 
 	pub = FEEDS_PUBLISHER (obj);
-	feeds_publisher_hub_switch (pub, FALSE);
+	grss_feeds_publisher_hub_switch (pub, FALSE);
 
 	remove_current_topics (pub);
 	g_hash_table_destroy (pub->priv->topics);
 }
 
 static void
-feeds_publisher_class_init (FeedsPublisherClass *klass)
+grss_feeds_publisher_class_init (GrssFeedsPublisherClass *klass)
 {
 	GObjectClass *gobject_class;
 
-	g_type_class_add_private (klass, sizeof (FeedsPublisherPrivate));
+	g_type_class_add_private (klass, sizeof (GrssFeedsPublisherPrivate));
 
 	gobject_class = G_OBJECT_CLASS (klass);
-	gobject_class->finalize = feeds_publisher_finalize;
+	gobject_class->finalize = grss_feeds_publisher_finalize;
 
 	/**
-	 * FeedsSubscriber::new_subscription:
-	 * @pub: the #FeedsPublisher emitting the signal
-	 * @topic: #FeedChannel for which subscription has been added
+	 * GrssFeedsSubscriber::new_subscription:
+	 * @pub: the #GrssFeedsPublisher emitting the signal
+	 * @topic: #GrssFeedChannel for which subscription has been added
 	 * @callback: callback required for new subscriber
 	 *
 	 * Emitted when a new remote client subscribes to this publisher
@@ -176,9 +176,9 @@ feeds_publisher_class_init (FeedsPublisherClass *klass)
 	                                             G_TYPE_NONE, 2, FEED_CHANNEL_TYPE, G_TYPE_STRING);
 
 	/**
-	 * FeedsSubscriber::new_subscription:
-	 * @pub: the #FeedsPublisher emitting the signal
-	 * @topic: #FeedChannel for which subscription has been removed
+	 * GrssFeedsSubscriber::new_subscription:
+	 * @pub: the #GrssFeedsPublisher emitting the signal
+	 * @topic: #GrssFeedChannel for which subscription has been removed
 	 * @callback: callback revoked by the subscriber
 	 *
 	 * Emitted when a new remote client unsubscribes to this publisher
@@ -189,29 +189,29 @@ feeds_publisher_class_init (FeedsPublisherClass *klass)
 }
 
 static void
-feeds_publisher_init (FeedsPublisher *node)
+grss_feeds_publisher_init (GrssFeedsPublisher *node)
 {
 	node->priv = FEEDS_PUBLISHER_GET_PRIVATE (node);
-	memset (node->priv, 0, sizeof (FeedsPublisherPrivate));
+	memset (node->priv, 0, sizeof (GrssFeedsPublisherPrivate));
 	node->priv->port = DEFAULT_SERVER_PORT;
 	node->priv->topics = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, destroy_topic);
 }
 
 /**
- * feeds_publisher_new:
+ * grss_feeds_publisher_new:
  *
- * Allocates a new #FeedsPublisher
+ * Allocates a new #GrssFeedsPublisher
  *
- * Return value: a new #FeedsPublisher
+ * Return value: a new #GrssFeedsPublisher
  */
-FeedsPublisher*
-feeds_publisher_new ()
+GrssFeedsPublisher*
+grss_feeds_publisher_new ()
 {
 	return g_object_new (FEEDS_PUBLISHER_TYPE, NULL);
 }
 
 static gchar*
-format_feed_text (FeedsPublisher *pub, FeedChannel *channel, GList *items)
+format_feed_text (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items)
 {
 	const gchar *str;
 	gchar *formatted;
@@ -219,50 +219,50 @@ format_feed_text (FeedsPublisher *pub, FeedChannel *channel, GList *items)
 	GList *iter;
 	const GList *list;
 	GString *text;
-	FeedItem *item;
+	GrssFeedItem *item;
 
 	text = g_string_new ("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<feed xmlns=\"http://www.w3.org/2005/Atom\">\n");
 
-	str = feed_channel_get_title (channel);
+	str = grss_feed_channel_get_title (channel);
 	if (str != NULL)
 		g_string_append_printf (text, "<title>%s</title>\n", str);
 
-	str = feed_channel_get_description (channel);
+	str = grss_feed_channel_get_description (channel);
 	if (str != NULL)
 		g_string_append_printf (text, "<subtitle>%s</subtitle>\n", str);
 
-	str = feed_channel_get_homepage (channel);
+	str = grss_feed_channel_get_homepage (channel);
 	if (str != NULL)
 		g_string_append_printf (text, "<link href=\"%s\" />\n", str);
 
-	str = feed_channel_get_copyright (channel);
+	str = grss_feed_channel_get_copyright (channel);
 	if (str != NULL)
 		g_string_append_printf (text, "<author>%s</author>\n", str);
 
-	str = feed_channel_get_editor (channel);
+	str = grss_feed_channel_get_editor (channel);
 	if (str != NULL)
 		g_string_append_printf (text, "<rights>%s</rights>\n", str);
 
-	str = feed_channel_get_generator (channel);
+	str = grss_feed_channel_get_generator (channel);
 	if (str != NULL)
 		g_string_append_printf (text, "<generator>%s</generator>\n", str);
 
-	list = feed_channel_get_contributors (channel);
+	list = grss_feed_channel_get_contributors (channel);
 	while (list != NULL) {
 		g_string_append_printf (text, "<contributor>%s</contributor>\n", (gchar*) list->data);
 		list = list->next;
 	}
 
-	date = feed_channel_get_update_time (channel);
+	date = grss_feed_channel_get_update_time (channel);
 	formatted = date_to_ISO8601 (date);
 	g_string_append_printf (text, "<updated>%s</updated>\n", formatted);
 	g_free (formatted);
 
-	str = feed_channel_get_icon (channel);
+	str = grss_feed_channel_get_icon (channel);
 	if (str != NULL)
 		g_string_append_printf (text, "<icon>%s</icon>\n", str);
 
-	str = feed_channel_get_image (channel);
+	str = grss_feed_channel_get_image (channel);
 	if (str != NULL)
 		g_string_append_printf (text, "<logo>%s</logo>\n", str);
 
@@ -271,37 +271,37 @@ format_feed_text (FeedsPublisher *pub, FeedChannel *channel, GList *items)
 
 		g_string_append (text, "\t<entry>\n");
 
-		str = feed_item_get_title (item);
+		str = grss_feed_item_get_title (item);
 		if (str != NULL)
 			g_string_append_printf (text, "\t<title>%s</title>\n", str);
 
-		str = feed_item_get_id (item);
+		str = grss_feed_item_get_id (item);
 		if (str != NULL)
 			g_string_append_printf (text, "\t<id>%s</id>\n", str);
 
-		str = feed_item_get_source (item);
+		str = grss_feed_item_get_source (item);
 		if (str != NULL)
 			g_string_append_printf (text, "<link href=\"%s\" />\n", str);
 
-		str = feed_item_get_description (item);
+		str = grss_feed_item_get_description (item);
 		if (str != NULL)
 			g_string_append_printf (text, "\t<summary>%s</summary>\n", str);
 
-		str = feed_item_get_author (item);
+		str = grss_feed_item_get_author (item);
 		if (str != NULL)
 			g_string_append_printf (text, "\t<author>%s</author>\n", str);
 
-		str = feed_item_get_copyright (item);
+		str = grss_feed_item_get_copyright (item);
 		if (str != NULL)
 			g_string_append_printf (text, "\t<rights>%s</rights>\n", str);
 
-		list = feed_item_get_contributors (item);
+		list = grss_feed_item_get_contributors (item);
 		while (list != NULL) {
 			g_string_append_printf (text, "\t<contributor>%s</contributor>\n", (gchar*) list->data);
 			list = list->next;
 		}
 
-		date = feed_item_get_publish_time (item);
+		date = grss_feed_item_get_publish_time (item);
 		formatted = date_to_ISO8601 (date);
 		g_string_append_printf (text, "<published>%s</published>\n", formatted);
 		g_free (formatted);
@@ -372,7 +372,7 @@ verify_delivery_cb (SoupSession *session, SoupMessage *msg, gpointer user_data)
 }
 
 static void
-deliver_to_subscribers (FeedsPublisher *pub, FeedChannel *channel, GList *items)
+deliver_to_subscribers (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items)
 {
 	gboolean found;
 	gchar *text;
@@ -385,21 +385,21 @@ deliver_to_subscribers (FeedsPublisher *pub, FeedChannel *channel, GList *items)
 	RemoteSubscriber *client;
 	ValidTopic *topic;
 
-	topic = g_hash_table_lookup (pub->priv->topics, feed_channel_get_source (channel));
+	topic = g_hash_table_lookup (pub->priv->topics, grss_feed_channel_get_source (channel));
 	if (topic == NULL || topic->subscribers == NULL)
 		return;
 
 	to_deliver = NULL;
 
 	for (oiter = items; oiter; oiter = oiter->next) {
-		olink = feed_item_get_source (oiter->data);
+		olink = grss_feed_item_get_source (oiter->data);
 		if (olink == NULL)
 			continue;
 
 		found = FALSE;
 
 		for (iiter = topic->items_delivered; iiter; iiter = iiter->next) {
-			ilink = feed_item_get_source (iiter->data);
+			ilink = grss_feed_item_get_source (iiter->data);
 
 			if (strcmp (ilink, olink) == 0) {
 				found = TRUE;
@@ -474,18 +474,18 @@ feed_required_by_web_cb (SoupServer *server, SoupMessage *msg, const char *path,
 }
 
 /**
- * feeds_publisher_publish:
- * @pub: a #FeedsPublisher
- * @channel: the #FeedChannel to dump in the file
- * @items: list of #FeedItems to be added in the feed
+ * grss_feeds_publisher_publish:
+ * @pub: a #GrssFeedsPublisher
+ * @channel: the #GrssFeedChannel to dump in the file
+ * @items: list of #GrssFeedItems to be added in the feed
  * @id: name used in the external URL of the feed
  *
  * If the local web server has been executed (with
- * feeds_publisher_hub_switch()) this function exposes the given @channel as
+ * grss_feeds_publisher_hub_switch()) this function exposes the given @channel as
  * an Atom formatted file avalable to http://[LOCAL_IP:DEFINED_PORT]/@id
  */
 void
-feeds_publisher_publish (FeedsPublisher *pub, FeedChannel *channel, GList *items, const gchar *id)
+grss_feeds_publisher_publish (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *id)
 {
 	gchar *path;
 	GFile *file;
@@ -500,9 +500,9 @@ feeds_publisher_publish (FeedsPublisher *pub, FeedChannel *channel, GList *items
 	path = g_strdup_printf ("file://%s/libgrss/activefeeds/%s", g_get_tmp_dir (), id);
 
 	/*
-		PubSubHubbub notifies are already delivered by feeds_publisher_publish_file()
+		PubSubHubbub notifies are already delivered by grss_feeds_publisher_publish_file()
 	*/
-	feeds_publisher_publish_file (pub, channel, items, (const gchar*) path);
+	grss_feeds_publisher_publish_file (pub, channel, items, (const gchar*) path);
 
 	file = g_file_new_for_uri (path);
 	soup_server_add_handler (pub->priv->server, id, feed_required_by_web_cb, file, g_object_unref);
@@ -511,19 +511,19 @@ feeds_publisher_publish (FeedsPublisher *pub, FeedChannel *channel, GList *items
 }
 
 /**
- * feeds_publisher_publish_file:
- * @pub: a #FeedsPublisher
- * @channel: the #FeedChannel to dump in the file
- * @items: list of #FeedItems to be added in the feed
+ * grss_feeds_publisher_publish_file:
+ * @pub: a #GrssFeedsPublisher
+ * @channel: the #GrssFeedChannel to dump in the file
+ * @items: list of #GrssFeedItems to be added in the feed
  * @path: path of the file to write
  *
  * Dump the given @channel in an Atom formatted file in @path. If the local
- * PubSubHubbub hub has been activated (with feeds_publisher_hub_switch())
+ * PubSubHubbub hub has been activated (with grss_feeds_publisher_hub_switch())
  * notifies remote subscribers about the new items which has been added since
- * previous invocation of this function for the same #FeedChannel
+ * previous invocation of this function for the same #GrssFeedChannel
  */
 void
-feeds_publisher_publish_file (FeedsPublisher *pub, FeedChannel *channel, GList *items, const gchar *uri)
+grss_feeds_publisher_publish_file (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *uri)
 {
 	gchar *text;
 	GFile *file;
@@ -543,7 +543,7 @@ feeds_publisher_publish_file (FeedsPublisher *pub, FeedChannel *channel, GList *
 }
 
 static void
-add_client_to_topic (FeedsPublisher *pub, RemoteSubscriber *client)
+add_client_to_topic (GrssFeedsPublisher *pub, RemoteSubscriber *client)
 {
 	ValidTopic *topic;
 
@@ -562,7 +562,7 @@ add_client_to_topic (FeedsPublisher *pub, RemoteSubscriber *client)
 }
 
 static void
-remove_client_to_topic (FeedsPublisher *pub, RemoteSubscriber *client)
+remove_client_to_topic (GrssFeedsPublisher *pub, RemoteSubscriber *client)
 {
 	GList *iter;
 	ValidTopic *topic;
@@ -697,7 +697,7 @@ subscribe_verify_cb (SoupSession *session, SoupMessage *msg, gpointer user_data)
 }
 
 static RemoteSubscriber*
-search_subscriber_by_topic_and_callback (FeedsPublisher *pub, gchar *topic, gchar *callback)
+search_subscriber_by_topic_and_callback (GrssFeedsPublisher *pub, gchar *topic, gchar *callback)
 {
 	GList *iter;
 	ValidTopic *topic_test;
@@ -733,7 +733,7 @@ handle_incoming_requests_cb (SoupServer *server, SoupMessage *msg, const char *p
 	gchar *callback;
 	gchar *verify;
 	SoupMessage *verify_msg;
-	FeedsPublisher *pub;
+	GrssFeedsPublisher *pub;
 	RemoteSubscriber *client;
 	ValidTopic *topic_struct;
 
@@ -821,7 +821,7 @@ handle_incoming_requests_cb (SoupServer *server, SoupMessage *msg, const char *p
 }
 
 static void
-close_server (FeedsPublisher *pub)
+close_server (GrssFeedsPublisher *pub)
 {
 	if (pub->priv->server != NULL) {
 		soup_server_remove_handler (pub->priv->server, NULL);
@@ -832,7 +832,7 @@ close_server (FeedsPublisher *pub)
 }
 
 static void
-create_and_run_server (FeedsPublisher *pub)
+create_and_run_server (GrssFeedsPublisher *pub)
 {
 	SoupAddress *soup_addr;
 
@@ -848,8 +848,8 @@ create_and_run_server (FeedsPublisher *pub)
 }
 
 /**
- * feeds_publisher_hub_set_port:
- * @pub: a #FeedsPublisher
+ * grss_feeds_publisher_hub_set_port:
+ * @pub: a #GrssFeedsPublisher
  * @port: new listening port for the server
  *
  * To customize the port opened by the local server to deliver feeds and
@@ -857,32 +857,32 @@ create_and_run_server (FeedsPublisher *pub)
  * while the hub is running imply restart the local server
  */
 void
-feeds_publisher_hub_set_port (FeedsPublisher *pub, int port)
+grss_feeds_publisher_hub_set_port (GrssFeedsPublisher *pub, int port)
 {
 	if (port != pub->priv->port) {
 		pub->priv->port = port;
 
 		if (pub->priv->running == TRUE) {
-			feeds_publisher_hub_switch (pub, FALSE);
-			feeds_publisher_hub_switch (pub, TRUE);
+			grss_feeds_publisher_hub_switch (pub, FALSE);
+			grss_feeds_publisher_hub_switch (pub, TRUE);
 		}
 	}
 }
 
 /**
- * feeds_publisher_hub_set_topics:
- * @pub: a #FeedsPublisher
- * @topics: a list of #FeedChannels
+ * grss_feeds_publisher_hub_set_topics:
+ * @pub: a #GrssFeedsPublisher
+ * @topics: a list of #GrssFeedChannels
  *
- * To define a list of valid "topics" for which the #FeedsPublisher will
+ * To define a list of valid "topics" for which the #GrssFeedsPublisher will
  * deliver contents. Sources of those channels, as retrieved by
- * feed_channel_get_source(), are accepted as "hub.topic" parameter in
+ * grss_feed_channel_get_source(), are accepted as "hub.topic" parameter in
  * PubSubHubbub registration requests from remote subscribers.
  * Pay attention to the fact subscriptions requests for different topic are
  * now rejected
  */
 void
-feeds_publisher_hub_set_topics (FeedsPublisher *pub, GList *topics)
+grss_feeds_publisher_hub_set_topics (GrssFeedsPublisher *pub, GList *topics)
 {
 	GList *iter;
 	ValidTopic *topic;
@@ -893,7 +893,7 @@ feeds_publisher_hub_set_topics (FeedsPublisher *pub, GList *topics)
 		topic = g_new0 (ValidTopic, 1);
 		topic->channel = g_object_ref (iter->data);
 		topic->resend_handler = -1;
-		g_hash_table_insert (pub->priv->topics, (gpointer) feed_channel_get_source (iter->data), topic);
+		g_hash_table_insert (pub->priv->topics, (gpointer) grss_feed_channel_get_source (iter->data), topic);
 	}
 }
 
@@ -902,7 +902,7 @@ refresh_subscribers_in_topic (gpointer key, gpointer value, gpointer user_data)
 {
 	GList *iter;
 	SoupMessage *verify_msg;
-	FeedsPublisher *pub;
+	GrssFeedsPublisher *pub;
 	ValidTopic *topic;
 	RemoteSubscriber *client;
 
@@ -922,7 +922,7 @@ refresh_subscribers_in_topic (gpointer key, gpointer value, gpointer user_data)
 static gboolean
 refresh_subscribers (gpointer user_data)
 {
-	FeedsPublisher *pub;
+	GrssFeedsPublisher *pub;
 
 	pub = user_data;
 	pub->priv->current_time = time (NULL);
@@ -932,26 +932,26 @@ refresh_subscribers (gpointer user_data)
 }
 
 static void
-install_refresh_handler (FeedsPublisher *pub)
+install_refresh_handler (GrssFeedsPublisher *pub)
 {
 	pub->priv->refresh_handler = g_timeout_add_seconds (DEFAULT_REFRESH_CHECK_INTERVAL, refresh_subscribers, pub);
 }
 
 static void
-remove_refresh_handler (FeedsPublisher *pub)
+remove_refresh_handler (GrssFeedsPublisher *pub)
 {
 	g_source_remove (pub->priv->refresh_handler);
 }
 
 /**
- * feeds_publisher_hub_switch:
- * @pub: a #FeedsPublisher
+ * grss_feeds_publisher_hub_switch:
+ * @pub: a #GrssFeedsPublisher
  * @run: TRUE to run the local server, FALSE to stop it
  *
  * Permits to start and stop the webserver implemented by this object
  */
 void
-feeds_publisher_hub_switch (FeedsPublisher *pub, gboolean run)
+grss_feeds_publisher_hub_switch (GrssFeedsPublisher *pub, gboolean run)
 {
 	if (pub->priv->running != run) {
 		pub->priv->running = run;

@@ -23,33 +23,33 @@
 
 #include "libgrss.h"
 
-#define FEED_ENCLOSURE_TYPE		(feed_enclosure_get_type())
-#define FEED_ENCLOSURE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_ENCLOSURE_TYPE, FeedEnclosure))
-#define FEED_ENCLOSURE_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEED_ENCLOSURE_TYPE, FeedEnclosureClass))
+#define FEED_ENCLOSURE_TYPE		(grss_feed_enclosure_get_type())
+#define FEED_ENCLOSURE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_ENCLOSURE_TYPE, GrssFeedEnclosure))
+#define FEED_ENCLOSURE_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEED_ENCLOSURE_TYPE, GrssFeedEnclosureClass))
 #define IS_FEED_ENCLOSURE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEED_ENCLOSURE_TYPE))
 #define IS_FEED_ENCLOSURE_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  FEED_ENCLOSURE_TYPE))
-#define FEED_ENCLOSURE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEED_ENCLOSURE_TYPE, FeedEnclosureClass))
+#define FEED_ENCLOSURE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEED_ENCLOSURE_TYPE, GrssFeedEnclosureClass))
 
-typedef struct _FeedEnclosure		FeedEnclosure;
-typedef struct _FeedEnclosurePrivate	FeedEnclosurePrivate;
+typedef struct _GrssFeedEnclosure		GrssFeedEnclosure;
+typedef struct _GrssFeedEnclosurePrivate	GrssFeedEnclosurePrivate;
 
-struct _FeedEnclosure {
+struct _GrssFeedEnclosure {
 	GObject parent;
-	FeedEnclosurePrivate *priv;
+	GrssFeedEnclosurePrivate *priv;
 };
 
 typedef struct {
 	GObjectClass parent;
-} FeedEnclosureClass;
+} GrssFeedEnclosureClass;
 
-GType		feed_enclosure_get_type		(void) G_GNUC_CONST;
+GType			grss_feed_enclosure_get_type	(void) G_GNUC_CONST;
 
-FeedEnclosure*	feed_enclosure_new		(gchar *url);
+GrssFeedEnclosure*	grss_feed_enclosure_new		(gchar *url);
 
-const gchar*	feed_enclosure_get_url		(FeedEnclosure *enclosure);
-void		feed_enclosure_set_format	(FeedEnclosure *enclosure, gchar *type);
-const gchar*	feed_enclosure_get_format	(FeedEnclosure *enclosure);
-void		feed_enclosure_set_length	(FeedEnclosure *enclosure, gsize length);
-gsize		feed_enclosure_get_length	(FeedEnclosure *enclosure);
+const gchar*		grss_feed_enclosure_get_url	(GrssFeedEnclosure *enclosure);
+void			grss_feed_enclosure_set_format	(GrssFeedEnclosure *enclosure, gchar *type);
+const gchar*		grss_feed_enclosure_get_format	(GrssFeedEnclosure *enclosure);
+void			grss_feed_enclosure_set_length	(GrssFeedEnclosure *enclosure, gsize length);
+gsize			grss_feed_enclosure_get_length	(GrssFeedEnclosure *enclosure);
 
 #endif /* __FEED_ENCLOSURE_H__ */

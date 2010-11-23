@@ -23,68 +23,68 @@
 
 #include "libgrss.h"
 
-#define FEED_CHANNEL_TYPE		(feed_channel_get_type())
-#define FEED_CHANNEL(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_CHANNEL_TYPE, FeedChannel))
-#define FEED_CHANNEL_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEED_CHANNEL_TYPE, FeedChannelClass))
+#define FEED_CHANNEL_TYPE		(grss_feed_channel_get_type())
+#define FEED_CHANNEL(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_CHANNEL_TYPE, GrssFeedChannel))
+#define FEED_CHANNEL_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEED_CHANNEL_TYPE, GrssFeedChannelClass))
 #define IS_FEED_CHANNEL(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEED_CHANNEL_TYPE))
 #define IS_FEED_CHANNEL_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  FEED_CHANNEL_TYPE))
-#define FEED_CHANNEL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEED_CHANNEL_TYPE, FeedChannelClass))
+#define FEED_CHANNEL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEED_CHANNEL_TYPE, GrssFeedChannelClass))
 
-typedef struct _FeedChannel		FeedChannel;
-typedef struct _FeedChannelPrivate	FeedChannelPrivate;
+typedef struct _GrssFeedChannel		GrssFeedChannel;
+typedef struct _GrssFeedChannelPrivate	GrssFeedChannelPrivate;
 
-struct _FeedChannel {
+struct _GrssFeedChannel {
 	GObject parent;
-	FeedChannelPrivate *priv;
+	GrssFeedChannelPrivate *priv;
 };
 
 typedef struct {
 	GObjectClass parent;
-} FeedChannelClass;
+} GrssFeedChannelClass;
 
-GType		feed_channel_get_type			(void) G_GNUC_CONST;
+GType			grss_feed_channel_get_type		(void) G_GNUC_CONST;
 
-FeedChannel*	feed_channel_new			();
-FeedChannel*	feed_channel_new_from_file		(const gchar *path);
+GrssFeedChannel*	grss_feed_channel_new			();
+GrssFeedChannel*	grss_feed_channel_new_from_file		(const gchar *path);
 
-void		feed_channel_set_source			(FeedChannel *channel, gchar *source);
-const gchar*	feed_channel_get_source			(FeedChannel *channel);
-void		feed_channel_set_title			(FeedChannel *channel, gchar *title);
-const gchar*	feed_channel_get_title			(FeedChannel *channel);
-void		feed_channel_set_homepage		(FeedChannel *channel, gchar *homepage);
-const gchar*	feed_channel_get_homepage		(FeedChannel *channel);
-void		feed_channel_set_description		(FeedChannel *channel, gchar *description);
-const gchar*	feed_channel_get_description		(FeedChannel *channel);
-void		feed_channel_set_image			(FeedChannel *channel, gchar *image);
-const gchar*	feed_channel_get_image			(FeedChannel *channel);
-void		feed_channel_set_icon			(FeedChannel *channel, gchar *icon);
-const gchar*	feed_channel_get_icon			(FeedChannel *channel);
-void		feed_channel_set_language		(FeedChannel *channel, gchar *language);
-const gchar*	feed_channel_get_language		(FeedChannel *channel);
-void		feed_channel_set_category		(FeedChannel *channel, gchar *category);
-const gchar*	feed_channel_get_category		(FeedChannel *channel);
-void		feed_channel_set_pubsubhub		(FeedChannel *channel, gchar *hub, gchar *self);
-gboolean	feed_channel_get_pubsubhub		(FeedChannel *channel, gchar **hub, gchar **self);
+void			grss_feed_channel_set_source		(GrssFeedChannel *channel, gchar *source);
+const gchar*		grss_feed_channel_get_source		(GrssFeedChannel *channel);
+void			grss_feed_channel_set_title		(GrssFeedChannel *channel, gchar *title);
+const gchar*		grss_feed_channel_get_title		(GrssFeedChannel *channel);
+void			grss_feed_channel_set_homepage		(GrssFeedChannel *channel, gchar *homepage);
+const gchar*		grss_feed_channel_get_homepage		(GrssFeedChannel *channel);
+void			grss_feed_channel_set_description	(GrssFeedChannel *channel, gchar *description);
+const gchar*		grss_feed_channel_get_description	(GrssFeedChannel *channel);
+void			grss_feed_channel_set_image		(GrssFeedChannel *channel, gchar *image);
+const gchar*		grss_feed_channel_get_image		(GrssFeedChannel *channel);
+void			grss_feed_channel_set_icon		(GrssFeedChannel *channel, gchar *icon);
+const gchar*		grss_feed_channel_get_icon		(GrssFeedChannel *channel);
+void			grss_feed_channel_set_language		(GrssFeedChannel *channel, gchar *language);
+const gchar*		grss_feed_channel_get_language		(GrssFeedChannel *channel);
+void			grss_feed_channel_set_category		(GrssFeedChannel *channel, gchar *category);
+const gchar*		grss_feed_channel_get_category		(GrssFeedChannel *channel);
+void			grss_feed_channel_set_pubsubhub		(GrssFeedChannel *channel, gchar *hub, gchar *self);
+gboolean		grss_feed_channel_get_pubsubhub		(GrssFeedChannel *channel, gchar **hub, gchar **self);
 
-void		feed_channel_set_copyright		(FeedChannel *channel, gchar *copyright);
-const gchar*	feed_channel_get_copyright		(FeedChannel *channel);
-void		feed_channel_set_editor			(FeedChannel *channel, gchar *editor);
-const gchar*	feed_channel_get_editor			(FeedChannel *channel);
-void		feed_channel_add_contributor		(FeedChannel *channel, gchar *contributor);
-const GList*	feed_channel_get_contributors		(FeedChannel *channel);
-void		feed_channel_set_webmaster		(FeedChannel *channel, gchar *webmaster);
-const gchar*	feed_channel_get_webmaster		(FeedChannel *channel);
-void		feed_channel_set_generator		(FeedChannel *channel, gchar *generator);
-const gchar*	feed_channel_get_generator		(FeedChannel *channel);
+void			grss_feed_channel_set_copyright		(GrssFeedChannel *channel, gchar *copyright);
+const gchar*		grss_feed_channel_get_copyright		(GrssFeedChannel *channel);
+void			grss_feed_channel_set_editor		(GrssFeedChannel *channel, gchar *editor);
+const gchar*		grss_feed_channel_get_editor		(GrssFeedChannel *channel);
+void			grss_feed_channel_add_contributor	(GrssFeedChannel *channel, gchar *contributor);
+const GList*		grss_feed_channel_get_contributors	(GrssFeedChannel *channel);
+void			grss_feed_channel_set_webmaster		(GrssFeedChannel *channel, gchar *webmaster);
+const gchar*		grss_feed_channel_get_webmaster		(GrssFeedChannel *channel);
+void			grss_feed_channel_set_generator		(GrssFeedChannel *channel, gchar *generator);
+const gchar*		grss_feed_channel_get_generator		(GrssFeedChannel *channel);
 
-void		feed_channel_set_publish_time		(FeedChannel *channel, time_t publish);
-time_t		feed_channel_get_publish_time		(FeedChannel *channel);
-void		feed_channel_set_update_time		(FeedChannel *channel, time_t update);
-time_t		feed_channel_get_update_time		(FeedChannel *channel);
-void		feed_channel_set_update_interval	(FeedChannel *channel, int minutes);
-int		feed_channel_get_update_interval	(FeedChannel *channel);
+void			grss_feed_channel_set_publish_time	(GrssFeedChannel *channel, time_t publish);
+time_t			grss_feed_channel_get_publish_time	(GrssFeedChannel *channel);
+void			grss_feed_channel_set_update_time	(GrssFeedChannel *channel, time_t update);
+time_t			grss_feed_channel_get_update_time	(GrssFeedChannel *channel);
+void			grss_feed_channel_set_update_interval	(GrssFeedChannel *channel, int minutes);
+int			grss_feed_channel_get_update_interval	(GrssFeedChannel *channel);
 
-gboolean	feed_channel_fetch			(FeedChannel *channel);
-void		feed_channel_fetch_async		(FeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data);
+gboolean		grss_feed_channel_fetch			(GrssFeedChannel *channel);
+void			grss_feed_channel_fetch_async		(GrssFeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data);
 
 #endif /* __FEED_CHANNEL_H__ */
