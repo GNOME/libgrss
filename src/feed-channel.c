@@ -542,7 +542,7 @@ grss_feed_channel_add_contributor (GrssFeedChannel *channel, gchar *contributor)
  * Return value: list of contributors to the channel, or NULL
  */
 const GList*
-grss_feed_channel_get_contributor (GrssFeedChannel *channel)
+grss_feed_channel_get_contributors (GrssFeedChannel *channel)
 {
 	return (const GList*) channel->priv->contributors;
 }

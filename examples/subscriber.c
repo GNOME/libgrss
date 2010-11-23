@@ -21,19 +21,19 @@
 #include <libgrss.h>
 
 static void
-item_fetched (FeedsSubscriber *subscriber, FeedChannel *feed, FeedItem *item)
+item_fetched (GrssFeedsSubscriber *subscriber, GrssFeedChannel *feed, GrssFeedItem *item)
 {
-	printf ("Received from %s\n", feed_channel_get_title (feed));
-	printf ("\t\t%s\n\n\n", feed_item_get_title (item));
+	printf ("Received from %s\n", grss_feed_channel_get_title (feed));
+	printf ("\t\t%s\n\n\n", grss_feed_item_get_title (item));
 }
 
 static gboolean
 start_subscribe (gpointer data)
 {
-	FeedsSubscriber *sub;
+	GrssFeedsSubscriber *sub;
 
-	sub = (FeedsSubscriber*) data;
-	feeds_subscriber_switch (sub, TRUE);
+	sub = (GrssFeedsSubscriber*) data;
+	grss_feeds_subscriber_switch (sub, TRUE);
 	printf ("Ready, now waiting for events.\n\n");
 	return FALSE;
 }
@@ -50,8 +50,8 @@ main ()
 	};
 	GList *iter;
 	GList *list;
-	FeedChannel *feed;
-	FeedsSubscriber *sub;
+	GrssFeedChannel *feed;
+	GrssFeedsSubscriber *sub;
 
 	g_type_init ();
 
@@ -65,16 +65,17 @@ main ()
 	printf ("... fetching feeds...\n");
 
 	for (i = 0; example_feeds [i] != NULL; i++) {
-		feed = feed_channel_new ();
-		feed_channel_set_source (feed, example_feeds [i]);
-		ok = feed_channel_fetch (feed);
+		feed = grss_feed_channel_new ();
+		grss_feed_channel_set_source (feed, example_feeds [i]);
+		ok = grss_feed_channel_fetch (feed);
 
 		if (ok == FALSE) {
 			g_warning ("Unable to fetch feed at %s", example_feeds [i]);
 			g_object_unref (feed);
 		}
-		else
+		else {
 			list = g_list_prepend (list, feed);
+		}
 	}
 
 	if (list == NULL)
@@ -83,9 +84,9 @@ main ()
 	printf ("... feeds analyzed...\n");
 	list = g_list_reverse (list);
 
-	sub = feeds_subscriber_new ();
+	sub = grss_feeds_subscriber_new ();
 
-	ok = feeds_subscriber_listen (sub, list);
+	ok = grss_feeds_subscriber_listen (sub, list);
 	g_list_free (list);
 
 	if (ok == FALSE) {
