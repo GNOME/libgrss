@@ -23,12 +23,12 @@
 
 #include "libgrss.h"
 
-#define FEED_CHANNEL_TYPE		(grss_feed_channel_get_type())
-#define FEED_CHANNEL(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_CHANNEL_TYPE, GrssFeedChannel))
-#define FEED_CHANNEL_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEED_CHANNEL_TYPE, GrssFeedChannelClass))
-#define IS_FEED_CHANNEL(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEED_CHANNEL_TYPE))
-#define IS_FEED_CHANNEL_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  FEED_CHANNEL_TYPE))
-#define FEED_CHANNEL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEED_CHANNEL_TYPE, GrssFeedChannelClass))
+#define GRSS_FEED_CHANNEL_TYPE		(grss_feed_channel_get_type())
+#define GRSS_FEED_CHANNEL(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GRSS_FEED_CHANNEL_TYPE, GrssFeedChannel))
+#define FEED_CHANNEL_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), GRSS_FEED_CHANNEL_TYPE, GrssFeedChannelClass))
+#define GRSS_IS_FEED_CHANNEL(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GRSS_FEED_CHANNEL_TYPE))
+#define GRSS_IS_FEED_CHANNEL_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  GRSS_FEED_CHANNEL_TYPE))
+#define GRSS_FEED_CHANNEL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GRSS_FEED_CHANNEL_TYPE, GrssFeedChannelClass))
 
 typedef struct _GrssFeedChannel		GrssFeedChannel;
 typedef struct _GrssFeedChannelPrivate	GrssFeedChannelPrivate;

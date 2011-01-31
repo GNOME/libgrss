@@ -173,7 +173,7 @@ grss_feeds_publisher_class_init (GrssFeedsPublisherClass *klass)
 	 */
 	signals [SUBSCRIPTION_ADDED] = g_signal_new ("new-subscription", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
 	                                             NULL, NULL, feed_marshal_VOID__OBJECT_STRING,
-	                                             G_TYPE_NONE, 2, FEED_CHANNEL_TYPE, G_TYPE_STRING);
+	                                             G_TYPE_NONE, 2, GRSS_FEED_CHANNEL_TYPE, G_TYPE_STRING);
 
 	/**
 	 * GrssFeedsSubscriber::new_subscription:
@@ -185,7 +185,7 @@ grss_feeds_publisher_class_init (GrssFeedsPublisherClass *klass)
 	 */
 	signals [SUBSCRIPTION_DELETED] = g_signal_new ("delete-subscription", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
 	                                               NULL, NULL, feed_marshal_VOID__OBJECT_STRING,
-	                                               G_TYPE_NONE, 2, FEED_CHANNEL_TYPE, G_TYPE_STRING);
+	                                               G_TYPE_NONE, 2, GRSS_FEED_CHANNEL_TYPE, G_TYPE_STRING);
 }
 
 static void

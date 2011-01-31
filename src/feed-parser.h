@@ -23,12 +23,12 @@
 
 #include "libgrss.h"
 
-#define FEED_PARSER_TYPE		(grss_feed_parser_get_type())
-#define FEED_PARSER(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_PARSER_TYPE, GrssFeedParser))
-#define FEED_PARSER_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEED_PARSER_TYPE, GrssFeedParserClass))
-#define IS_FEED_PARSER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEED_PARSER_TYPE))
-#define IS_FEED_PARSER_CLASS(c)		(G_TYPE_CHECK_CLASS_TYPE ((c),  FEED_PARSER_TYPE))
-#define FEED_PARSER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEED_PARSER_TYPE, GrssFeedParserClass))
+#define GRSS_FEED_PARSER_TYPE		(grss_feed_parser_get_type())
+#define GRSS_FEED_PARSER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GRSS_FEED_PARSER_TYPE, GrssFeedParser))
+#define GRSS_FEED_PARSER_CLASS(c)	(G_TYPE_CHECK_CLASS_CAST ((c), GRSS_FEED_PARSER_TYPE, GrssFeedParserClass))
+#define GRSS_IS_FEED_PARSER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GRSS_FEED_PARSER_TYPE))
+#define GRSS_IS_FEED_PARSER_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  GRSS_FEED_PARSER_TYPE))
+#define GRSS_FEED_PARSER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GRSS_FEED_PARSER_TYPE, GrssFeedParserClass))
 
 typedef struct _GrssFeedParser		GrssFeedParser;
 typedef struct _GrssFeedParserPrivate	GrssFeedParserPrivate;

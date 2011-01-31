@@ -23,12 +23,12 @@
 
 #include "libgrss.h"
 
-#define FEED_ITEM_TYPE		(grss_feed_item_get_type())
-#define FEED_ITEM(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_ITEM_TYPE, GrssFeedItem))
-#define FEED_ITEM_CLASS(c)	(G_TYPE_CHECK_CLASS_CAST ((c), FEED_ITEM_TYPE, GrssFeedItemClass))
-#define IS_FEED_ITEM(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEED_ITEM_TYPE))
-#define IS_FEED_ITEM_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  FEED_ITEM_TYPE))
-#define FEED_ITEM_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEED_ITEM_TYPE, GrssFeedItemClass))
+#define GRSS_FEED_ITEM_TYPE		(grss_feed_item_get_type())
+#define GRSS_FEED_ITEM(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GRSS_FEED_ITEM_TYPE, GrssFeedItem))
+#define GRSS_FEED_ITEM_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), GRSS_FEED_ITEM_TYPE, GrssFeedItemClass))
+#define GRSS_IS_FEED_ITEM(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GRSS_FEED_ITEM_TYPE))
+#define GRSS_IS_FEED_ITEM_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  GRSS_FEED_ITEM_TYPE))
+#define GRSS_FEED_ITEM_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GRSS_FEED_ITEM_TYPE, GrssFeedItemClass))
 
 typedef struct _GrssFeedItem	GrssFeedItem;
 typedef struct _GrssFeedItemPrivate	GrssFeedItemPrivate;

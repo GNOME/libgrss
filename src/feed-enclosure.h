@@ -23,12 +23,12 @@
 
 #include "libgrss.h"
 
-#define FEED_ENCLOSURE_TYPE		(grss_feed_enclosure_get_type())
-#define FEED_ENCLOSURE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEED_ENCLOSURE_TYPE, GrssFeedEnclosure))
-#define FEED_ENCLOSURE_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEED_ENCLOSURE_TYPE, GrssFeedEnclosureClass))
-#define IS_FEED_ENCLOSURE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEED_ENCLOSURE_TYPE))
-#define IS_FEED_ENCLOSURE_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  FEED_ENCLOSURE_TYPE))
-#define FEED_ENCLOSURE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEED_ENCLOSURE_TYPE, GrssFeedEnclosureClass))
+#define GRSS_FEED_ENCLOSURE_TYPE		(grss_feed_enclosure_get_type())
+#define GRSS_FEED_ENCLOSURE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), GRSS_FEED_ENCLOSURE_TYPE, GrssFeedEnclosure))
+#define GRSS_FEED_ENCLOSURE_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), GRSS_FEED_ENCLOSURE_TYPE, GrssFeedEnclosureClass))
+#define GRSS_IS_FEED_ENCLOSURE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GRSS_FEED_ENCLOSURE_TYPE))
+#define GRSS_IS_FEED_ENCLOSURE_CLASS(c)		(G_TYPE_CHECK_CLASS_TYPE ((c),  GRSS_FEED_ENCLOSURE_TYPE))
+#define GRSS_FEED_ENCLOSURE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GRSS_FEED_ENCLOSURE_TYPE, GrssFeedEnclosureClass))
 
 typedef struct _GrssFeedEnclosure		GrssFeedEnclosure;
 typedef struct _GrssFeedEnclosurePrivate	GrssFeedEnclosurePrivate;

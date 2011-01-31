@@ -33,7 +33,7 @@
 #include "feed-atom-handler.h"
 #include "feed-pie-handler.h"
 
-#define FEED_PARSER_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEED_PARSER_TYPE, GrssFeedParserPrivate))
+#define FEED_PARSER_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), GRSS_FEED_PARSER_TYPE, GrssFeedParserPrivate))
 
 /**
  * SECTION: feed-parser
@@ -67,7 +67,7 @@ grss_feed_parser_finalize (GObject *object)
 {
 	GrssFeedParser *parser;
 
-	parser = FEED_PARSER (object);
+	parser = GRSS_FEED_PARSER (object);
 	G_OBJECT_CLASS (grss_feed_parser_parent_class)->finalize (object);
 }
 
@@ -127,7 +127,7 @@ grss_feed_parser_new ()
 {
 	GrssFeedParser *parser;
 
-	parser = g_object_new (FEED_PARSER_TYPE, NULL);
+	parser = g_object_new (GRSS_FEED_PARSER_TYPE, NULL);
 	return parser;
 }
 

@@ -23,12 +23,12 @@
 
 #include "libgrss.h"
 
-#define FEEDS_POOL_TYPE			(grss_feeds_pool_get_type())
-#define FEEDS_POOL(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_POOL_TYPE, GrssFeedsPool))
-#define FEEDS_POOL_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEEDS_POOL_TYPE, GrssFeedsPoolClass))
-#define IS_FEEDS_POOL(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEEDS_POOL_TYPE))
-#define IS_FEEDS_POOL_CLASS(c)		(G_TYPE_CHECK_CLASS_TYPE ((c),  FEEDS_POOL_TYPE))
-#define FEEDS_POOL_GET_CLASS(o)		(G_TYPE_INSTANCE_GET_CLASS ((o), FEEDS_POOL_TYPE, GrssFeedsPoolClass))
+#define GRSS_FEEDS_POOL_TYPE		(grss_feeds_pool_get_type())
+#define GRSS_FEEDS_POOL(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GRSS_FEEDS_POOL_TYPE, GrssFeedsPool))
+#define GRSS_FEEDS_POOL_CLASS(c)	(G_TYPE_CHECK_CLASS_CAST ((c), GRSS_FEEDS_POOL_TYPE, GrssFeedsPoolClass))
+#define GRSS_IS_FEEDS_POOL(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GRSS_FEEDS_POOL_TYPE))
+#define GRSS_IS_FEEDS_POOL_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  GRSS_FEEDS_POOL_TYPE))
+#define GRSS_FEEDS_POOL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GRSS_FEEDS_POOL_TYPE, GrssFeedsPoolClass))
 
 typedef struct _GrssFeedsPool		GrssFeedsPool;
 typedef struct _GrssFeedsPoolPrivate	GrssFeedsPoolPrivate;

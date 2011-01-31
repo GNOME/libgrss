@@ -22,7 +22,7 @@
 #include "feed-channel.h"
 #include "feed-parser.h"
 
-#define FEED_CHANNEL_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEED_CHANNEL_TYPE, GrssFeedChannelPrivate))
+#define FEED_CHANNEL_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GRSS_FEED_CHANNEL_TYPE, GrssFeedChannelPrivate))
 
 /**
  * SECTION: feed-channel
@@ -79,7 +79,7 @@ grss_feed_channel_finalize (GObject *obj)
 	GList *iter;
 	GrssFeedChannel *chan;
 
-	chan = FEED_CHANNEL (obj);
+	chan = GRSS_FEED_CHANNEL (obj);
 	FREE_STRING (chan->priv->title);
 	FREE_STRING (chan->priv->homepage);
 	FREE_STRING (chan->priv->description);
@@ -129,7 +129,7 @@ grss_feed_channel_init (GrssFeedChannel *node)
 GrssFeedChannel*
 grss_feed_channel_new ()
 {
-	return g_object_new (FEED_CHANNEL_TYPE, NULL);
+	return g_object_new (GRSS_FEED_CHANNEL_TYPE, NULL);
 }
 
 /**
@@ -162,7 +162,7 @@ grss_feed_channel_new_from_file (const gchar *path)
 	doc = file_to_xml (path);
 
 	if (doc != NULL) {
-		ret = g_object_new (FEED_CHANNEL_TYPE, NULL);
+		ret = g_object_new (GRSS_FEED_CHANNEL_TYPE, NULL);
 		parser = grss_feed_parser_new ();
 		items = grss_feed_parser_parse (parser, ret, doc, NULL);
 
@@ -769,7 +769,7 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 	GrssFeedChannel *channel;
 
 	result = user_data;
-	channel = FEED_CHANNEL (g_async_result_get_source_object (G_ASYNC_RESULT (result)));
+	channel = GRSS_FEED_CHANNEL (g_async_result_get_source_object (G_ASYNC_RESULT (result)));
 	g_object_get (msg, "status-code", &status, NULL);
 
 	if (status >= 200 && status <= 299) {

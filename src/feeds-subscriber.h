@@ -23,12 +23,12 @@
 
 #include "libgrss.h"
 
-#define FEEDS_SUBSCRIBER_TYPE		(grss_feeds_subscriber_get_type())
-#define FEEDS_SUBSCRIBER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriber))
-#define FEEDS_SUBSCRIBER_CLASS(c)	(G_TYPE_CHECK_CLASS_CAST ((c), FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriberClass))
-#define IS_FEEDS_SUBSCRIBER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEEDS_SUBSCRIBER_TYPE))
-#define IS_FEEDS_SUBSCRIBER_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  FEEDS_SUBSCRIBER_TYPE))
-#define FEEDS_SUBSCRIBER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriberClass))
+#define GRSS_FEEDS_SUBSCRIBER_TYPE		(grss_feeds_subscriber_get_type())
+#define GRSS_FEEDS_SUBSCRIBER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GRSS_FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriber))
+#define GRSS_FEEDS_SUBSCRIBER_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), GRSS_FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriberClass))
+#define GRSS_IS_FEEDS_SUBSCRIBER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GRSS_FEEDS_SUBSCRIBER_TYPE))
+#define GRSS_IS_FEEDS_SUBSCRIBER_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  GRSS_FEEDS_SUBSCRIBER_TYPE))
+#define GRSS_FEEDS_SUBSCRIBER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GRSS_FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriberClass))
 
 typedef struct _GrssFeedsSubscriber		GrssFeedsSubscriber;
 typedef struct _GrssFeedsSubscriberPrivate	GrssFeedsSubscriberPrivate;

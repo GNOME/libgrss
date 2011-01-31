@@ -23,7 +23,7 @@
 #include "feed-parser.h"
 #include "feed-marshal.h"
 
-#define FEEDS_POOL_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_POOL_TYPE, GrssFeedsPoolPrivate))
+#define FEEDS_POOL_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GRSS_FEEDS_POOL_TYPE, GrssFeedsPoolPrivate))
 
 /**
  * SECTION: feeds-pool
@@ -65,6 +65,8 @@ remove_currently_listened (GrssFeedsPool *pool)
 	GList *iter;
 	GrssFeedChannelWrap *wrap;
 
+	soup_session_abort (pool->priv->soupsession);
+
 	if (pool->priv->feeds_list != NULL) {
 		for (iter = pool->priv->feeds_list; iter; iter = g_list_next (iter)) {
 			wrap = (GrssFeedChannelWrap*) iter->data;
@@ -93,7 +95,7 @@ grss_feeds_pool_finalize (GObject *obj)
 {
 	GrssFeedsPool *pool;
 
-	pool = FEEDS_POOL (obj);
+	pool = GRSS_FEEDS_POOL (obj);
 	grss_feeds_pool_switch (pool, FALSE);
 	remove_currently_listened (pool);
 	g_object_unref (pool->priv->parser);
@@ -160,7 +162,7 @@ grss_feeds_pool_init (GrssFeedsPool *node)
 GrssFeedsPool*
 grss_feeds_pool_new ()
 {
-	return g_object_new (FEEDS_POOL_TYPE, NULL);
+	return g_object_new (GRSS_FEEDS_POOL_TYPE, NULL);
 }
 
 static void
@@ -174,7 +176,7 @@ create_listened (GrssFeedsPool *pool, GList *feeds)
 	list = NULL;
 
 	for (iter = feeds; iter; iter = g_list_next (iter)) {
-		feed = FEED_CHANNEL (iter->data);
+		feed = GRSS_FEED_CHANNEL (iter->data);
 
 		wrap = g_new0 (GrssFeedChannelWrap, 1);
 		g_object_ref (feed);

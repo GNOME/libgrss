@@ -22,12 +22,12 @@
 
 #include "libgrss.h"
 
-#define FEEDS_STORE_TYPE		(grss_feeds_store_get_type())
-#define FEEDS_STORE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), FEEDS_STORE_TYPE, GrssFeedsStore))
-#define FEEDS_STORE_CLASS(c)		(G_TYPE_CHECK_CLASS_CAST ((c), FEEDS_STORE_TYPE, GrssFeedsStoreClass))
-#define IS_FEEDS_STORE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), FEEDS_STORE_TYPE))
-#define IS_FEEDS_STORE_CLASS(c)		(G_TYPE_CHECK_CLASS_TYPE ((c),  FEEDS_STORE_TYPE))
-#define FEEDS_STORE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), FEEDS_STORE_TYPE, GrssFeedsStoreClass))
+#define GRSS_FEEDS_STORE_TYPE		(grss_feeds_store_get_type())
+#define GRSS_FEEDS_STORE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GRSS_FEEDS_STORE_TYPE, GrssFeedsStore))
+#define GRSS_FEEDS_STORE_CLASS(c)	(G_TYPE_CHECK_CLASS_CAST ((c), GRSS_FEEDS_STORE_TYPE, GrssFeedsStoreClass))
+#define GRSS_IS_FEEDS_STORE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GRSS_FEEDS_STORE_TYPE))
+#define GRSS_IS_FEEDS_STORE_CLASS(c)	(G_TYPE_CHECK_CLASS_TYPE ((c),  GRSS_FEEDS_STORE_TYPE))
+#define GRSS_FEEDS_STORE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GRSS_FEEDS_STORE_TYPE, GrssFeedsStoreClass))
 
 typedef struct _GrssFeedsStore		GrssFeedsStore;
 typedef struct _GrssFeedsStorePrivate	GrssFeedsStorePrivate;

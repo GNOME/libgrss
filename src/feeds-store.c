@@ -21,7 +21,7 @@
 #include "utils.h"
 #include "feeds-pool.h"
 
-#define FEEDS_STORE_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_STORE_TYPE, GrssFeedsStorePrivate))
+#define FEEDS_STORE_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GRSS_FEEDS_STORE_TYPE, GrssFeedsStorePrivate))
 
 /**
  * SECTION: feeds-store
@@ -65,7 +65,7 @@ grss_feeds_store_init (GrssFeedsStore *node)
 GList*
 grss_feeds_store_get_channels (GrssFeedsStore *store)
 {
-	return FEEDS_STORE_GET_CLASS (store)->get_channels (store);
+	return GRSS_FEEDS_STORE_GET_CLASS (store)->get_channels (store);
 }
 
 /**
@@ -82,7 +82,7 @@ grss_feeds_store_get_channels (GrssFeedsStore *store)
 GList*
 grss_feeds_store_get_items_by_channel (GrssFeedsStore *store, GrssFeedChannel *channel)
 {
-	return FEEDS_STORE_GET_CLASS (store)->get_items_by_channel (store, channel);
+	return GRSS_FEEDS_STORE_GET_CLASS (store)->get_items_by_channel (store, channel);
 }
 
 /**
@@ -98,7 +98,7 @@ grss_feeds_store_get_items_by_channel (GrssFeedsStore *store, GrssFeedChannel *c
 gboolean
 grss_feeds_store_has_item (GrssFeedsStore *store, GrssFeedChannel *channel, const gchar *id)
 {
-	return FEEDS_STORE_GET_CLASS (store)->has_item (store, channel, id);
+	return GRSS_FEEDS_STORE_GET_CLASS (store)->has_item (store, channel, id);
 }
 
 /**
@@ -114,7 +114,7 @@ void
 grss_feeds_store_add_item_in_channel (GrssFeedsStore *store, GrssFeedChannel *channel, GrssFeedItem *item)
 {
 	if (grss_feeds_store_has_item (store, channel, grss_feed_item_get_id (item)) == FALSE)
-		FEEDS_STORE_GET_CLASS (store)->add_item_in_channel (store, channel, item);
+		GRSS_FEEDS_STORE_GET_CLASS (store)->add_item_in_channel (store, channel, item);
 }
 
 static void

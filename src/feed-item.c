@@ -22,7 +22,7 @@
 #include "feed-item.h"
 #include "feed-channel.h"
 
-#define FEED_ITEM_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEED_ITEM_TYPE, GrssFeedItemPrivate))
+#define FEED_ITEM_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GRSS_FEED_ITEM_TYPE, GrssFeedItemPrivate))
 
 /**
  * SECTION: feed-item
@@ -72,7 +72,7 @@ grss_feed_item_finalize (GObject *obj)
 	GList *iter;
 	GrssFeedItem *item;
 
-	item = FEED_ITEM (obj);
+	item = GRSS_FEED_ITEM (obj);
 	FREE_STRING (item->priv->id);
 	FREE_STRING (item->priv->title);
 	FREE_STRING (item->priv->description);
@@ -134,7 +134,7 @@ grss_feed_item_new (GrssFeedChannel *parent)
 {
 	GrssFeedItem *item;
 
-	item = FEED_ITEM (g_object_new (FEED_ITEM_TYPE, NULL));
+	item = GRSS_FEED_ITEM (g_object_new (GRSS_FEED_ITEM_TYPE, NULL));
 	item->priv->parent = parent;
 	item->priv->pub_time = time (NULL);
 	return item;

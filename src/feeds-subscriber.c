@@ -25,7 +25,7 @@
 
 #define DEFAULT_SERVER_PORT   8444
 
-#define FEEDS_SUBSCRIBER_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriberPrivate))
+#define FEEDS_SUBSCRIBER_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GRSS_FEEDS_SUBSCRIBER_TYPE, GrssFeedsSubscriberPrivate))
 
 /**
  * SECTION: feeds-subscriber
@@ -140,7 +140,7 @@ grss_feeds_subscriber_finalize (GObject *obj)
 {
 	GrssFeedsSubscriber *sub;
 
-	sub = FEEDS_SUBSCRIBER (obj);
+	sub = GRSS_FEEDS_SUBSCRIBER (obj);
 	grss_feeds_subscriber_switch (sub, FALSE);
 	remove_currently_listened (sub);
 	FREE_STRING (sub->priv->hub);
@@ -192,7 +192,7 @@ grss_feeds_subscriber_init (GrssFeedsSubscriber *node)
 GrssFeedsSubscriber*
 grss_feeds_subscriber_new ()
 {
-	return g_object_new (FEEDS_SUBSCRIBER_TYPE, NULL);
+	return g_object_new (GRSS_FEEDS_SUBSCRIBER_TYPE, NULL);
 }
 
 static gboolean

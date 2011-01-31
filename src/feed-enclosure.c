@@ -21,7 +21,7 @@
 #include "utils.h"
 #include "feed-enclosure.h"
 
-#define FEED_ENCLOSURE_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEED_ENCLOSURE_TYPE, GrssFeedEnclosurePrivate))
+#define FEED_ENCLOSURE_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GRSS_FEED_ENCLOSURE_TYPE, GrssFeedEnclosurePrivate))
 
 /**
  * SECTION: feed-enclosure
@@ -44,7 +44,7 @@ static void grss_feed_enclosure_finalize (GObject *obj)
 {
 	GrssFeedEnclosure *enclosure;
 
-	enclosure = FEED_ENCLOSURE (obj);
+	enclosure = GRSS_FEED_ENCLOSURE (obj);
 	FREE_STRING (enclosure->priv->url);
 	FREE_STRING (enclosure->priv->type);
 }
@@ -77,7 +77,7 @@ GrssFeedEnclosure* grss_feed_enclosure_new (gchar *url)
 {
 	GrssFeedEnclosure *ret;
 
-	ret = g_object_new (FEED_ENCLOSURE_TYPE, NULL);
+	ret = g_object_new (GRSS_FEED_ENCLOSURE_TYPE, NULL);
 	ret->priv->url = g_strdup (url);
 	return ret;
 }
