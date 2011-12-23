@@ -32,14 +32,6 @@
 #include "ns-handler.h"
 
 #define FEED_ATOM_HANDLER_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEED_ATOM_HANDLER_TYPE, FeedAtomHandlerPrivate))
-
-/**
- * SECTION: feed-atom-handler
- * @short_description: specialized parser for Atom feeds
- *
- * #FeedAtomHandler is a #FeedHandler specialized for feeds in Atom format
- */
-
 #define FEED_ATOM_HANDLER_ERROR			feed_atom_handler_error_quark()
 #define ATOM10_NS				BAD_CAST"http://www.w3.org/2005/Atom"
 
@@ -406,11 +398,11 @@ atom10_parse_link (xmlNodePtr cur, GrssFeedChannel *feed, GrssFeedItem *item)
 		}
 		else if (g_str_equal (relation, "hub")) {
 			if (feed != NULL)
-				grss_feed_channel_set_pubsubhub (feed, url, NULL);
+				grss_feed_channel_set_pubsubhub (feed, url);
 		}
 		else if (g_str_equal (relation, "self")) {
 			if (feed != NULL)
-				grss_feed_channel_set_pubsubhub (feed, NULL, url);
+				grss_feed_channel_set_source (feed, url);
 		}
 
 		xmlFree (title);
@@ -916,13 +908,6 @@ feed_atom_handler_init (FeedAtomHandler *object)
 	object->priv->entry_elements_hash = hash;
 }
 
-/**
- * feed_atom_handler_new:
- *
- * Allocates a new #FeedAtomHandler
- *
- * Return value: a new #FeedAtomHandler
- */
 FeedAtomHandler*
 feed_atom_handler_new ()
 {

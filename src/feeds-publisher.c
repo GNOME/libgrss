@@ -31,7 +31,7 @@
 
 /**
  * SECTION: feeds-publisher
- * @short_description: feed writer and PubSubHubbub publisher
+ * @short_description: feed writer and PubSubHubBub publisher
  *
  * #GrssFeedsPublisher may be used to expose contents for any given #GrssFeedChannel,
  * both writing a file to be dispatched by the local webserver or providing
@@ -515,7 +515,7 @@ grss_feeds_publisher_publish (GrssFeedsPublisher *pub, GrssFeedChannel *channel,
  * @pub: a #GrssFeedsPublisher
  * @channel: the #GrssFeedChannel to dump in the file
  * @items: list of #GrssFeedItems to be added in the feed
- * @path: path of the file to write
+ * @uri: URI of the file to write
  *
  * Dump the given @channel in an Atom formatted file in @path. If the local
  * PubSubHubbub hub has been activated (with grss_feeds_publisher_hub_switch())
@@ -619,7 +619,7 @@ verification_message_for_client (RemoteSubscriber *client)
 			break;
 	}
 
-	body = g_strdup_printf ("%s?hub.mode=%s&hub.topic=%s&hub.challenge=%s&hub.lease_seconds=%ld",
+	body = g_strdup_printf ("%s?hub.mode=%s&hub.topic=%s&hub.challenge=%s&hub.lease_seconds=%lld",
 				client->callback, mode, client->topic, client->challenge, client->lease_interval);
 
 	ret = soup_message_new ("GET", body);

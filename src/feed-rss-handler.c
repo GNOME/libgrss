@@ -44,14 +44,6 @@
 
 #define FEED_RSS_HANDLER_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEED_RSS_HANDLER_TYPE, FeedRssHandlerPrivate))
 
-/**
- * SECTION: feed-rss-handler
- * @short_description: specialized parser for RSS feeds
- *
- * #FeedRssHandler is a #FeedHandler specialized for feeds in RSS format,
- * both 1.0 and 2.0
- */
-
 #define FEED_RSS_HANDLER_ERROR		feed_rss_handler_error_quark()
 
 /* HTML output strings */
@@ -115,6 +107,32 @@ feed_rss_handler_check_format (FeedHandler *self, xmlDocPtr doc, xmlNodePtr cur)
 	}
 
 	return FALSE;
+}
+
+static void
+parse_rss_cloud (GrssFeedChannel *feed, xmlNodePtr cur) {
+	gchar *domain;
+	gchar *path;
+	gchar *protocol;
+	gchar *completepath;
+
+	domain = (gchar*) xmlGetNsProp (cur, BAD_CAST"domain", NULL);
+	path = (gchar*) xmlGetNsProp (cur, BAD_CAST"path", NULL);
+	protocol = (gchar*) xmlGetNsProp (cur, BAD_CAST"protocol", NULL);
+
+	if (domain != NULL && path != NULL && protocol != NULL) {
+		if (strncmp (domain, "http://", 7) != 0)
+			completepath = g_strdup_printf ("http://%s%s", domain, path);
+		else
+			completepath = g_strdup_printf ("%s%s", domain, path);
+
+		grss_feed_channel_set_rsscloud (feed, completepath, protocol);
+
+		g_free (domain);
+		g_free (path);
+		g_free (protocol);
+		g_free (completepath);
+	}
 }
 
 static void
@@ -216,6 +234,9 @@ parse_channel (FeedRssHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xml
 				grss_feed_channel_set_description (feed, tmp);
 				g_free (tmp);
 			}
+		}
+		else if (!xmlStrcmp (cur->name, BAD_CAST"cloud")) {
+ 			parse_rss_cloud (feed, cur);
 		}
 
 		cur = cur->next;
@@ -538,13 +559,6 @@ feed_rss_handler_init (FeedRssHandler *object)
 	object->priv = FEED_RSS_HANDLER_GET_PRIVATE (object);
 }
 
-/**
- * feed_rss_handler_new:
- *
- * Allocates a new #FeedRssHandler
- *
- * Return value: a new #FeedRssHandler
- */
 FeedRssHandler*
 feed_rss_handler_new ()
 {

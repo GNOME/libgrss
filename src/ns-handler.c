@@ -23,17 +23,6 @@
 
 #define NS_HANDLER_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), NS_HANDLER_TYPE, NSHandlerPrivate))
 
-/**
- * SECTION: ns-handler
- * @short_description: namespaces handler
- *
- * The #NSHandler object is a special extension used by #FeedHandlers to
- * handle more tags in feeds. When unknow XML elements are found they are
- * filtered by the #NSHandler, which check if that rappresent a valid
- * extension and populates the specified #GrssFeedChannel (or #GrssFeedItem) with
- * more attributes
- */
-
 struct _NSHandlerPrivate {
 	GHashTable	*href_handlers;
 	GHashTable	*prefix_handlers;
@@ -463,10 +452,6 @@ ns_wfw_item (GrssFeedItem *item, xmlNodePtr cur)
 static gboolean
 ns_atom10_channel (GrssFeedChannel *feed, xmlNodePtr cur)
 {
-	/*
-		Used to manage PubSubHubbub information in RSS feeds
-	*/
-
 	gchar *href;
 	gchar *relation;
 
@@ -477,9 +462,9 @@ ns_atom10_channel (GrssFeedChannel *feed, xmlNodePtr cur)
 			href = (gchar*) xmlGetNsProp (cur, BAD_CAST "href", NULL);
 
 			if (strcmp (relation, "self") == 0)
-				grss_feed_channel_set_pubsubhub (feed, NULL, href);
+				grss_feed_channel_set_source (feed, href);
 			else if (strcmp (relation, "hub") == 0)
-				grss_feed_channel_set_pubsubhub (feed, href, NULL);
+				grss_feed_channel_set_pubsubhub (feed, href);
 
 			g_free (relation);
 			g_free (href);
@@ -616,13 +601,6 @@ ns_handler_init (NSHandler *node)
 	g_hash_table_insert (node->priv->href_handlers, "http://www.w3.org/2005/Atom", nsh);
 }
 
-/**
- * ns_handler_new:
- *
- * Allocates a new #NSHandler
- *
- * Return value: a new #NSHandler
- */
 NSHandler*
 ns_handler_new ()
 {
@@ -645,17 +623,6 @@ retrieve_internal_handler (NSHandler *handler, xmlNodePtr cur)
 	return nsh;
 }
 
-/**
- * ns_handler_channel:
- * @handler: a #NSHandler
- * @feed: channel to which assign eventual values
- * @cur: XML tag to be analyzed
- *
- * Check a given tag for extended namespaces values
- *
- * Return value: %TRUE if a value has been assigned by the @handler, %FALSE
- * otherwise
- */
 gboolean
 ns_handler_channel (NSHandler *handler, GrssFeedChannel *feed, xmlNodePtr cur)
 {
@@ -669,17 +636,6 @@ ns_handler_channel (NSHandler *handler, GrssFeedChannel *feed, xmlNodePtr cur)
 		return FALSE;
 }
 
-/**
- * ns_handler_item:
- * @handler: a #NSHandler
- * @item: item to which assign eventual values
- * @cur: XML tag to be analyzed
- *
- * Check a given tag for extended namespaces values
- *
- * Return value: %TRUE if a value has been assigned by the @handler, %FALSE
- * otherwise
- */
 gboolean
 ns_handler_item (NSHandler *handler, GrssFeedItem *item, xmlNodePtr cur)
 {

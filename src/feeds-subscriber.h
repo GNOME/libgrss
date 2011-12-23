@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009, Roberto Guido <rguido@src.gnome.org>
+ * Copyright (C) 2011, Roberto Guido <rguido@src.gnome.org>
  *                     Michele Tameni <michele@amdplanet.it>
  *
  * This library is free software; you can redistribute it and/or
@@ -51,7 +51,9 @@ GrssFeedsSubscriber*	grss_feeds_subscriber_new		();
 gboolean		grss_feeds_subscriber_listen		(GrssFeedsSubscriber *sub, GList *feeds);
 GList*			grss_feeds_subscriber_get_listened	(GrssFeedsSubscriber *sub);
 void			grss_feeds_subscriber_set_port		(GrssFeedsSubscriber *sub, int port);
-void			grss_feeds_subscriber_set_hub		(GrssFeedsSubscriber *sub, gchar *hub);
 void			grss_feeds_subscriber_switch		(GrssFeedsSubscriber *sub, gboolean run);
+GInetAddress*		grss_feeds_subscriber_get_address	(GrssFeedsSubscriber *sub);
+int			grss_feeds_subscriber_get_port		(GrssFeedsSubscriber *sub);
+SoupSession*		grss_feeds_subscriber_get_session	(GrssFeedsSubscriber *sub);
 
 #endif /* __FEEDS_SUBSCRIBER_H__ */

@@ -45,7 +45,7 @@ main ()
 	gboolean ok;
 	gchar *example_feeds [] = {
 		"http://rss.slashdot.org/Slashdot/slashdot",
-		"http://feeds.feedburner.com/Techcrunch",
+		"http://techcrunch.com/feed/",
 		NULL
 	};
 	GList *iter;

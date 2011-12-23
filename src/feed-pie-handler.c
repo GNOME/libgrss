@@ -34,15 +34,6 @@
 #include "ns-handler.h"
 
 #define FEED_PIE_HANDLER_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEED_PIE_HANDLER_TYPE, FeedPieHandlerPrivate))
-
-/**
- * SECTION: feed-pie-handler
- * @short_description: specialized parser for PIE feeds
- *
- * #FeedPieHandler is a #FeedHandler specialized for feeds in PIE format, an
- * older specification of Atom
- */
-
 #define FEED_PIE_HANDLER_ERROR			feed_pie_handler_error_quark()
 
 typedef void 	(*PieChannelParserFunc)		(xmlNodePtr cur, GrssFeedChannel *feed);
@@ -493,13 +484,6 @@ feed_pie_handler_init (FeedPieHandler *object)
 	object->priv = FEED_PIE_HANDLER_GET_PRIVATE (object);
 }
 
-/**
- * feed_pie_handler_new:
- *
- * Allocates a new #FeedPieHandler
- *
- * Return value: a new #FeedPieHandler
- */
 FeedPieHandler*
 feed_pie_handler_new ()
 {

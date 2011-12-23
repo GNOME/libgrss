@@ -33,13 +33,6 @@
 
 #define FEEDS_OPML_GROUP_HANDLER_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEEDS_OPML_GROUP_HANDLER_TYPE, FeedsOpmlGroupHandlerPrivate))
 
-/**
- * SECTION: feeds-opml-group-handler
- * @short_description: specialized parser for OPML files
- *
- * #FeedsOpmlGroupHandler is a #GrssFeedsGroupHandler specialized for OPML contents
- */
-
 struct FeedsOpmlGroupHandlerPrivate {
 	int	rfu;
 };

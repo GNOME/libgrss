@@ -63,8 +63,10 @@ void			grss_feed_channel_set_language		(GrssFeedChannel *channel, gchar *languag
 const gchar*		grss_feed_channel_get_language		(GrssFeedChannel *channel);
 void			grss_feed_channel_set_category		(GrssFeedChannel *channel, gchar *category);
 const gchar*		grss_feed_channel_get_category		(GrssFeedChannel *channel);
-void			grss_feed_channel_set_pubsubhub		(GrssFeedChannel *channel, gchar *hub, gchar *self);
-gboolean		grss_feed_channel_get_pubsubhub		(GrssFeedChannel *channel, gchar **hub, gchar **self);
+void			grss_feed_channel_set_pubsubhub		(GrssFeedChannel *channel, gchar *hub);
+gboolean		grss_feed_channel_get_pubsubhub		(GrssFeedChannel *channel, gchar **hub);
+void			grss_feed_channel_set_rsscloud		(GrssFeedChannel *channel, gchar *path, gchar *protocol);
+gboolean		grss_feed_channel_get_rsscloud		(GrssFeedChannel *channel, gchar **path, gchar **protocol);
 
 void			grss_feed_channel_set_copyright		(GrssFeedChannel *channel, gchar *copyright);
 const gchar*		grss_feed_channel_get_copyright		(GrssFeedChannel *channel);
@@ -86,5 +88,6 @@ int			grss_feed_channel_get_update_interval	(GrssFeedChannel *channel);
 
 gboolean		grss_feed_channel_fetch			(GrssFeedChannel *channel);
 void			grss_feed_channel_fetch_async		(GrssFeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data);
+GList*			grss_feed_channel_fetch_all		(GrssFeedChannel *channel);
 
 #endif /* __FEED_CHANNEL_H__ */

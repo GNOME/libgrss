@@ -25,13 +25,6 @@
 
 #define FEEDS_XBEL_GROUP_HANDLER_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEEDS_XBEL_GROUP_HANDLER_TYPE, FeedsXbelGroupHandlerPrivate))
 
-/**
- * SECTION: feeds-xbel-group-handler
- * @short_description: specialized parser for XBEL files
- *
- * #FeedsXbelGroupHandler is a #GrssFeedsGroupHandler specialized for XBEL contents
- */
-
 struct FeedsXbelGroupHandlerPrivate {
 	int	rfu;
 };
@@ -77,7 +70,7 @@ feeds_xbel_group_handler_parse (GrssFeedsGroupHandler *self, xmlDocPtr doc, GErr
 
 	xpathCtx = xmlXPathNewContext (doc);
 
-	/**
+	/*
 		TODO	This XPath query may be improved to check only "bookmark" tags into the main "xbel"
 	*/
 	xpathObj = xmlXPathEvalExpression (BAD_CAST"//bookmark", xpathCtx);

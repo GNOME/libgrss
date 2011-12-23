@@ -21,14 +21,6 @@
 #include "utils.h"
 #include "feed-handler.h"
 
-/**
- * SECTION: feed-handler
- * @short_description: interface for specialized parsers
- *
- * The #FeedHandler interface defines a unique API for all specialized
- * parsers implementations
- */
-
 static void
 feed_handler_base_init (gpointer g_class)
 {
@@ -52,14 +44,6 @@ feed_handler_get_type ()
 	return iface_type;
 }
 
-/**
- * feed_handler_set_ns_handler:
- * @self: a #FeedHandler
- * @handler: instance of #NSHandler
- *
- * Permits to assign a #NSHandler to the specified #FeedHandler, to expand
- * his parsing capabilities to the external managed tags
- */
 void
 feed_handler_set_ns_handler (FeedHandler *self, NSHandler *handler)
 {
@@ -69,17 +53,6 @@ feed_handler_set_ns_handler (FeedHandler *self, NSHandler *handler)
 	return FEED_HANDLER_GET_INTERFACE (self)->set_ns_handler (self, handler);
 }
 
-/**
- * feed_handler_check_format:
- * @self: a #FeedHandler
- * @doc: XML document from a parsed feed
- * @cur: first valid  node into the XML document
- *
- * Used to check validity of an XML document against the given feed parser
- *
- * Return value: %TRUE if the document can be parsed with the given
- * #FeedHandler, %FALSE otherwise
- */
 gboolean
 feed_handler_check_format (FeedHandler *self, xmlDocPtr doc, xmlNodePtr cur)
 {
@@ -89,19 +62,6 @@ feed_handler_check_format (FeedHandler *self, xmlDocPtr doc, xmlNodePtr cur)
 	return FEED_HANDLER_GET_INTERFACE (self)->check_format (self, doc, cur);
 }
 
-/**
- * feed_handler_parse:
- * @self: a #FeedHandler
- * @feed: feed to be parsed
- * @doc: XML document from the feed
- * @error: location for eventual errors
- *
- * Parses the given @doc (obtained fetching @feed) and extracts a list of
- * items
- *
- * Return value: a list of #GrssFeedItem, to be freed when no longer in use, or
- * %NULL if an error occours (and @error is set accordly)
- */
 GList*
 feed_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
 {

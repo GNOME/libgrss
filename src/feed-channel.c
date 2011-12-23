@@ -35,30 +35,35 @@
 
 typedef struct {
 	gchar	*hub;
-	gchar	*self;
 } PubSub;
 
+typedef struct {
+	gchar	*path;
+	gchar	*protocol;
+} RSSCloud;
+
 struct _GrssFeedChannelPrivate {
-	gchar	*source;
+	gchar		*source;
 
-	gchar	*title;
-	gchar	*homepage;
-	gchar	*description;
-	gchar	*image;
-	gchar	*icon;
-	gchar	*language;
-	gchar	*category;
-	PubSub	pubsub;
+	gchar		*title;
+	gchar		*homepage;
+	gchar		*description;
+	gchar		*image;
+	gchar		*icon;
+	gchar		*language;
+	gchar		*category;
+	PubSub		pubsub;
+	RSSCloud	rsscloud;
 
-	gchar	*copyright;
-	gchar	*editor;
-	GList	*contributors;
-	gchar	*webmaster;
-	gchar	*generator;
+	gchar		*copyright;
+	gchar		*editor;
+	GList		*contributors;
+	gchar		*webmaster;
+	gchar		*generator;
 
-	time_t	pub_time;
-	time_t	update_time;
-	int	update_interval;
+	time_t		pub_time;
+	time_t		update_time;
+	int		update_interval;
 };
 
 enum {
@@ -88,7 +93,8 @@ grss_feed_channel_finalize (GObject *obj)
 	FREE_STRING (chan->priv->language);
 	FREE_STRING (chan->priv->category);
 	FREE_STRING (chan->priv->pubsub.hub);
-	FREE_STRING (chan->priv->pubsub.self);
+	FREE_STRING (chan->priv->rsscloud.path);
+	FREE_STRING (chan->priv->rsscloud.protocol);
 	FREE_STRING (chan->priv->copyright);
 	FREE_STRING (chan->priv->editor);
 	FREE_STRING (chan->priv->webmaster);
@@ -130,6 +136,24 @@ GrssFeedChannel*
 grss_feed_channel_new ()
 {
 	return g_object_new (GRSS_FEED_CHANNEL_TYPE, NULL);
+}
+
+/**
+ * grss_feed_channel_new_from_source:
+ * @source: URL of the feed
+ *
+ * Allocates a new #GrssFeedChannel and assign it the given remote source
+ *
+ * Return value: a #GrssFeedChannel
+ */
+GrssFeedChannel*
+grss_feed_channel_new_from_source (gchar *source)
+{
+	GrssFeedChannel *ret;
+
+	ret = grss_feed_channel_new ();
+	grss_feed_channel_set_source (ret, source);
+	return ret;
 }
 
 /**
@@ -408,38 +432,23 @@ grss_feed_channel_get_category (GrssFeedChannel *channel)
  * grss_feed_channel_set_pubsubhub:
  * @channel: a #GrssFeedChannel
  * @hub: hub for the feed, or NULL
- * @self: target referencing the feed, or NULL
  *
- * To set information about PubSubHubbub for the channel. Options can be set
- * alternatively, only with hub != %NULL or self != %NULL, and are saved
- * internally to the object: the hub is considered valid
- * (grss_feed_channel_get_pubsubhub() returns %TRUE) only when both parameters has
- * been set. To unset the hub, pass %NULL for both parameters
+ * To set information about PubSubHubbub for the channel. To unset the hub,
+ * pass %NULL as parameter
  */
 void
-grss_feed_channel_set_pubsubhub (GrssFeedChannel *channel, gchar *hub, gchar *self)
+grss_feed_channel_set_pubsubhub (GrssFeedChannel *channel, gchar *hub)
 {
-	if (hub == NULL && self == NULL) {
-		FREE_STRING (channel->priv->pubsub.hub);
-		FREE_STRING (channel->priv->pubsub.self);
-	}
-	else {
-		if (hub != NULL) {
-			FREE_STRING (channel->priv->pubsub.hub);
-			channel->priv->pubsub.hub = g_strdup (hub);
-		}
-		if (self != NULL) {
-			FREE_STRING (channel->priv->pubsub.self);
-			channel->priv->pubsub.self = g_strdup (self);
-		}
-	}
+	FREE_STRING (channel->priv->pubsub.hub);
+
+	if (hub != NULL)
+		channel->priv->pubsub.hub = g_strdup (hub);
 }
 
 /**
  * grss_feed_channel_get_pubsubhub:
  * @channel: a #GrssFeedChannel
  * @hub: location for the hub string, or NULL
- * @self: location for the reference to the feed, or NULL
  *
  * Retrieves information about the PubSubHubbub hub of the channel
  *
@@ -447,14 +456,55 @@ grss_feed_channel_set_pubsubhub (GrssFeedChannel *channel, gchar *hub, gchar *se
  * @channel, %FALSE otherwise
  */
 gboolean
-grss_feed_channel_get_pubsubhub (GrssFeedChannel *channel, gchar **hub, gchar **self)
+grss_feed_channel_get_pubsubhub (GrssFeedChannel *channel, gchar **hub)
 {
 	if (hub != NULL)
 		*hub = channel->priv->pubsub.hub;
-	if (self != NULL)
-		*self = channel->priv->pubsub.self;
 
-	return (channel->priv->pubsub.hub != NULL && channel->priv->pubsub.self != NULL);
+	return (channel->priv->pubsub.hub != NULL);
+}
+
+/**
+ * grss_feed_channel_set_rsscloud:
+ * @channel: a #GrssFeedChannel
+ * @path: complete references of the URL where to register subscription, e.g.
+ * http://example.com/rsscloudNotify
+ * @protocol: type of protocol used for notifications
+ *
+ * To set information about RSSCloud notifications for the channel
+ */
+void
+grss_feed_channel_set_rsscloud (GrssFeedChannel *channel, gchar *path, gchar *protocol)
+{
+	FREE_STRING (channel->priv->rsscloud.path);
+	FREE_STRING (channel->priv->rsscloud.protocol);
+
+	if (path != NULL && protocol != NULL) {
+		channel->priv->rsscloud.path = g_strdup (path);
+		channel->priv->rsscloud.protocol = g_strdup (protocol);
+	}
+}
+
+/**
+ * grss_feed_channel_get_rsscloud:
+ * @channel: a #GrssFeedChannel
+ * @path: location for the path string, or NULL
+ * @protocol: location for the protocol string, or NULL
+ *
+ * Retrieves information about the RSSCloud coordinates of the channel
+ *
+ * Return value: %TRUE if a valid RSSCloud path has been set for the
+ * @channel, %FALSE otherwise
+ */
+gboolean
+grss_feed_channel_get_rsscloud (GrssFeedChannel *channel, gchar **path, gchar **protocol)
+{
+	if (path != NULL)
+		*path = channel->priv->rsscloud.path;
+	if (protocol != NULL)
+		*protocol = channel->priv->rsscloud.protocol;
+
+	return (channel->priv->rsscloud.path != NULL && channel->priv->rsscloud.protocol != NULL);
 }
 
 /**
@@ -690,7 +740,7 @@ grss_feed_channel_get_update_interval (GrssFeedChannel *channel)
 }
 
 static gboolean
-quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg)
+quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg, GList **save_items)
 {
 	GList *items;
 	GList *iter;
@@ -699,7 +749,8 @@ quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg)
 
 	/*
 		TODO	This function is quite inefficent because parses all
-			the feed with a GrssFeedParser and them waste obtained
+			the feed with a GrssFeedParser also when not required
+			(save_items == NULL) and wastes time obtained
 			GrssFeedItems. Perhaps a more aimed function in
 			GrssFeedParser would help...
 	*/
@@ -710,10 +761,13 @@ quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg)
 		parser = grss_feed_parser_new ();
 		items = grss_feed_parser_parse (parser, channel, doc, NULL);
 
-		if (items != NULL) {
+		if (save_items == NULL && items != NULL) {
 			for (iter = items; iter; iter = g_list_next (iter))
 				g_object_unref (iter->data);
 			g_list_free (items);
+		}
+		else {
+			*save_items = items;
 		}
 
 		g_object_unref (parser);
@@ -750,7 +804,7 @@ grss_feed_channel_fetch (GrssFeedChannel *channel)
 	status = soup_session_send_message (session, msg);
 
 	if (status >= 200 && status <= 299) {
-		ret = quick_and_dirty_parse (channel, msg);
+		ret = quick_and_dirty_parse (channel, msg, NULL);
 	}
 	else {
 		g_warning ("Unable to fetch feed from %s: %s", grss_feed_channel_get_source (channel), soup_status_get_phrase (status));
@@ -773,7 +827,7 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 	g_object_get (msg, "status-code", &status, NULL);
 
 	if (status >= 200 && status <= 299) {
-		quick_and_dirty_parse (channel, msg);
+		quick_and_dirty_parse (channel, msg, NULL);
 	}
 	else {
 		g_simple_async_result_set_error (result, FEEDS_CHANNEL_ERROR, FEEDS_CHANNEL_FETCH_ERROR,
@@ -804,4 +858,41 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
 	session = soup_session_async_new ();
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
 	soup_session_queue_message (session, msg, feed_downloaded, result);
+}
+
+/**
+ * grss_feed_channel_fetch_all:
+ * @channel: a #GrssFeedChannel
+ *
+ * Utility to fetch and populate a #GrssFeedChannel, and retrieve all its
+ * items
+ *
+ * Return value: a GList of #GrssFeedItem, to be completely unreferenced and
+ * freed when no longer in use, or %NULL if an error occurs
+ */
+GList*
+grss_feed_channel_fetch_all (GrssFeedChannel *channel)
+{
+	gboolean ret;
+	guint status;
+	GList *items;
+	SoupMessage *msg;
+	SoupSession *session;
+
+	session = soup_session_sync_new ();
+	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
+	status = soup_session_send_message (session, msg);
+	items = NULL;
+
+	if (status >= 200 && status <= 299) {
+		ret = quick_and_dirty_parse (channel, msg, &items);
+	}
+	else {
+		g_warning ("Unable to fetch feed from %s: %s", grss_feed_channel_get_source (channel), soup_status_get_phrase (status));
+		ret = FALSE;
+	}
+
+	g_object_unref (session);
+	g_object_unref (msg);
+	return items;
 }

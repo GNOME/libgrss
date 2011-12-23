@@ -25,13 +25,6 @@
 
 #define FEEDS_XOXO_GROUP_HANDLER_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEEDS_XOXO_GROUP_HANDLER_TYPE, FeedsXoxoGroupHandlerPrivate))
 
-/**
- * SECTION: feeds-xoxo-group-handler
- * @short_description: specialized parser for XOXO files
- *
- * #FeedsXoxoGroupHandler is a #GrssFeedsGroupHandler specialized for XOXO contents
- */
-
 struct FeedsXoxoGroupHandlerPrivate {
 	int	rfu;
 };
@@ -94,7 +87,7 @@ feeds_xoxo_group_handler_parse (GrssFeedsGroupHandler *self, xmlDocPtr doc, GErr
 	xpathCtx = xmlXPathNewContext (doc);
 	xmlXPathRegisterNs (xpathCtx, BAD_CAST"xhtml", BAD_CAST"http://www.w3.org/1999/xhtml");
 
-	/**
+	/*
 		TODO	This XPath query may be improved to check only "a" tags into the main "ol"
 	*/
 	xpathObj = xmlXPathEvalExpression (BAD_CAST"//xhtml:a[@type='webfeed']", xpathCtx);

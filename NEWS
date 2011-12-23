@@ -3,7 +3,7 @@ libgrss 0.5 (UNRELEASED)
 - Complete API break: all object and function names moved to "grss" namespace
 - Added XOXO and XBEL files parsers
 - Added FeedsPublisher to expose feeds contents as files or by local server
-- PubSubHub subscriber
+- PubSubHub and RSSCloud subscribers
 - Added functions feed_channel_fetch_async() and feed_channel_new_from_file()
 
 libgrss 0.4
