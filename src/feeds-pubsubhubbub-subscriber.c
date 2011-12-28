@@ -153,9 +153,9 @@ feeds_pubsubhubbub_subscriber_handler_handle_message (GrssFeedsSubscriberHandler
 		mode = (gchar*) g_hash_table_lookup (query, "hub.mode");
 
 		if (*status == FEED_SUBSCRIPTION_SUBSCRIBING && strcmp (mode, "subscribe") == 0) {
+			*status = FEED_SUBSCRIPTION_SUBSCRIBED;
 			challenge = g_strdup ((gchar*) g_hash_table_lookup (query, "hub.challenge"));
 			soup_message_set_response (msg, "application/x-www-form-urlencoded", SOUP_MEMORY_TAKE, challenge, strlen (challenge));
-
 			soup_message_set_status (msg, 200);
 		}
 		else if (*status == FEED_SUBSCRIPTION_UNSUBSCRIBING && strcmp (mode, "unsubscribe") == 0) {

@@ -239,7 +239,7 @@ grss_feeds_pool_get_listened (GrssFeedsPool *pool)
 }
 
 /**
- * grss_feeds_pool_get_listened:
+ * grss_feeds_pool_get_listened_num:
  * @pool: a #GrssFeedsPool
  *
  * Returns number of feeds under the @pool control, as provided by

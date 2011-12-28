@@ -65,9 +65,6 @@ grss_feed_parser_error_quark ()
 static void
 grss_feed_parser_finalize (GObject *object)
 {
-	GrssFeedParser *parser;
-
-	parser = GRSS_FEED_PARSER (object);
 	G_OBJECT_CLASS (grss_feed_parser_parent_class)->finalize (object);
 }
 

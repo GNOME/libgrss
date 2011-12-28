@@ -20,6 +20,7 @@ sources_private_h = \
 	feeds-pubsubhubbub-subscriber.h \
 	feeds-rsscloud-subscriber.h     \
 	feeds-subscriber-handler.h      \
+	feeds-subscriber-private.h	\
 	feeds-xbel-group-handler.h      \
 	feeds-xoxo-group-handler.h      \
 	ns-handler.h                    \

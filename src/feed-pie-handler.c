@@ -61,9 +61,6 @@ feed_pie_handler_error_quark ()
 static void
 feed_pie_handler_finalize (GObject *object)
 {
-	FeedPieHandler *parser;
-
-	parser = FEED_PIE_HANDLER (object);
 	G_OBJECT_CLASS (feed_pie_handler_parent_class)->finalize (object);
 }
 

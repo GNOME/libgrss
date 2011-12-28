@@ -57,9 +57,6 @@ static xmlNode* find_first_element (xmlDocPtr doc)
 static void
 feeds_xoxo_group_handler_finalize (GObject *object)
 {
-	FeedsXoxoGroupHandler *parser;
-
-	parser = FEEDS_XOXO_GROUP_HANDLER (object);
 	G_OBJECT_CLASS (feeds_xoxo_group_handler_parent_class)->finalize (object);
 }
 
@@ -79,10 +76,8 @@ feeds_xoxo_group_handler_parse (GrssFeedsGroupHandler *self, xmlDocPtr doc, GErr
 	xmlXPathObjectPtr xpathObj;
 	xmlXPathContextPtr xpathCtx;
 	GrssFeedChannel *channel;
-	FeedsXoxoGroupHandler *parser;
 
 	items = NULL;
-	parser = FEEDS_XOXO_GROUP_HANDLER (self);
 
 	xpathCtx = xmlXPathNewContext (doc);
 	xmlXPathRegisterNs (xpathCtx, BAD_CAST"xhtml", BAD_CAST"http://www.w3.org/1999/xhtml");

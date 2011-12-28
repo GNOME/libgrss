@@ -57,9 +57,6 @@ grss_feeds_group_error_quark ()
 static void
 grss_feeds_group_finalize (GObject *object)
 {
-	GrssFeedsGroup *group;
-
-	group = FEEDS_GROUP (object);
 	G_OBJECT_CLASS (grss_feeds_group_parent_class)->finalize (object);
 }
 
@@ -192,8 +189,17 @@ grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **
 	return items;
 }
 
+/**
+ * grss_feeds_group_export_file:
+ * @group:
+ * @channels:
+ * @path:
+ * @error:
+ *
+ * Return value: FALSE
+ */
 gboolean
-grss_feeds_group_export_file (GrssFeedsGroup *groups, GList *channels, const gchar *path, GError *error)
+grss_feeds_group_export_file (GrssFeedsGroup *group, GList *channels, const gchar *path, GError *error)
 {
 	return FALSE;
 }

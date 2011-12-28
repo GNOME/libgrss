@@ -20,6 +20,7 @@
 
 #include "feeds-rsscloud-subscriber.h"
 #include "feeds-subscriber.h"
+#include "feeds-subscriber-private.h"
 #include "feeds-subscriber-handler.h"
 #include "utils.h"
 #include "feed-parser.h"
@@ -81,7 +82,7 @@ subscribe_response_cb (SoupSession *session,
                        gpointer user_data)
 {
 	gboolean done;
-	const xmlChar *success;
+	xmlChar *success;
 	guint status;
 	xmlDocPtr doc;
 	xmlNodePtr cur;
@@ -152,6 +153,22 @@ feeds_rsscloud_subscriber_handler_subscribe (GrssFeedsSubscriberHandler *handler
 	soup_session_queue_message (grss_feeds_subscriber_get_session (myself->priv->parent), msg, subscribe_response_cb, NULL);
 }
 
+static void
+fetched_items_cb (GObject *source_object,
+                  GAsyncResult *res,
+                  gpointer user_data)
+{
+	GList *items;
+	GrssFeedChannel *channel;
+	GrssFeedsRsscloudSubscriber *handler;
+
+	items = g_async_result_get_user_data (res);
+	channel = GRSS_FEED_CHANNEL (g_async_result_get_source_object (res));
+	handler = user_data;
+
+	grss_feeds_subscriber_dispatch (handler->priv->parent, channel, items);
+}
+
 GList*
 feeds_rsscloud_subscriber_handler_handle_message (GrssFeedsSubscriberHandler *handler,
                                                   GrssFeedChannel *channel,
@@ -171,13 +188,14 @@ feeds_rsscloud_subscriber_handler_handle_message (GrssFeedsSubscriberHandler *ha
 		challenge = (gchar*) g_hash_table_lookup (query, "challenge");
 
 		if (*status == FEED_SUBSCRIPTION_SUBSCRIBING && challenge != NULL) {
+			*status = FEED_SUBSCRIPTION_SUBSCRIBED;
 			challenge = g_strdup (challenge);
 			soup_message_set_response (msg, "application/x-www-form-urlencoded", SOUP_MEMORY_TAKE, challenge, strlen (challenge));
 			soup_message_set_status (msg, 200);
 		}
 	}
 	else if (*status == FEED_SUBSCRIPTION_SUBSCRIBED) {
-		ret = grss_feed_channel_fetch_all (channel);
+		grss_feed_channel_fetch_all_async (channel, fetched_items_cb, handler);
 		soup_message_set_status (msg, 202);
 	}
 	else {

@@ -45,9 +45,6 @@ G_DEFINE_TYPE_WITH_CODE (FeedsOpmlGroupHandler, feeds_opml_group_handler, G_TYPE
 static void
 feeds_opml_group_handler_finalize (GObject *object)
 {
-	FeedsOpmlGroupHandler *parser;
-
-	parser = FEEDS_OPML_GROUP_HANDLER (object);
 	G_OBJECT_CLASS (feeds_opml_group_handler_parent_class)->finalize (object);
 }
 
@@ -188,10 +185,8 @@ feeds_opml_group_handler_parse (GrssFeedsGroupHandler *self, xmlDocPtr doc, GErr
 {
 	xmlNodePtr cur;
 	GList *items;
-	FeedsOpmlGroupHandler *parser;
 
 	items = NULL;
-	parser = FEEDS_OPML_GROUP_HANDLER (self);
 	cur = xmlDocGetRootElement (doc);
 
 	while (cur) {

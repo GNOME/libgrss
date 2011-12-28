@@ -37,9 +37,6 @@ G_DEFINE_TYPE_WITH_CODE (FeedsXbelGroupHandler, feeds_xbel_group_handler, G_TYPE
 static void
 feeds_xbel_group_handler_finalize (GObject *object)
 {
-	FeedsXbelGroupHandler *parser;
-
-	parser = FEEDS_XBEL_GROUP_HANDLER (object);
 	G_OBJECT_CLASS (feeds_xbel_group_handler_parent_class)->finalize (object);
 }
 
@@ -63,10 +60,8 @@ feeds_xbel_group_handler_parse (GrssFeedsGroupHandler *self, xmlDocPtr doc, GErr
 	xmlXPathObjectPtr xpathObj;
 	xmlXPathContextPtr xpathCtx;
 	GrssFeedChannel *channel;
-	FeedsXbelGroupHandler *parser;
 
 	items = NULL;
-	parser = FEEDS_XBEL_GROUP_HANDLER (self);
 
 	xpathCtx = xmlXPathNewContext (doc);
 

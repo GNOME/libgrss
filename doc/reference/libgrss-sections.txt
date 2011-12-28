@@ -17,6 +17,7 @@ GrssFeedsPool
 grss_feeds_pool_new
 grss_feeds_pool_listen
 grss_feeds_pool_get_listened
+grss_feeds_pool_get_listened_num
 grss_feeds_pool_switch
 grss_feeds_pool_get_session
 </SECTION>
@@ -147,6 +148,10 @@ grss_feed_channel_set_update_interval
 grss_feed_channel_get_update_interval
 grss_feed_channel_fetch
 grss_feed_channel_fetch_async
+grss_feed_channel_fetch_finish
+grss_feed_channel_fetch_all
+grss_feed_channel_fetch_all_async
+grss_feed_channel_fetch_all_finish
 </SECTION>
 
 <SECTION>

@@ -77,6 +77,8 @@ typedef struct {
 
 	GrssFeedsSubscriber		*sub;
 	GrssFeedsSubscriberHandler	*handler;
+
+	GList				*items_cache;
 } GrssFeedChannelWrap;
 
 enum {
@@ -92,11 +94,19 @@ static void
 remove_currently_listened (GrssFeedsSubscriber *sub)
 {
 	GList *iter;
+	GList *cache_iter;
 	GrssFeedChannelWrap *wrap;
 
 	if (sub->priv->feeds_list != NULL) {
 		for (iter = sub->priv->feeds_list; iter; iter = g_list_next (iter)) {
 			wrap = (GrssFeedChannelWrap*) iter->data;
+
+			if (wrap->items_cache != NULL) {
+				for (cache_iter = wrap->items_cache; cache_iter; cache_iter = g_list_next (cache_iter))
+					g_object_unref (cache_iter->data);
+				g_list_free (wrap->items_cache);
+			}
+
 			g_free (wrap->path);
 			g_object_unref (wrap->channel);
 			g_free (wrap);
@@ -142,7 +152,8 @@ grss_feeds_subscriber_class_init (GrssFeedsSubscriberClass *klass)
 	 * @item: the #GrssFeedItem received
 	 *
 	 * Emitted when a notification has been received and parsed. The
-	 * @item is unref'd at the end of signal
+	 * @item is cached and unref'd when the #GrssFeedsSubscriber is
+	 * destroyed or a new set of feeds is provided
 	 */
 	signals [NOTIFICATION_RECEIVED] = g_signal_new ("notification-received", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
 	                                                NULL, NULL, feed_marshal_VOID__OBJECT_OBJECT,
@@ -279,19 +290,64 @@ grss_feeds_subscriber_get_listened (GrssFeedsSubscriber *sub)
 }
 
 static void
+dispatch_items (GrssFeedChannelWrap *feed, GList *items)
+{
+	gboolean exists;
+	const gchar* item_id;
+	GList *iter;
+	GList *cache_iter;
+	GrssFeedItem *item;
+	GrssFeedItem *cache_item;
+
+	for (iter = items; iter; iter = g_list_next (iter)) {
+		item = (GrssFeedItem*) iter->data;
+		item_id = grss_feed_item_get_id (item);
+
+		exists = FALSE;
+
+		for (cache_iter = feed->items_cache; cache_iter; cache_iter = g_list_next (cache_iter)) {
+			cache_item = (GrssFeedItem*) cache_iter->data;
+			if (strcmp (item_id, grss_feed_item_get_id (cache_item)) == 0)
+				exists = TRUE;
+		}
+
+		if (exists == FALSE) {
+			g_signal_emit (feed->sub, signals [NOTIFICATION_RECEIVED], 0, feed->channel, item, NULL);
+			feed->items_cache = g_list_prepend (feed->items_cache, item);
+		}
+	}
+}
+
+static void
 handle_incoming_notification_cb (SoupServer *server, SoupMessage *msg, const char *path,
                                  GHashTable *query, SoupClientContext *client, gpointer user_data)
 {
-	GList *iter;
 	GList *items;
 	GrssFeedChannelWrap *feed;
 
 	feed = (GrssFeedChannelWrap*) user_data;
 	items = grss_feeds_subscriber_handler_handle_incoming_message (feed->handler, feed->channel, &(feed->status), server, msg, path, query, client);
 
-	for (iter = items; iter; iter = g_list_next (iter))
-		g_signal_emit (feed->sub, signals [NOTIFICATION_RECEIVED], 0, feed->channel, (GrssFeedItem*) iter->data, NULL);
-	g_list_free (items);
+	if (items != NULL) {
+		dispatch_items (feed, items);
+		g_list_free (items);
+	}
+}
+
+void
+grss_feeds_subscriber_dispatch (GrssFeedsSubscriber *sub, GrssFeedChannel *channel, GList *items)
+{
+	GList *iter;
+	GrssFeedChannelWrap *wrap;
+
+	for (iter = sub->priv->feeds_list; iter; iter = g_list_next (iter)) {
+		wrap = (GrssFeedChannelWrap*) iter->data;
+
+		if (wrap->channel == channel) {
+			dispatch_items (wrap, items);
+			break;
+		}
+	}
 }
 
 static void

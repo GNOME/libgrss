@@ -68,6 +68,7 @@ struct _GrssFeedChannelPrivate {
 
 enum {
 	FEEDS_CHANNEL_FETCH_ERROR,
+	FEEDS_CHANNEL_PARSE_ERROR
 };
 
 G_DEFINE_TYPE (GrssFeedChannel, grss_feed_channel, G_TYPE_OBJECT);
@@ -827,7 +828,9 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 	g_object_get (msg, "status-code", &status, NULL);
 
 	if (status >= 200 && status <= 299) {
-		quick_and_dirty_parse (channel, msg, NULL);
+		if (quick_and_dirty_parse (channel, msg, NULL) == FALSE)
+			g_simple_async_result_set_error (result, FEEDS_CHANNEL_ERROR, FEEDS_CHANNEL_PARSE_ERROR,
+						 "Unable to parse feed from %s", grss_feed_channel_get_source (channel));
 	}
 	else {
 		g_simple_async_result_set_error (result, FEEDS_CHANNEL_ERROR, FEEDS_CHANNEL_FETCH_ERROR,
@@ -836,6 +839,25 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 
 	g_simple_async_result_complete_in_idle (result);
 	g_object_unref (result);
+}
+
+/**
+ * grss_feed_channel_fetch_finish:
+ * @channel: a #GrssFeedChannel
+ * @res: the #GAsyncResult passed to the callback
+ * @error: if an error occourred, FALSE is returned and this is filled with the message
+ *
+ * Finalizes an asyncronous operation started with grss_feed_channel_fetch_async()
+ *
+ * Return value: TRUE if @channel informations have been successfully fetched, FALSE otherwise
+ */
+gboolean
+grss_feed_channel_fetch_finish (GrssFeedChannel *channel, GAsyncResult *res, GError **error)
+{
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (res), error))
+		return FALSE;
+	else
+		return TRUE;
 }
 
 /**
@@ -873,7 +895,6 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
 GList*
 grss_feed_channel_fetch_all (GrssFeedChannel *channel)
 {
-	gboolean ret;
 	guint status;
 	GList *items;
 	SoupMessage *msg;
@@ -884,15 +905,98 @@ grss_feed_channel_fetch_all (GrssFeedChannel *channel)
 	status = soup_session_send_message (session, msg);
 	items = NULL;
 
-	if (status >= 200 && status <= 299) {
-		ret = quick_and_dirty_parse (channel, msg, &items);
-	}
-	else {
+	if (status >= 200 && status <= 299)
+		quick_and_dirty_parse (channel, msg, &items);
+	else
 		g_warning ("Unable to fetch feed from %s: %s", grss_feed_channel_get_source (channel), soup_status_get_phrase (status));
-		ret = FALSE;
-	}
 
 	g_object_unref (session);
 	g_object_unref (msg);
 	return items;
+}
+
+static void
+free_items_list (gpointer list)
+{
+	GList *items;
+	GList *iter;
+
+	items = list;
+
+	for (iter = items; iter; iter = g_list_next (iter))
+		g_object_unref (iter->data);
+
+	g_list_free (items);
+}
+
+static void
+feed_downloaded_return_items (SoupSession *session, SoupMessage *msg, gpointer user_data)
+{
+	guint status;
+	GList *items;
+	GSimpleAsyncResult *result;
+	GrssFeedChannel *channel;
+
+	result = user_data;
+	channel = GRSS_FEED_CHANNEL (g_async_result_get_source_object (G_ASYNC_RESULT (result)));
+	g_object_get (msg, "status-code", &status, NULL);
+
+	if (status >= 200 && status <= 299) {
+		items = NULL;
+
+		if (quick_and_dirty_parse (channel, msg, &items) == TRUE)
+			g_simple_async_result_set_op_res_gpointer (result, items, free_items_list);
+		else
+			g_simple_async_result_set_error (result, FEEDS_CHANNEL_ERROR, FEEDS_CHANNEL_PARSE_ERROR,
+						 "Unable to parse feed from %s", grss_feed_channel_get_source (channel));
+	}
+	else {
+		g_simple_async_result_set_error (result, FEEDS_CHANNEL_ERROR, FEEDS_CHANNEL_FETCH_ERROR,
+						 "Unable to download from %s", grss_feed_channel_get_source (channel));
+	}
+
+	g_simple_async_result_complete_in_idle (result);
+	g_object_unref (result);
+}
+
+/**
+ * grss_feed_channel_fetch_all_async:
+ * @channel: a #GrssFeedChannel
+ * @callback: function to invoke at the end of the download
+ * @user_data: data passed to the callback
+ *
+ * Similar to grss_feed_channel_fetch_all(), but asyncronous
+ */
+void
+grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data)
+{
+	GSimpleAsyncResult *result;
+	SoupMessage *msg;
+	SoupSession *session;
+
+	result = g_simple_async_result_new (G_OBJECT (channel), callback, user_data, grss_feed_channel_fetch_async);
+
+	session = soup_session_async_new ();
+	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
+	soup_session_queue_message (session, msg, feed_downloaded_return_items, result);
+}
+
+/**
+ * grss_feed_channel_fetch_all_finish:
+ * @channel: a #GrssFeedChannel
+ * @res: the #GAsyncResult passed to the callback
+ * @error: if an error occourred, NULL is returned and this is filled with the message
+ *
+ * Finalizes an asyncronous operation started with grss_feed_channel_fetch_all_async()
+ *
+ * Return value: list of items fetched from the #GrssFeedChannel, or NULL if @error is set. The
+ * list (and contained items) is freed at the end of the callback
+ */
+GList*
+grss_feed_channel_fetch_all_finish (GrssFeedChannel *channel, GAsyncResult *res, GError **error)
+{
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (res), error))
+		return NULL;
+	else
+		return (GList*) g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (res));
 }

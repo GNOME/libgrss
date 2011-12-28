@@ -62,9 +62,6 @@ feed_atom_handler_error_quark ()
 static void
 feed_atom_handler_finalize (GObject *object)
 {
-	FeedAtomHandler *parser;
-
-	parser = FEED_ATOM_HANDLER (object);
 	G_OBJECT_CLASS (feed_atom_handler_parent_class)->finalize (object);
 }
 
@@ -277,7 +274,6 @@ atom10_parse_person_construct (xmlNodePtr cur)
 	gchar *name = NULL;
 	gchar *uri = NULL;
 	gchar *email = NULL;
-	gboolean invalid = FALSE;
 
 	cur = cur->xmlChildrenNode;
 	while (cur) {
@@ -293,8 +289,6 @@ atom10_parse_person_construct (xmlNodePtr cur)
 			}
 
 			if (xmlStrEqual (cur->name, BAD_CAST"email")) {
-				if (email)
-					invalid = TRUE;
 				g_free (email);
 				tmp = (gchar *)xmlNodeListGetString(cur->doc, cur->xmlChildrenNode, 1);
 				email = g_strdup_printf(" - <a href=\"mailto:%s\">%s</a>", tmp, tmp);
@@ -302,8 +296,6 @@ atom10_parse_person_construct (xmlNodePtr cur)
 			}
 
 			if (xmlStrEqual (cur->name, BAD_CAST"uri")) {
-				if (!uri)
-					invalid = TRUE;
 				g_free (uri);
 				tmp = (gchar *)xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 				uri = g_strdup_printf (" (<a href=\"%s\">Website</a>)", tmp);
@@ -316,12 +308,10 @@ atom10_parse_person_construct (xmlNodePtr cur)
 
 		cur = cur->next;
 	}
-	if (!name) {
-		invalid = TRUE;
-		name = g_strdup ("Invalid Atom feed: unknown author");
-	}
 
-	/* FIXME: so somthing with "invalid" flag */
+	if (!name)
+		name = g_strdup ("Invalid Atom feed: unknown author");
+
 	tmp = g_strdup_printf ("%s%s%s", name, uri ? uri : "", email ? email : "");
 
 	if (uri)
