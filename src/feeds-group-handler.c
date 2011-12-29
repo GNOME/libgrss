@@ -44,6 +44,15 @@ grss_feeds_group_handler_get_type ()
 	return iface_type;
 }
 
+const gchar*
+grss_feeds_group_handler_get_name (GrssFeedsGroupHandler *self)
+{
+	if (IS_FEEDS_GROUP_HANDLER (self) == FALSE)
+		return NULL;
+
+	return FEEDS_GROUP_HANDLER_GET_INTERFACE (self)->get_name (self);
+}
+
 gboolean
 grss_feeds_group_handler_check_format (GrssFeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur)
 {

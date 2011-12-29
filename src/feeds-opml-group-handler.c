@@ -48,6 +48,12 @@ feeds_opml_group_handler_finalize (GObject *object)
 	G_OBJECT_CLASS (feeds_opml_group_handler_parent_class)->finalize (object);
 }
 
+static const gchar*
+feeds_opml_group_handler_get_name (GrssFeedsGroupHandler *self)
+{
+	return "OPML";
+}
+
 static gboolean
 feeds_opml_group_handler_check_format (GrssFeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur)
 {
@@ -207,16 +213,43 @@ feeds_opml_group_handler_parse (GrssFeedsGroupHandler *self, xmlDocPtr doc, GErr
 static gchar*
 feeds_opml_group_handler_dump (GrssFeedsGroupHandler *self, GList *channels, GError **error)
 {
-	/**
-		TODO
-	*/
+	int size;
+	xmlChar *ret;
+	xmlDocPtr doc;
+	xmlNodePtr cur;
+	xmlNodePtr opmlNode;
+	xmlNodePtr childNode;
+	GList *iter;
+	GrssFeedChannel *channel;
 
-	return NULL;
+	doc = xmlNewDoc (BAD_CAST"1.0");
+
+	opmlNode = xmlNewDocNode (doc, NULL, BAD_CAST"opml", NULL);
+	xmlNewProp (opmlNode, BAD_CAST"version", BAD_CAST"1.0");
+	xmlNewChild (opmlNode, NULL, BAD_CAST"head", NULL);
+
+	cur = xmlNewChild (opmlNode, NULL, BAD_CAST"body", NULL);
+	if (cur) {
+		for (iter = channels; iter; iter = g_list_next (iter)) {
+			channel = (GrssFeedChannel*) iter->data;
+			childNode = xmlNewChild (cur, NULL, BAD_CAST"outline", NULL);
+			xmlNewProp (childNode, BAD_CAST"text", BAD_CAST grss_feed_channel_get_title (channel));
+			xmlNewProp (childNode, BAD_CAST"type", BAD_CAST"rss");
+			xmlNewProp (childNode, BAD_CAST"xmlUrl", BAD_CAST grss_feed_channel_get_source (channel));
+		}
+	}
+
+	xmlDocSetRootElement (doc, opmlNode);
+	xmlDocDumpFormatMemoryEnc (doc, &ret, &size, "utf-8", 1);
+	xmlFreeDoc (doc);
+
+	return (gchar*) ret;
 }
 
 static void
 grss_feeds_group_handler_interface_init (GrssFeedsGroupHandlerInterface *iface)
 {
+	iface->get_name = feeds_opml_group_handler_get_name;
 	iface->check_format = feeds_opml_group_handler_check_format;
 	iface->parse = feeds_opml_group_handler_parse;
 	iface->dump = feeds_opml_group_handler_dump;

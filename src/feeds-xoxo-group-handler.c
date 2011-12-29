@@ -60,6 +60,12 @@ feeds_xoxo_group_handler_finalize (GObject *object)
 	G_OBJECT_CLASS (feeds_xoxo_group_handler_parent_class)->finalize (object);
 }
 
+static const gchar*
+feeds_xoxo_group_handler_get_name (GrssFeedsGroupHandler *self)
+{
+	return "XOXO";
+}
+
 static gboolean
 feeds_xoxo_group_handler_check_format (GrssFeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur)
 {
@@ -121,16 +127,44 @@ feeds_xoxo_group_handler_parse (GrssFeedsGroupHandler *self, xmlDocPtr doc, GErr
 static gchar*
 feeds_xoxo_group_handler_dump (GrssFeedsGroupHandler *self, GList *channels, GError **error)
 {
-	/**
-		TODO
-	*/
+	int size;
+	xmlChar *ret;
+	xmlDocPtr doc;
+	xmlNodePtr xoxoNode;
+	xmlNodePtr childNode;
+	xmlNodePtr linkNode;
+	xmlNodePtr funkyNode;
+	GList *iter;
+	GrssFeedChannel *channel;
 
-	return NULL;
+	doc = xmlNewDoc (BAD_CAST"1.0");
+
+	xoxoNode = xmlNewDocNode (doc, NULL, BAD_CAST"ol", NULL);
+	xmlNewProp (xoxoNode, BAD_CAST"class", BAD_CAST"xoxo");
+
+	funkyNode = xmlNewChild (xoxoNode, NULL, BAD_CAST"li", NULL);
+	funkyNode = xmlNewChild (funkyNode, NULL, BAD_CAST"ol", NULL);
+	funkyNode = xmlNewChild (funkyNode, NULL, BAD_CAST"li", NULL);
+	funkyNode = xmlNewChild (funkyNode, NULL, BAD_CAST"ul", NULL);
+
+	for (iter = channels; iter; iter = g_list_next (iter)) {
+		channel = (GrssFeedChannel*) iter->data;
+		childNode = xmlNewChild (funkyNode, NULL, BAD_CAST"li", NULL);
+		linkNode = xmlNewTextChild (childNode, NULL, BAD_CAST"a", BAD_CAST grss_feed_channel_get_title (channel));
+		xmlNewProp (linkNode, BAD_CAST"href", BAD_CAST grss_feed_channel_get_source (channel));
+	}
+
+	xmlDocSetRootElement (doc, xoxoNode);
+	xmlDocDumpFormatMemoryEnc (doc, &ret, &size, "utf-8", 1);
+	xmlFreeDoc (doc);
+
+	return (gchar*) ret;
 }
 
 static void
 grss_feeds_group_handler_interface_init (GrssFeedsGroupHandlerInterface *iface)
 {
+	iface->get_name = feeds_xoxo_group_handler_get_name;
 	iface->check_format = feeds_xoxo_group_handler_check_format;
 	iface->parse = feeds_xoxo_group_handler_parse;
 	iface->dump = feeds_xoxo_group_handler_dump;

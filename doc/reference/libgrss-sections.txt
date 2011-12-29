@@ -159,6 +159,7 @@ grss_feed_channel_fetch_all_finish
 <TITLE>GrssFeedsGroup</TITLE>
 GrssFeedsGroup
 grss_feeds_group_new
+grss_feeds_group_get_formats
 grss_feeds_group_parse_file
 grss_feeds_group_export_file
 </SECTION>

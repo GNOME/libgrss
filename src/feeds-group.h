@@ -46,7 +46,8 @@ GType		grss_feeds_group_get_type	() G_GNUC_CONST;
 
 GrssFeedsGroup*	grss_feeds_group_new		();
 
+GList*		grss_feeds_group_get_formats	(GrssFeedsGroup *group);
 GList*		grss_feeds_group_parse_file	(GrssFeedsGroup *group, const gchar *path, GError **error);
-gboolean	grss_feeds_group_export_file	(GrssFeedsGroup *group, GList *channels, const gchar *path, GError *error);
+gboolean	grss_feeds_group_export_file	(GrssFeedsGroup *group, GList *channels, const gchar *format, const gchar *uri, GError **error);
 
 #endif /* __FEEDS_GROUP_H__ */

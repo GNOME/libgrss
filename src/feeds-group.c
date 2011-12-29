@@ -136,6 +136,34 @@ retrieve_group_handler (GrssFeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
 }
 
 /**
+ * grss_feeds_group_get_formats:
+ * @group: a #GrssFeedsGroupClass
+ *
+ * Returns the list of supported file formats
+ *
+ * Return value: a list of constant strings with names of supported formats. The list must be
+ * freed when no longer used
+ */
+GList*
+grss_feeds_group_get_formats (GrssFeedsGroup *group)
+{
+	GSList *iter;
+	GList *names;
+	GrssFeedsGroupHandler *handler;
+
+	iter = feeds_groups_get_list (group);
+	names = NULL;
+
+	while (iter) {
+		handler = (GrssFeedsGroupHandler*) (iter->data);
+		names = g_list_prepend (names, grss_feeds_group_handler_get_name (handler));
+		iter = g_slist_next (iter);
+	}
+
+	return names;
+}
+
+/**
  * grss_feeds_group_parse_file:
  * @group: a #GrssFeedsGroup
  * @path: path of the file to parse
@@ -193,13 +221,65 @@ grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **
  * grss_feeds_group_export_file:
  * @group:
  * @channels:
- * @path:
+ * @format:
+ * @uri:
  * @error:
  *
  * Return value: FALSE
  */
 gboolean
-grss_feeds_group_export_file (GrssFeedsGroup *group, GList *channels, const gchar *path, GError *error)
+grss_feeds_group_export_file (GrssFeedsGroup *group, GList *channels, const gchar *format, const gchar *uri, GError **error)
 {
-	return FALSE;
+	gboolean ret;
+	gchar *contents;
+	gsize written;
+	GSList *iter;
+	GError *err;
+	GFile *file;
+	GFileOutputStream *stream;
+	GrssFeedsGroupHandler *handler;
+
+	contents = NULL;
+	stream = NULL;
+	iter = feeds_groups_get_list (group);
+
+	while (iter) {
+		handler = (GrssFeedsGroupHandler*) (iter->data);
+
+		if (strcasecmp (grss_feeds_group_handler_get_name (handler), format) == 0) {
+			err = NULL;
+			contents = grss_feeds_group_handler_dump (handler, channels, &err);
+
+			if (contents == NULL) {
+				g_propagate_error (error, err);
+				ret = FALSE;
+				break;
+			}
+
+			file = g_file_new_for_uri (uri);
+			stream = g_file_append_to (file, G_FILE_CREATE_NONE, NULL, &err);
+
+			if (stream == NULL) {
+				g_propagate_error (error, err);
+				ret = FALSE;
+				break;
+			}
+
+			if (g_output_stream_write_all (G_OUTPUT_STREAM (stream), contents, strlen (contents), &written, NULL, &err) == FALSE) {
+				g_propagate_error (error, err);
+				ret = FALSE;
+				break;
+			}
+
+			ret = TRUE;
+			break;
+		}
+	}
+
+	if (stream != NULL)
+		g_object_unref (stream);
+	if (contents != NULL)
+		g_free (contents);
+
+	return ret;
 }

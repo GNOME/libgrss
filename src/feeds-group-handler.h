@@ -34,6 +34,7 @@ typedef struct _GrssFeedsGroupHandlerInterface	GrssFeedsGroupHandlerInterface;
 struct _GrssFeedsGroupHandlerInterface {
 	GTypeInterface parent_iface;
 
+	const gchar* (*get_name) (GrssFeedsGroupHandler *self);
 	gboolean (*check_format) (GrssFeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur);
 	GList* (*parse) (GrssFeedsGroupHandler *self, xmlDocPtr doc, GError **error);
 	gchar* (*dump) (GrssFeedsGroupHandler *self, GList *channels, GError **error);
@@ -41,6 +42,7 @@ struct _GrssFeedsGroupHandlerInterface {
 
 GType		grss_feeds_group_handler_get_type	();
 
+const gchar*	grss_feeds_group_handler_get_name	(GrssFeedsGroupHandler *self);
 gboolean	grss_feeds_group_handler_check_format	(GrssFeedsGroupHandler *self, xmlDocPtr doc, xmlNodePtr cur);
 GList*		grss_feeds_group_handler_parse		(GrssFeedsGroupHandler *self, xmlDocPtr doc, GError **error);
 gchar*		grss_feeds_group_handler_dump		(GrssFeedsGroupHandler *self, GList *channels, GError **error);
