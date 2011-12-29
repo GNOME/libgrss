@@ -48,6 +48,8 @@ GrssFeedChannel*	grss_feed_channel_new			();
 GrssFeedChannel*	grss_feed_channel_new_from_source	(gchar *source);
 GrssFeedChannel*	grss_feed_channel_new_from_file		(const gchar *path);
 
+void			grss_feed_channel_set_format		(GrssFeedChannel *channel, gchar *format);
+const gchar*		grss_feed_channel_get_format		(GrssFeedChannel *channel);
 void			grss_feed_channel_set_source		(GrssFeedChannel *channel, gchar *source);
 const gchar*		grss_feed_channel_get_source		(GrssFeedChannel *channel);
 void			grss_feed_channel_set_title		(GrssFeedChannel *channel, gchar *title);

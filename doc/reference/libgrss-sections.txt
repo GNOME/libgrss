@@ -110,6 +110,8 @@ GrssFeedChannel
 grss_feed_channel_new
 grss_feed_channel_new_from_source
 grss_feed_channel_new_from_file
+grss_feed_channel_set_format
+grss_feed_channel_get_format
 grss_feed_channel_set_source
 grss_feed_channel_get_source
 grss_feed_channel_set_title

@@ -528,6 +528,8 @@ feed_rss_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 		cur = cur->next;
 	}
 
+	grss_feed_channel_set_format (feed, "application/rss+xml");
+
 	if (items != NULL)
 		items = g_list_reverse (items);
 	return items;

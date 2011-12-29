@@ -43,6 +43,7 @@ typedef struct {
 } RSSCloud;
 
 struct _GrssFeedChannelPrivate {
+	gchar		*format;
 	gchar		*source;
 
 	gchar		*title;
@@ -202,6 +203,34 @@ grss_feed_channel_new_from_file (const gchar *path)
 	}
 
 	return ret;
+}
+
+/**
+ * grss_feed_channel_set_format:
+ * @channel: a #GrssFeedChannel
+ * @format: format of the file, such as "application/atom+xml" or "application/rss+xml"
+ *
+ * To assign a file format to the feed
+ */
+void
+grss_feed_channel_set_format (GrssFeedChannel *channel, gchar *format)
+{
+	FREE_STRING (channel->priv->format);
+	channel->priv->format = g_strdup (format);
+}
+
+/**
+ * grss_feed_channel_get_format:
+ * @channel: a #GrssFeedChannel
+ *
+ * Retrieves the file format of @channel
+ *
+ * Return value: file format of channel
+ */
+const gchar*
+grss_feed_channel_get_format (GrssFeedChannel *channel)
+{
+	return (const gchar*) channel->priv->format;
 }
 
 /**

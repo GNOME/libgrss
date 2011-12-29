@@ -455,7 +455,14 @@ feed_pie_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 		break;
 	}
 
-	return g_list_reverse (items);
+	/*
+		I've not found a more appropriate mimetype for PIE...
+	*/
+	grss_feed_channel_set_format (feed, "application/atom+xml");
+
+	if (items != NULL)
+		items = g_list_reverse (items);
+	return items;
 }
 
 static void
