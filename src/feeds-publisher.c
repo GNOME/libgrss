@@ -210,6 +210,9 @@ grss_feeds_publisher_new ()
 	return g_object_new (FEEDS_PUBLISHER_TYPE, NULL);
 }
 
+/*
+	TODO	Provide a GrssFeedFormatter to permit Atom and RSS publication
+*/
 static gchar*
 format_feed_text (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items)
 {

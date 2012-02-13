@@ -243,6 +243,9 @@ grss_feed_channel_get_format (GrssFeedChannel *channel)
 void
 grss_feed_channel_set_source (GrssFeedChannel *channel, gchar *source)
 {
+	/*
+		TODO	Check if the provided string is a valid URL
+	*/
 	FREE_STRING (channel->priv->source);
 	channel->priv->source = g_strdup (source);
 }

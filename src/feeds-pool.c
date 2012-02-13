@@ -258,7 +258,7 @@ grss_feeds_pool_get_listened_num (GrssFeedsPool *pool)
 }
 
 static void
-feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data)
+feed_downloaded (GObject *source, GAsyncResult *res, gpointer user_data)
 {
 	guint status;
 	GList *items;
@@ -270,39 +270,17 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data)
 	if (feed->pool->priv->running == FALSE)
 		return;
 
-	items = NULL;
-	feed->next_fetch = time (NULL) + (grss_feed_channel_get_update_interval (feed->channel) * 60);
-	g_object_get (msg, "status-code", &status, NULL);
+	error = NULL;
+	items = grss_feed_channel_fetch_all_finish (GRSS_FEED_CHANNEL (source), res, &error);
 
-	if (status < 200 || status > 299) {
-		g_warning ("Unable to download from %s", grss_feed_channel_get_source (feed->channel));
-	}
-	else {
-		doc = content_to_xml ((const gchar*) msg->response_body->data, msg->response_body->length);
-
-		if (doc != NULL) {
-			error = NULL;
-			items = grss_feed_parser_parse (feed->pool->priv->parser, feed->channel, doc, &error);
-			xmlFreeDoc (doc);
-
-			if (items == NULL && error) {
-				g_warning ("Unable to parse feed at %s: %s", grss_feed_channel_get_source (feed->channel), error->message);
-				g_error_free (error);
-			}
-		}
+	if (items == NULL && error) {
+		g_warning ("Unable to parse feed at %s: %s", grss_feed_channel_get_source (feed->channel), error->message);
+		g_error_free (error);
 	}
 
 	g_signal_emit (feed->pool, signals [FEED_READY], 0, feed->channel, items, NULL);
-}
 
-static void
-fetch_feed (GrssFeedChannelWrap *feed)
-{
-	SoupMessage *msg;
-
-	g_signal_emit (feed->pool, signals [FEED_FETCHING], 0, feed->channel, NULL);
-	msg = soup_message_new ("GET", grss_feed_channel_get_source (feed->channel));
-	soup_session_queue_message (feed->pool->priv->soupsession, msg, feed_downloaded, feed);
+	feed->next_fetch = time (NULL) + (grss_feed_channel_get_update_interval (feed->channel) * 60);
 }
 
 static gboolean
@@ -324,7 +302,7 @@ fetch_feeds (gpointer data)
 	for (iter = pool->priv->feeds_list; iter; iter = g_list_next (iter)) {
 		feed = (GrssFeedChannelWrap*) iter->data;
 		if (feed->next_fetch <= now)
-			fetch_feed (feed);
+			grss_feed_channel_fetch_all_async (feed->channel, feed_downloaded, feed);
 	}
 
 	return TRUE;
