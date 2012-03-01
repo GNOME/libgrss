@@ -228,46 +228,47 @@ format_feed_text (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *item
 
 	str = grss_feed_channel_get_title (channel);
 	if (str != NULL)
-		g_string_append_printf (text, "<title>%s</title>\n", str);
+		g_string_append_printf (text, "\t<title>%s</title>\n", str);
 
 	str = grss_feed_channel_get_description (channel);
 	if (str != NULL)
-		g_string_append_printf (text, "<subtitle>%s</subtitle>\n", str);
+		g_string_append_printf (text, "\t<subtitle>%s</subtitle>\n", str);
 
 	str = grss_feed_channel_get_homepage (channel);
 	if (str != NULL)
-		g_string_append_printf (text, "<link href=\"%s\" />\n", str);
+		g_string_append_printf (text, "\t<link href=\"%s\" />\n", str);
 
 	str = grss_feed_channel_get_copyright (channel);
 	if (str != NULL)
-		g_string_append_printf (text, "<author>%s</author>\n", str);
+		g_string_append_printf (text, "\t<author>%s</author>\n", str);
 
 	str = grss_feed_channel_get_editor (channel);
 	if (str != NULL)
-		g_string_append_printf (text, "<rights>%s</rights>\n", str);
+		g_string_append_printf (text, "\t<rights>%s</rights>\n", str);
 
 	str = grss_feed_channel_get_generator (channel);
 	if (str != NULL)
-		g_string_append_printf (text, "<generator>%s</generator>\n", str);
+		g_string_append_printf (text, "\t<generator>%s</generator>\n", str);
 
 	list = grss_feed_channel_get_contributors (channel);
 	while (list != NULL) {
-		g_string_append_printf (text, "<contributor>%s</contributor>\n", (gchar*) list->data);
+		g_string_append_printf (text, "\t<contributor>%s</contributor>\n", (gchar*) list->data);
 		list = list->next;
 	}
 
 	date = grss_feed_channel_get_update_time (channel);
 	formatted = date_to_ISO8601 (date);
-	g_string_append_printf (text, "<updated>%s</updated>\n", formatted);
+
+	g_string_append_printf (text, "\t<updated>%s</updated>\n", formatted);
 	g_free (formatted);
 
 	str = grss_feed_channel_get_icon (channel);
 	if (str != NULL)
-		g_string_append_printf (text, "<icon>%s</icon>\n", str);
+		g_string_append_printf (text, "\t<icon>%s</icon>\n", str);
 
 	str = grss_feed_channel_get_image (channel);
 	if (str != NULL)
-		g_string_append_printf (text, "<logo>%s</logo>\n", str);
+		g_string_append_printf (text, "\t<logo>%s</logo>\n", str);
 
 	for (iter = items; iter; iter = iter->next) {
 		item = iter->data;
@@ -276,37 +277,37 @@ format_feed_text (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *item
 
 		str = grss_feed_item_get_title (item);
 		if (str != NULL)
-			g_string_append_printf (text, "\t<title>%s</title>\n", str);
+			g_string_append_printf (text, "\t\t<title>%s</title>\n", str);
 
 		str = grss_feed_item_get_id (item);
 		if (str != NULL)
-			g_string_append_printf (text, "\t<id>%s</id>\n", str);
+			g_string_append_printf (text, "\t\t<id>%s</id>\n", str);
 
 		str = grss_feed_item_get_source (item);
 		if (str != NULL)
-			g_string_append_printf (text, "<link href=\"%s\" />\n", str);
+			g_string_append_printf (text, "\t\t<link href=\"%s\" />\n", str);
 
 		str = grss_feed_item_get_description (item);
 		if (str != NULL)
-			g_string_append_printf (text, "\t<summary>%s</summary>\n", str);
+			g_string_append_printf (text, "\t\t<summary>%s</summary>\n", str);
 
 		str = grss_feed_item_get_author (item);
 		if (str != NULL)
-			g_string_append_printf (text, "\t<author>%s</author>\n", str);
+			g_string_append_printf (text, "\t\t<author>%s</author>\n", str);
 
 		str = grss_feed_item_get_copyright (item);
 		if (str != NULL)
-			g_string_append_printf (text, "\t<rights>%s</rights>\n", str);
+			g_string_append_printf (text, "\t\t<rights>%s</rights>\n", str);
 
 		list = grss_feed_item_get_contributors (item);
 		while (list != NULL) {
-			g_string_append_printf (text, "\t<contributor>%s</contributor>\n", (gchar*) list->data);
+			g_string_append_printf (text, "\t\t<contributor>%s</contributor>\n", (gchar*) list->data);
 			list = list->next;
 		}
 
 		date = grss_feed_item_get_publish_time (item);
 		formatted = date_to_ISO8601 (date);
-		g_string_append_printf (text, "<published>%s</published>\n", formatted);
+		g_string_append_printf (text, "\t\t<published>%s</published>\n", formatted);
 		g_free (formatted);
 
 		g_string_append (text, "\t</entry>\n");
@@ -482,35 +483,40 @@ feed_required_by_web_cb (SoupServer *server, SoupMessage *msg, const char *path,
  * @channel: the #GrssFeedChannel to dump in the file
  * @items: list of #GrssFeedItems to be added in the feed
  * @id: name used in the external URL of the feed
+ * @error: if an error occourred, %FALSE is returned and this is filled with the message
  *
  * If the local web server has been executed (with
  * grss_feeds_publisher_hub_switch()) this function exposes the given @channel as
  * an Atom formatted file avalable to http://[LOCAL_IP:DEFINED_PORT]/@id
+ * 
+ * Return value: %TRUE if the file is successfully written, %FALSE otherwise
  */
-void
-grss_feeds_publisher_publish (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *id)
+gboolean
+grss_feeds_publisher_publish (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *id, GError **error)
 {
+	gboolean ret;
 	gchar *path;
 	GFile *file;
 
 	if (pub->priv->server == NULL) {
 		g_warning ("Local web server is not running, unable to expose required contents");
-		return;
+		return FALSE;
 	}
 
 	soup_server_remove_handler (pub->priv->server, id);
-
 	path = g_strdup_printf ("file://%s/libgrss/activefeeds/%s", g_get_tmp_dir (), id);
 
 	/*
 		PubSubHubbub notifies are already delivered by grss_feeds_publisher_publish_file()
 	*/
-	grss_feeds_publisher_publish_file (pub, channel, items, (const gchar*) path);
-
-	file = g_file_new_for_uri (path);
-	soup_server_add_handler (pub->priv->server, id, feed_required_by_web_cb, file, g_object_unref);
+	ret = grss_feeds_publisher_publish_file (pub, channel, items, (const gchar*) path, error);
+	if (ret == TRUE) {
+		file = g_file_new_for_uri (path);
+		soup_server_add_handler (pub->priv->server, id, feed_required_by_web_cb, file, g_object_unref);
+	}
 
 	g_free (path);
+	return ret;
 }
 
 /**
@@ -519,30 +525,45 @@ grss_feeds_publisher_publish (GrssFeedsPublisher *pub, GrssFeedChannel *channel,
  * @channel: the #GrssFeedChannel to dump in the file
  * @items: list of #GrssFeedItems to be added in the feed
  * @uri: URI of the file to write
+ * @error: if an error occourred, %FALSE is returned and this is filled with the message
  *
  * Dump the given @channel in an Atom formatted file in @path. If the local
  * PubSubHubbub hub has been activated (with grss_feeds_publisher_hub_switch())
  * notifies remote subscribers about the new items which has been added since
  * previous invocation of this function for the same #GrssFeedChannel
+ * 
+ * Return value: %TRUE if the file is successfully written, %FALSE otherwise
  */
-void
-grss_feeds_publisher_publish_file (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *uri)
+gboolean
+grss_feeds_publisher_publish_file (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *uri, GError **error)
 {
+	gboolean ret;
 	gchar *text;
 	GFile *file;
 	GFileOutputStream *stream;
 
+	ret = FALSE;
 	file = g_file_new_for_uri (uri);
-	text = format_feed_text (pub, channel, items);
-	stream = g_file_append_to (file, G_FILE_CREATE_NONE, NULL, NULL);
-	g_output_stream_write_all (G_OUTPUT_STREAM (stream), text, strlen (text), NULL, NULL, NULL);
 
-	if (pub->priv->server != NULL)
-		deliver_to_subscribers (pub, channel, items);
+	stream = g_file_replace (file, NULL, FALSE, G_FILE_CREATE_REPLACE_DESTINATION, NULL, error);
+	if (stream == NULL) {
+		ret = FALSE;
+	}
+	else {
+		text = format_feed_text (pub, channel, items);
 
-	g_free (text);
-	g_object_unref (stream);
+		ret = g_output_stream_write_all (G_OUTPUT_STREAM (stream), text, strlen (text), NULL, NULL, error);
+		if (ret == TRUE) {
+			if (pub->priv->server != NULL)
+				deliver_to_subscribers (pub, channel, items);
+		}
+
+		g_free (text);
+		g_object_unref (stream);
+	}
+
 	g_object_unref (file);
+	return ret;
 }
 
 static void

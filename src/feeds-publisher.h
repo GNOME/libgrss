@@ -49,8 +49,8 @@ GType			grss_feeds_publisher_get_type		() G_GNUC_CONST;
 
 GrssFeedsPublisher*	grss_feeds_publisher_new		();
 
-void			grss_feeds_publisher_publish		(GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *id);
-void			grss_feeds_publisher_publish_file	(GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *uri);
+gboolean		grss_feeds_publisher_publish		(GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *id, GError **error);
+gboolean		grss_feeds_publisher_publish_file	(GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *uri, GError **error);
 
 void			grss_feeds_publisher_hub_set_port	(GrssFeedsPublisher *pub, int port);
 void			grss_feeds_publisher_hub_set_topics	(GrssFeedsPublisher *pub, GList *topics);

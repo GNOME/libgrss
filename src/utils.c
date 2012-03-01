@@ -554,7 +554,7 @@ date_to_ISO8601 (time_t date)
 	struct tm broken;
 
 	localtime_r (&date, &broken);
-	strftime (text, 100, "%t%Y-%m-%dT%H:%M%t", &broken);
+	strftime (text, 100, "%Y-%m-%dT%H:%M%t", &broken);
 	return g_strdup (text);
 }
 
