@@ -48,6 +48,7 @@ main ()
 		"http://techcrunch.com/feed/",
 		NULL
 	};
+	GError *error;
 	GList *iter;
 	GList *list;
 	GrssFeedChannel *feed;
@@ -67,11 +68,12 @@ main ()
 	for (i = 0; example_feeds [i] != NULL; i++) {
 		feed = grss_feed_channel_new ();
 		grss_feed_channel_set_source (feed, example_feeds [i]);
-		ok = grss_feed_channel_fetch (feed);
+		ok = grss_feed_channel_fetch (feed, &error);
 
 		if (ok == FALSE) {
-			g_warning ("Unable to fetch feed at %s", example_feeds [i]);
+			g_warning ("Unable to fetch feed at %s: %s", example_feeds [i], error->message);
 			g_object_unref (feed);
+			g_error_free (error);
 		}
 		else {
 			list = g_list_prepend (list, feed);

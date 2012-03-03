@@ -225,7 +225,7 @@ grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **
  * @uri:
  * @error:
  *
- * Return value: FALSE
+ * Return value: %FALSE
  */
 gboolean
 grss_feeds_group_export_file (GrssFeedsGroup *group, GList *channels, const gchar *format, const gchar *uri, GError **error)

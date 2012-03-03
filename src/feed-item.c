@@ -534,8 +534,8 @@ grss_feed_item_set_geo_point (GrssFeedItem *item, double latitude, double longit
  *
  * Retrieves the geo reference of the @item
  *
- * Return value: TRUE if @item has geographic coordinates assigned and
- * @latitude and @longitude have been set, FALSE if @item has not geo
+ * Return value: %TRUE if @item has geographic coordinates assigned and
+ * @latitude and @longitude have been set, %FALSE if @item has not geo
  * reference
  */
 gboolean

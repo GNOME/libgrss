@@ -45,7 +45,7 @@ print_items (GObject *source, GAsyncResult *res, gpointer useless)
 	error = NULL;
 	channel = GRSS_FEED_CHANNEL (source);
 	items = grss_feed_channel_fetch_all_finish (channel, res, &error);
-	
+
 	if (items == NULL) {
 		printf ("%s\n", error->message);
 	}
@@ -64,7 +64,7 @@ static gboolean do_work (gpointer useless)
 	i = 0;
 	g_timeout_add (100, mark_time, NULL);
 
-	feed = grss_feed_channel_new_from_source ("http://rss.slashdot.org/Slashdot/slashdot");
+	feed = grss_feed_channel_new_with_source ("http://rss.slashdot.org/Slashdot/slashdot");
 	grss_feed_channel_fetch_all_async (feed, print_items, NULL);
 
 	return FALSE;

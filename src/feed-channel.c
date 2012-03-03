@@ -22,7 +22,8 @@
 #include "feed-channel.h"
 #include "feed-parser.h"
 
-#define FEED_CHANNEL_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GRSS_FEED_CHANNEL_TYPE, GrssFeedChannelPrivate))
+#define FEED_CHANNEL_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GRSS_FEED_CHANNEL_TYPE, GrssFeedChannelPrivate))
+#define FEED_CHANNEL_ERROR		feed_channel_error_quark()
 
 /**
  * SECTION: feed-channel
@@ -30,8 +31,6 @@
  *
  * #GrssFeedChannel rappresents a single feed which may be fetched and parsed
  */
-
-#define FEEDS_CHANNEL_ERROR		feeds_channel_error_quark()
 
 typedef struct {
 	gchar	*hub;
@@ -68,16 +67,17 @@ struct _GrssFeedChannelPrivate {
 };
 
 enum {
-	FEEDS_CHANNEL_FETCH_ERROR,
-	FEEDS_CHANNEL_PARSE_ERROR
+	FEED_CHANNEL_FETCH_ERROR,
+	FEED_CHANNEL_PARSE_ERROR,
+	FEED_CHANNEL_FILE_ERROR,
 };
 
 G_DEFINE_TYPE (GrssFeedChannel, grss_feed_channel, G_TYPE_OBJECT);
 
 static GQuark
-feeds_channel_error_quark ()
+feed_channel_error_quark ()
 {
-	return g_quark_from_static_string ("feeds_channel_error");
+	return g_quark_from_static_string ("feed_channel_error");
 }
 
 static void
@@ -141,7 +141,7 @@ grss_feed_channel_new ()
 }
 
 /**
- * grss_feed_channel_new_from_source:
+ * grss_feed_channel_new_with_source:
  * @source: URL of the feed
  *
  * Allocates a new #GrssFeedChannel and assign it the given remote source
@@ -149,7 +149,7 @@ grss_feed_channel_new ()
  * Return value: a #GrssFeedChannel
  */
 GrssFeedChannel*
-grss_feed_channel_new_from_source (gchar *source)
+grss_feed_channel_new_with_source (gchar *source)
 {
 	GrssFeedChannel *ret;
 
@@ -161,21 +161,40 @@ grss_feed_channel_new_from_source (gchar *source)
 /**
  * grss_feed_channel_new_from_file:
  * @path: path of the file to parse
+ * @error: if an error occourred, %NULL is returned and this is filled with the
+ *         message
  *
  * Allocates a new #GrssFeedChannel and init it with contents found in specified
  * file
  *
- * Return value: a #GrssFeedChannel, or NULL if the file in @path is not a valid
- * document
+ * Return value: a #GrssFeedChannel, or %NULL if the file in @path is not a
+ * valid document
  */
 GrssFeedChannel*
-grss_feed_channel_new_from_file (const gchar *path)
+grss_feed_channel_new_from_file (const gchar *path, GError **error)
 {
+	struct stat sbuf;
 	GList *items;
 	GList *iter;
 	xmlDocPtr doc;
 	GrssFeedParser *parser;
 	GrssFeedChannel *ret;
+
+	ret = NULL;
+
+	if (stat (path, &sbuf) == -1) {
+		g_set_error (error, FEED_CHANNEL_ERROR, FEED_CHANNEL_FILE_ERROR, "Unable to open file: %s", strerror (errno));
+		return NULL;
+	}
+
+	doc = file_to_xml (path);
+	if (doc == NULL) {
+		g_set_error (error, FEED_CHANNEL_ERROR, FEED_CHANNEL_PARSE_ERROR, "Unable to parse file");
+		return NULL;
+	}
+
+	ret = g_object_new (GRSS_FEED_CHANNEL_TYPE, NULL);
+	parser = grss_feed_parser_new ();
 
 	/*
 		TODO	This function is quite inefficent because parses all
@@ -183,24 +202,16 @@ grss_feed_channel_new_from_file (const gchar *path)
 			GrssFeedItems. Perhaps a more aimed function in
 			GrssFeedParser would help...
 	*/
+	items = grss_feed_parser_parse (parser, ret, doc, NULL);
 
-	ret = NULL;
-	doc = file_to_xml (path);
-
-	if (doc != NULL) {
-		ret = g_object_new (GRSS_FEED_CHANNEL_TYPE, NULL);
-		parser = grss_feed_parser_new ();
-		items = grss_feed_parser_parse (parser, ret, doc, NULL);
-
-		if (items != NULL) {
-			for (iter = items; iter; iter = g_list_next (iter))
-				g_object_unref (iter->data);
-			g_list_free (items);
-		}
-
-		g_object_unref (parser);
-		xmlFreeDoc (doc);
+	if (items != NULL) {
+		for (iter = items; iter; iter = g_list_next (iter))
+			g_object_unref (iter->data);
+		g_list_free (items);
 	}
+
+	g_object_unref (parser);
+	xmlFreeDoc (doc);
 
 	return ret;
 }
@@ -815,6 +826,8 @@ quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg, GList **save_
 /**
  * grss_feed_channel_fetch:
  * @channel: a #GrssFeedChannel
+ * @error: if an error occourred, %FALSE is returned and this is filled with the
+ *         message
  *
  * Utility to fetch and populate a #GrssFeedChannel for the first time, and init
  * all his internal values. Only the source URL has to be set in @channel
@@ -825,12 +838,14 @@ quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg, GList **save_
  * otherwise
  */
 gboolean
-grss_feed_channel_fetch (GrssFeedChannel *channel)
+grss_feed_channel_fetch (GrssFeedChannel *channel, GError **error)
 {
 	gboolean ret;
 	guint status;
 	SoupMessage *msg;
 	SoupSession *session;
+
+	ret = FALSE;
 
 	session = soup_session_sync_new ();
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
@@ -838,10 +853,12 @@ grss_feed_channel_fetch (GrssFeedChannel *channel)
 
 	if (status >= 200 && status <= 299) {
 		ret = quick_and_dirty_parse (channel, msg, NULL);
+		if (ret == FALSE)
+			g_set_error (error, FEED_CHANNEL_ERROR, FEED_CHANNEL_PARSE_ERROR, "Unable to parse file");
 	}
 	else {
-		g_warning ("Unable to fetch feed from %s: %s", grss_feed_channel_get_source (channel), soup_status_get_phrase (status));
-		ret = FALSE;
+		g_set_error (error, FEED_CHANNEL_ERROR, FEED_CHANNEL_FETCH_ERROR,
+		             "Unable to download from %s", grss_feed_channel_get_source (channel));
 	}
 
 	g_object_unref (session);
@@ -861,11 +878,11 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 
 	if (status >= 200 && status <= 299) {
 		if (quick_and_dirty_parse (channel, msg, NULL) == FALSE)
-			g_simple_async_result_set_error (result, FEEDS_CHANNEL_ERROR, FEEDS_CHANNEL_PARSE_ERROR,
+			g_simple_async_result_set_error (result, FEED_CHANNEL_ERROR, FEED_CHANNEL_PARSE_ERROR,
 						 "Unable to parse feed from %s", grss_feed_channel_get_source (channel));
 	}
 	else {
-		g_simple_async_result_set_error (result, FEEDS_CHANNEL_ERROR, FEEDS_CHANNEL_FETCH_ERROR,
+		g_simple_async_result_set_error (result, FEED_CHANNEL_ERROR, FEED_CHANNEL_FETCH_ERROR,
 						 "Unable to download from %s", grss_feed_channel_get_source (channel));
 	}
 
@@ -877,11 +894,14 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
  * grss_feed_channel_fetch_finish:
  * @channel: a #GrssFeedChannel
  * @res: the #GAsyncResult passed to the callback
- * @error: if an error occourred, FALSE is returned and this is filled with the message
+ * @error: if an error occourred, %FALSE is returned and this is filled with the
+ *         message
  *
- * Finalizes an asyncronous operation started with grss_feed_channel_fetch_async()
+ * Finalizes an asyncronous operation started with
+ * grss_feed_channel_fetch_async()
  *
- * Return value: TRUE if @channel informations have been successfully fetched, FALSE otherwise
+ * Return value: %TRUE if @channel informations have been successfully fetched,
+ * %FALSE otherwise
  */
 gboolean
 grss_feed_channel_fetch_finish (GrssFeedChannel *channel, GAsyncResult *res, GError **error)
@@ -917,6 +937,8 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
 /**
  * grss_feed_channel_fetch_all:
  * @channel: a #GrssFeedChannel
+ * @error: if an error occourred, %NULL is returned and this is filled with the
+ *         message
  *
  * Utility to fetch and populate a #GrssFeedChannel, and retrieve all its
  * items
@@ -925,7 +947,7 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
  * freed when no longer in use, or %NULL if an error occurs
  */
 GList*
-grss_feed_channel_fetch_all (GrssFeedChannel *channel)
+grss_feed_channel_fetch_all (GrssFeedChannel *channel, GError **error)
 {
 	guint status;
 	GList *items;
@@ -937,10 +959,14 @@ grss_feed_channel_fetch_all (GrssFeedChannel *channel)
 	status = soup_session_send_message (session, msg);
 	items = NULL;
 
-	if (status >= 200 && status <= 299)
-		quick_and_dirty_parse (channel, msg, &items);
-	else
-		g_warning ("Unable to fetch feed from %s: %s", grss_feed_channel_get_source (channel), soup_status_get_phrase (status));
+	if (status >= 200 && status <= 299) {
+		if (quick_and_dirty_parse (channel, msg, &items) == FALSE)
+			g_set_error (error, FEED_CHANNEL_ERROR, FEED_CHANNEL_PARSE_ERROR, "Unable to parse file");
+	}
+	else {
+		g_set_error (error, FEED_CHANNEL_ERROR, FEED_CHANNEL_FETCH_ERROR,
+		             "Unable to download from %s", grss_feed_channel_get_source (channel));
+	}
 
 	g_object_unref (session);
 	g_object_unref (msg);
@@ -979,11 +1005,11 @@ feed_downloaded_return_items (SoupSession *session, SoupMessage *msg, gpointer u
 		if (quick_and_dirty_parse (channel, msg, &items) == TRUE)
 			g_simple_async_result_set_op_res_gpointer (result, items, free_items_list);
 		else
-			g_simple_async_result_set_error (result, FEEDS_CHANNEL_ERROR, FEEDS_CHANNEL_PARSE_ERROR,
+			g_simple_async_result_set_error (result, FEED_CHANNEL_ERROR, FEED_CHANNEL_PARSE_ERROR,
 						 "Unable to parse feed from %s", grss_feed_channel_get_source (channel));
 	}
 	else {
-		g_simple_async_result_set_error (result, FEEDS_CHANNEL_ERROR, FEEDS_CHANNEL_FETCH_ERROR,
+		g_simple_async_result_set_error (result, FEED_CHANNEL_ERROR, FEED_CHANNEL_FETCH_ERROR,
 						 "Unable to download from %s", grss_feed_channel_get_source (channel));
 	}
 

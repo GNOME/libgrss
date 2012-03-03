@@ -970,7 +970,7 @@ remove_refresh_handler (GrssFeedsPublisher *pub)
 /**
  * grss_feeds_publisher_hub_switch:
  * @pub: a #GrssFeedsPublisher
- * @run: TRUE to run the local server, FALSE to stop it
+ * @run: %TRUE to run the local server, %FALSE to stop it
  *
  * Permits to start and stop the webserver implemented by this object
  */

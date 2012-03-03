@@ -593,7 +593,7 @@ grss_feeds_subscriber_set_port (GrssFeedsSubscriber *sub, int port)
 /**
  * grss_feeds_subscriber_switch:
  * @sub: a #GrssFeedsSubscriber
- * @run: TRUE to run the subscriber, FALSE to pause it
+ * @run: %TRUE to run the subscriber, %FALSE to pause it
  *
  * Permits to pause or resume @sub listening for events
  */

@@ -1,0 +1,11 @@
+*.lo
+*.la
+*.make
+*.stamp
+.deps
+.libs
+Makefile
+Makefile.in
+config.*
+feed-marshal.h
+feed-marshal.c

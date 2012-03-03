@@ -260,10 +260,8 @@ grss_feeds_pool_get_listened_num (GrssFeedsPool *pool)
 static void
 feed_downloaded (GObject *source, GAsyncResult *res, gpointer user_data)
 {
-	guint status;
 	GList *items;
 	GError *error;
-	xmlDocPtr doc;
 	GrssFeedChannelWrap *feed;
 
 	feed = (GrssFeedChannelWrap*) user_data;
@@ -343,9 +341,9 @@ run_scheduler (GrssFeedsPool *pool)
 /**
  * grss_feeds_pool_switch:
  * @pool: a #GrssFeedsPool
- * @run: TRUE to run the pool, FALSE to pause it
+ * @run: %TRUE to run the pool, %FALSE to pause it
  *
- * Permits to pause or resume the @pool fetching feeds. If @run is #TRUE, the
+ * Permits to pause or resume the @pool fetching feeds. If @run is %TRUE, the
  * @pool starts immediately
  */
 void

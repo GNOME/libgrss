@@ -45,8 +45,8 @@ typedef struct {
 GType			grss_feed_channel_get_type		(void) G_GNUC_CONST;
 
 GrssFeedChannel*	grss_feed_channel_new			();
-GrssFeedChannel*	grss_feed_channel_new_from_source	(gchar *source);
-GrssFeedChannel*	grss_feed_channel_new_from_file		(const gchar *path);
+GrssFeedChannel*	grss_feed_channel_new_with_source	(gchar *source);
+GrssFeedChannel*	grss_feed_channel_new_from_file		(const gchar *path, GError **error);
 
 void			grss_feed_channel_set_format		(GrssFeedChannel *channel, gchar *format);
 const gchar*		grss_feed_channel_get_format		(GrssFeedChannel *channel);
@@ -89,10 +89,10 @@ time_t			grss_feed_channel_get_update_time	(GrssFeedChannel *channel);
 void			grss_feed_channel_set_update_interval	(GrssFeedChannel *channel, int minutes);
 int			grss_feed_channel_get_update_interval	(GrssFeedChannel *channel);
 
-gboolean		grss_feed_channel_fetch			(GrssFeedChannel *channel);
+gboolean		grss_feed_channel_fetch			(GrssFeedChannel *channel, GError **error);
 void			grss_feed_channel_fetch_async		(GrssFeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data);
 gboolean		grss_feed_channel_fetch_finish		(GrssFeedChannel *channel, GAsyncResult *res, GError **error);
-GList*			grss_feed_channel_fetch_all		(GrssFeedChannel *channel);
+GList*			grss_feed_channel_fetch_all		(GrssFeedChannel *channel, GError **error);
 void			grss_feed_channel_fetch_all_async	(GrssFeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data);
 GList*			grss_feed_channel_fetch_all_finish	(GrssFeedChannel *channel, GAsyncResult *res, GError **error);
 
