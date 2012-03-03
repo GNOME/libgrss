@@ -28,6 +28,7 @@
 #define DEFAULT_REFRESH_CHECK_INTERVAL	60
 
 #define FEEDS_PUBLISHER_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), FEEDS_PUBLISHER_TYPE, GrssFeedsPublisherPrivate))
+#define FEEDS_PUBLISHER_ERROR			feeds_publisher_error_quark()
 
 /**
  * SECTION: feeds-publisher
@@ -91,7 +92,19 @@ enum {
 
 static guint signals [LAST_SIGNAL] = {0};
 
+enum {
+	FEEDS_PUBLISHER_FORMAT_ERROR,
+	FEEDS_PUBLISHER_SERVER_ERROR,
+	FEEDS_PUBLISHER_FILE_ERROR
+};
+
 G_DEFINE_TYPE (GrssFeedsPublisher, grss_feeds_publisher, G_TYPE_OBJECT);
+
+static GQuark
+feeds_publisher_error_quark ()
+{
+	return g_quark_from_static_string ("feeds_publisher_error");
+}
 
 static void
 destroy_remote_subscriber (RemoteSubscriber *client)
@@ -210,11 +223,21 @@ grss_feeds_publisher_new ()
 	return g_object_new (FEEDS_PUBLISHER_TYPE, NULL);
 }
 
-/*
-	TODO	Provide a GrssFeedFormatter to permit Atom and RSS publication
-*/
-static gchar*
-format_feed_text (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items)
+/**
+ * grss_feeds_publisher_format_content:
+ * @pub: a #GrssFeedsPublisher.
+ * @channel: the #GrssFeedChannel to dump in the file.
+ * @items: list of #GrssFeedItems to be added in the feed.
+ * @error: if an error occourred, %NULL is returned and this is filled with the
+ *         message.
+ * 
+ * Format a #GrssFeedChannel in Atom and returns the resulting string.
+ * 
+ * Return value: a newly allocated string holding the formatted feed, to be
+ * freed when no longer in use.
+ */
+gchar*
+grss_feeds_publisher_format_content (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, GError **error)
 {
 	const gchar *str;
 	gchar *formatted;
@@ -223,6 +246,11 @@ format_feed_text (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *item
 	const GList *list;
 	GString *text;
 	GrssFeedItem *item;
+
+	/*
+		TODO	Provide a GrssFeedFormatter to permit Atom and RSS
+			publication
+	*/
 
 	text = g_string_new ("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<feed xmlns=\"http://www.w3.org/2005/Atom\">\n");
 
@@ -422,22 +450,24 @@ deliver_to_subscribers (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList
 		}
 
 		to_deliver = g_list_reverse (to_deliver);
-		text = format_feed_text (pub, channel, to_deliver);
+		text = grss_feeds_publisher_format_content (pub, channel, to_deliver, NULL);
 
-		for (oiter = topic->subscribers; oiter; oiter = oiter->next) {
-			client = oiter->data;
+		if (text != NULL) {
+			for (oiter = topic->subscribers; oiter; oiter = oiter->next) {
+				client = oiter->data;
 
-			if (client->to_be_resent != NULL) {
-				g_free (client->to_be_resent);
-				client->to_be_resent = NULL;
+				if (client->to_be_resent != NULL) {
+					g_free (client->to_be_resent);
+					client->to_be_resent = NULL;
+				}
+
+				msg = soup_message_new ("POST", client->callback);
+				soup_message_set_request (msg, "application/x-www-form-urlencoded", SOUP_MEMORY_TAKE, g_strdup (text), strlen (text));
+				soup_session_queue_message (client->parent->priv->soupsession, msg, verify_delivery_cb, client);
 			}
 
-			msg = soup_message_new ("POST", client->callback);
-			soup_message_set_request (msg, "application/x-www-form-urlencoded", SOUP_MEMORY_TAKE, g_strdup (text), strlen (text));
-			soup_session_queue_message (client->parent->priv->soupsession, msg, verify_delivery_cb, client);
+			topic->items_delivered = g_list_concat (to_deliver, topic->items_delivered);
 		}
-
-		topic->items_delivered = g_list_concat (to_deliver, topic->items_delivered);
 	}
 }
 
@@ -445,40 +475,21 @@ static void
 feed_required_by_web_cb (SoupServer *server, SoupMessage *msg, const char *path,
                          GHashTable *query, SoupClientContext *context, gpointer user_data)
 {
-	gchar *uri;
 	gchar *text;
-	gint64 size;
-	gsize read;
-	GError *error;
-	GFileInfo *info;
-	GFileInputStream *stream;
 
-	error = NULL;
-	stream = g_file_read (user_data, NULL, &error);
+	text = user_data;
 
-	if (stream == NULL) {
-		uri = g_file_get_uri (user_data);
-		g_warning ("Unable to open required feed in %s: %s.", uri, error->message);
-		g_free (uri);
-		g_error_free (error);
+	if (text == NULL) {
 		soup_message_set_status (msg, 404);
-		return;
 	}
-
-	info = g_file_input_stream_query_info (stream, G_FILE_ATTRIBUTE_STANDARD_SIZE, NULL, NULL);
-	size = g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_STANDARD_SIZE);
-	text = g_new0 (gchar, size);
-	g_input_stream_read_all (G_INPUT_STREAM (stream), text, size, &read, NULL, NULL);
-
-	soup_message_set_response (msg, "application/atom+xml", SOUP_MEMORY_TAKE, text, read);
-	soup_message_set_status (msg, 200);
-
-	g_object_unref (info);
-	g_object_unref (stream);
+	else {
+		soup_message_set_response (msg, "application/atom+xml", SOUP_MEMORY_COPY, text, strlen (text));
+		soup_message_set_status (msg, 200);
+	}
 }
 
 /**
- * grss_feeds_publisher_publish:
+ * grss_feeds_publisher_publish_web:
  * @pub: a #GrssFeedsPublisher.
  * @channel: the #GrssFeedChannel to dump in the file.
  * @items: list of #GrssFeedItems to be added in the feed.
@@ -493,31 +504,24 @@ feed_required_by_web_cb (SoupServer *server, SoupMessage *msg, const char *path,
  * Return value: %TRUE if the file is successfully written, %FALSE otherwise.
  */
 gboolean
-grss_feeds_publisher_publish (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *id, GError **error)
+grss_feeds_publisher_publish_web (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *id, GError **error)
 {
-	gboolean ret;
-	gchar *path;
-	GFile *file;
+	gchar *text;
 
 	if (pub->priv->server == NULL) {
-		g_warning ("Local web server is not running, unable to expose required contents");
+		g_set_error (error, FEEDS_PUBLISHER_ERROR, FEEDS_PUBLISHER_SERVER_ERROR, "Local web server is not running, unable to expose required contents.");
 		return FALSE;
 	}
 
+	text = grss_feeds_publisher_format_content (pub, channel, items, error);
+	if (text == NULL)
+		return FALSE;
+
 	soup_server_remove_handler (pub->priv->server, id);
-	path = g_strdup_printf ("file://%s/libgrss/activefeeds/%s", g_get_tmp_dir (), id);
+	soup_server_add_handler (pub->priv->server, id, feed_required_by_web_cb, text, g_free);
+	deliver_to_subscribers (pub, channel, items);
 
-	/*
-		PubSubHubbub notifies are already delivered by grss_feeds_publisher_publish_file()
-	*/
-	ret = grss_feeds_publisher_publish_file (pub, channel, items, (const gchar*) path, error);
-	if (ret == TRUE) {
-		file = g_file_new_for_uri (path);
-		soup_server_add_handler (pub->priv->server, id, feed_required_by_web_cb, file, g_object_unref);
-	}
-
-	g_free (path);
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -552,16 +556,20 @@ grss_feeds_publisher_publish_file (GrssFeedsPublisher *pub, GrssFeedChannel *cha
 		ret = FALSE;
 	}
 	else {
-		text = format_feed_text (pub, channel, items);
-
-		ret = g_output_stream_write_all (G_OUTPUT_STREAM (stream), text, strlen (text), NULL, NULL, error);
-		if (ret == TRUE) {
-			if (pub->priv->server != NULL)
-				deliver_to_subscribers (pub, channel, items);
+		text = grss_feeds_publisher_format_content (pub, channel, items, error);
+		if (text == NULL) {
+			ret = FALSE;
 		}
+		else {
+			ret = g_output_stream_write_all (G_OUTPUT_STREAM (stream), text, strlen (text), NULL, NULL, error);
+			if (ret == TRUE) {
+				if (pub->priv->server != NULL)
+					deliver_to_subscribers (pub, channel, items);
+			}
 
-		g_free (text);
-		g_object_unref (stream);
+			g_free (text);
+			g_object_unref (stream);
+		}
 	}
 
 	g_object_unref (file);

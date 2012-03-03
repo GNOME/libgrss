@@ -27,6 +27,7 @@
 #include "feeds-xbel-group-handler.h"
 
 #define FEEDS_GROUP_GET_PRIVATE(o)	(G_TYPE_INSTANCE_GET_PRIVATE ((o), FEEDS_GROUP_TYPE, GrssFeedsGroupPrivate))
+#define FEEDS_GROUP_ERROR		grss_feeds_group_error_quark()
 
 /**
  * SECTION: feeds-group
@@ -35,8 +36,6 @@
  * #GrssFeedsGroup is an utility to read and write lists of #GrssFeedChannels
  * in different formats, such as OPML and XOXO.
  */
-
-#define FEEDS_GROUP_ERROR		grss_feeds_group_error_quark()
 
 struct _GrssFeedsGroupPrivate {
 	GSList *handlers;
@@ -137,7 +136,7 @@ retrieve_group_handler (GrssFeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
 
 /**
  * grss_feeds_group_get_formats:
- * @group: a #GrssFeedsGroupClass.
+ * @group: a #GrssFeedsGroup.
  *
  * Returns the list of supported file formats.
  *

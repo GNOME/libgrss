@@ -52,7 +52,8 @@ grss_feeds_subscriber_get_session
 <TITLE>GrssFeedsPublisher</TITLE>
 GrssFeedsPublisher
 grss_feeds_publisher_new
-grss_feeds_publisher_publish
+grss_feeds_publisher_format_content
+grss_feeds_publisher_publish_web
 grss_feeds_publisher_publish_file
 grss_feeds_publisher_hub_set_port
 grss_feeds_publisher_hub_set_topics
@@ -108,7 +109,7 @@ grss_feed_parser_parse
 <TITLE>GrssFeedChannel</TITLE>
 GrssFeedChannel
 grss_feed_channel_new
-grss_feed_channel_new_from_source
+grss_feed_channel_new_with_source
 grss_feed_channel_new_from_file
 grss_feed_channel_set_format
 grss_feed_channel_get_format
