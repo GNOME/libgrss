@@ -3,9 +3,9 @@ SUBDIRS = src doc
 EXTRA_DIST = autogen.sh
 
 pcfiledir = $(libdir)/pkgconfig
-pcfile_DATA = libgrss-0.pc
+pcfile_DATA = libgrss-0.5.pc
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
 
-libgrss-0.pc: libgrss.pc
+libgrss-0.5.pc: libgrss.pc
 	@cp -f $< $@
