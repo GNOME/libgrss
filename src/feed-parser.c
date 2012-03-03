@@ -115,9 +115,9 @@ feed_parsers_get_list (GrssFeedParser *parser)
 /**
  * grss_feed_parser_new:
  *
- * Allocates a new #GrssFeedParser
+ * Allocates a new #GrssFeedParser.
  *
- * Return value: a new #GrssFeedParser
+ * Return value: a new #GrssFeedParser.
  */
 GrssFeedParser*
 grss_feed_parser_new ()
@@ -150,17 +150,17 @@ retrieve_feed_handler (GrssFeedParser *parser, xmlDocPtr doc, xmlNodePtr cur)
 
 /**
  * grss_feed_parser_parse:
- * @parser: a #GrssFeedParser
- * @feed: a #GrssFeedChannel to be parsed
+ * @parser: a #GrssFeedParser.
+ * @feed: a #GrssFeedChannel to be parsed.
  * @doc: XML document extracted from the contents of the feed, which must
- * already been fetched
- * @error: location for eventual errors
+ *       already been fetched.
+ * @error: location for eventual errors.
  *
  * Parses the given XML @doc, belonging to the given @feed, to obtain a list
- * of #GrssFeedItem
+ * of #GrssFeedItem.
  *
  * Return value: a list of #GrssFeedItem, to be freed when no longer in use, or
- * NULL if an error occours and @error is set
+ * NULL if an error occours and @error is set.
  */
 GList*
 grss_feed_parser_parse (GrssFeedParser *parser, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)

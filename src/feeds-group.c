@@ -32,8 +32,8 @@
  * SECTION: feeds-group
  * @short_description: import and export group of channels
  *
- * #GrssFeedsGroup is an utility to import and export list of #GrssFeedChannels in
- * different formats, such as OPML and XOXO.
+ * #GrssFeedsGroup is an utility to read and write lists of #GrssFeedChannels
+ * in different formats, such as OPML and XOXO.
  */
 
 #define FEEDS_GROUP_ERROR		grss_feeds_group_error_quark()
@@ -101,9 +101,9 @@ feeds_groups_get_list (GrssFeedsGroup *group)
 /**
  * grss_feeds_group_new:
  *
- * Allocates a new #GrssFeedsGroup
+ * Allocates a new #GrssFeedsGroup.
  *
- * Return value: a new #GrssFeedsGroup
+ * Return value: a new #GrssFeedsGroup.
  */
 GrssFeedsGroup*
 grss_feeds_group_new ()
@@ -137,12 +137,12 @@ retrieve_group_handler (GrssFeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
 
 /**
  * grss_feeds_group_get_formats:
- * @group: a #GrssFeedsGroupClass
+ * @group: a #GrssFeedsGroupClass.
  *
- * Returns the list of supported file formats
+ * Returns the list of supported file formats.
  *
- * Return value: a list of constant strings with names of supported formats. The list must be
- * freed when no longer used
+ * Return value: a list of constant strings with names of supported formats. The
+ * list must be freed when no longer used
  */
 GList*
 grss_feeds_group_get_formats (GrssFeedsGroup *group)
@@ -165,14 +165,14 @@ grss_feeds_group_get_formats (GrssFeedsGroup *group)
 
 /**
  * grss_feeds_group_parse_file:
- * @group: a #GrssFeedsGroup
- * @path: path of the file to parse
- * @error: location for eventual errors
+ * @group: a #GrssFeedsGroup.
+ * @path: path of the file to parse.
+ * @error: location for eventual errors.
  *
- * Parses the given file to obtain list of listed feeds
+ * Parses the given file to obtain list of listed feeds.
  *
  * Return value: a list of #GrssFeedChannels, or NULL if an error occours and
- * @error is set
+ * @error is set.
  */
 GList*
 grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **error)
@@ -219,13 +219,18 @@ grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **
 
 /**
  * grss_feeds_group_export_file:
- * @group:
- * @channels:
- * @format:
- * @uri:
- * @error:
+ * @group: a #GrssFeedsGroup.
+ * @channels: list of #GrssFeedChannels.
+ * @format: string rappresenting the desired export format, as returnes by
+ *          grss_feeds_group_get_formats().
+ * @uri: URI of the file to write.
+ * @error: location for eventual errors.
  *
- * Return value: %FALSE
+ * Creates a new file with the list of @channels rappresented in the required
+ * @format. It a file already exists at the @uri location, it is overwritten.
+ * 
+ * Return value: %TRUE if the file is created correctly, or %FALSE if an error
+ * occours and @error is set.
  */
 gboolean
 grss_feeds_group_export_file (GrssFeedsGroup *group, GList *channels, const gchar *format, const gchar *uri, GError **error)

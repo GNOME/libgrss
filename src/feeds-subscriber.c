@@ -41,6 +41,9 @@
  * engage a subscription for each #GrssFeedChannel passed with
  * grss_feeds_subscriber_listen(), and waits for direct notifications by the
  * remote server.
+ * 
+ * Pay attention to the fact this object doesn't provides any NAT traversing
+ * method to receive notification while behind a NAT.
  */
 
 /*
@@ -147,13 +150,13 @@ grss_feeds_subscriber_class_init (GrssFeedsSubscriberClass *klass)
 
 	/**
 	 * GrssFeedsSubscriber::notification-received:
-	 * @pool: the #GrssFeedsSubscriber emitting the signal
-	 * @feed: the #GrssFeedChannel which has been updated
-	 * @item: the #GrssFeedItem received
+	 * @pool: the #GrssFeedsSubscriber emitting the signal.
+	 * @feed: the #GrssFeedChannel which has been updated.
+	 * @item: the #GrssFeedItem received.
 	 *
 	 * Emitted when a notification has been received and parsed. The
 	 * @item is cached and unref'd when the #GrssFeedsSubscriber is
-	 * destroyed or a new set of feeds is provided
+	 * destroyed or a new set of feeds is provided.
 	 */
 	signals [NOTIFICATION_RECEIVED] = g_signal_new ("notification-received", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
 	                                                NULL, NULL, feed_marshal_VOID__OBJECT_OBJECT,
@@ -184,9 +187,9 @@ grss_feeds_subscriber_init (GrssFeedsSubscriber *node)
 /**
  * grss_feeds_subscriber_new:
  *
- * Allocates a new #GrssFeedsSubscriber
+ * Allocates a new #GrssFeedsSubscriber.
  *
- * Return value: a new #GrssFeedsSubscriber
+ * Return value: a new #GrssFeedsSubscriber.
  */
 GrssFeedsSubscriber*
 grss_feeds_subscriber_new ()
@@ -247,17 +250,17 @@ create_listened (GrssFeedsSubscriber *sub, GList *feeds)
 
 /**
  * grss_feeds_subscriber_listen:
- * @sub: a #GrssFeedsSubscriber
- * @feeds: a list of #GrssFeedChannel
+ * @sub: a #GrssFeedsSubscriber.
+ * @feeds: a list of #GrssFeedChannel.
  *
  * To set the list of feeds to be managed by @sub. The previous list, if any,
  * is invalidated. After invokation to the function, grss_feeds_subscriber_switch()
  * must be call to run the subscription.
  * The list in @feeds can be freed after calling this; linked #GrssFeedChannel
- * are g_object_ref'd here
+ * are g_object_ref'd here.
  *
  * Return value: %TRUE if all #GrssFeedChannels involved in @feeds are valid
- * and can be listened with one of the implemented procotols, %FALSE otherwise
+ * and can be listened with one of the implemented procotols, %FALSE otherwise.
  */
 gboolean
 grss_feeds_subscriber_listen (GrssFeedsSubscriber *sub, GList *feeds)
@@ -268,12 +271,12 @@ grss_feeds_subscriber_listen (GrssFeedsSubscriber *sub, GList *feeds)
 
 /**
  * grss_feeds_subscriber_get_listened:
- * @sub: a #GrssFeedsSubscriber
+ * @sub: a #GrssFeedsSubscriber.
  *
- * Returns the list of feeds currently managed by @sub
+ * Returns the list of feeds currently managed by @sub.
  *
  * Return value: a list of #GrssFeedChannel, to be freed with g_list_free() when
- * no longer in use. Do not modify elements found in this list
+ * no longer in use. Do not modify elements found in this list.
  */
 GList*
 grss_feeds_subscriber_get_listened (GrssFeedsSubscriber *sub)
@@ -568,14 +571,14 @@ stop_server (GrssFeedsSubscriber *sub)
 
 /**
  * grss_feeds_subscriber_set_port:
- * @sub: a #GrssFeedsSubscriber
- * @port: new listening port for the server
+ * @sub: a #GrssFeedsSubscriber.
+ * @port: new listening port for the server.
  *
  * To customize the port opened by the local server to catch incoming
  * publishers' events. By default this is 8444. Changing the port while the
  * subscriber is running imply restart the local server.
  * Pay attention to the fact many publishers' implementations accept only
- * certain ports
+ * certain ports.
  */
 void
 grss_feeds_subscriber_set_port (GrssFeedsSubscriber *sub, int port)
@@ -592,10 +595,10 @@ grss_feeds_subscriber_set_port (GrssFeedsSubscriber *sub, int port)
 
 /**
  * grss_feeds_subscriber_switch:
- * @sub: a #GrssFeedsSubscriber
- * @run: %TRUE to run the subscriber, %FALSE to pause it
+ * @sub: a #GrssFeedsSubscriber.
+ * @run: %TRUE to run the subscriber, %FALSE to pause it.
  *
- * Permits to pause or resume @sub listening for events
+ * Permits to pause or resume @sub listening for events.
  */
 void
 grss_feeds_subscriber_switch (GrssFeedsSubscriber *sub, gboolean run)
@@ -612,14 +615,14 @@ grss_feeds_subscriber_switch (GrssFeedsSubscriber *sub, gboolean run)
 
 /**
  * grss_feeds_subscriber_get_address:
- * @sub: a #GrssFeedsSubscriber
+ * @sub: a #GrssFeedsSubscriber.
  *
  * This function returns the Internet address where @sub is listening for
  * external events. It is often required by #GrssFeedsSubscriberHandlers while
- * subscribing contents to specify the local endpoint for communications
+ * subscribing contents to specify the local endpoint for communications.
  *
  * Return value: the #GInetAddress used by @sub, or %NULL if the
- * #GrssFeedsSubscriber is switched off
+ * #GrssFeedsSubscriber is switched off.
  */
 GInetAddress*
 grss_feeds_subscriber_get_address (GrssFeedsSubscriber *sub)
@@ -629,13 +632,13 @@ grss_feeds_subscriber_get_address (GrssFeedsSubscriber *sub)
 
 /**
  * grss_feeds_subscriber_get_port:
- * @sub: a #GrssFeedsSubscriber
+ * @sub: a #GrssFeedsSubscriber.
  *
  * This function returns the Internet port where @sub is listening for
  * external events. It is often required by #GrssFeedsSubscriberHandlers while
- * subscribing contents to specify the local endpoint for communications
+ * subscribing contents to specify the local endpoint for communications.
  * 
- * Return value: the port of the socket locally opened by @sub
+ * Return value: the port of the socket locally opened by @sub.
  */
 int
 grss_feeds_subscriber_get_port (GrssFeedsSubscriber *sub)
@@ -645,12 +648,12 @@ grss_feeds_subscriber_get_port (GrssFeedsSubscriber *sub)
 
 /**
  * grss_feeds_subscriber_get_session:
- * @sub: a #GrssFeedsSubscriber
+ * @sub: a #GrssFeedsSubscriber.
  *
  * To obtain the internal #SoupSession of a #GrssFeedsSubscriber, so to re-use
- * it in #GrssFeedsSubscriberHandlers or similar tasks
+ * it in #GrssFeedsSubscriberHandlers or similar tasks.
  * 
- * Return value: the #SoupSession used by the provided #GrssFeedsSubscriber
+ * Return value: the #SoupSession used by the provided #GrssFeedsSubscriber.
  */
 SoupSession*
 grss_feeds_subscriber_get_session (GrssFeedsSubscriber *sub)

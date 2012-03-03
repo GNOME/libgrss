@@ -29,7 +29,8 @@
  * @short_description: a feed item
  *
  * #GrssFeedItem is an abstraction for an item, collects all information about a
- * single element found into a feed
+ * single element found into a feed. It mostly is a passive container for
+ * attributes.
  */
 
 /*
@@ -123,11 +124,11 @@ grss_feed_item_init (GrssFeedItem *node)
 
 /**
  * grss_feed_item_new:
- * @parent: the feed from which the new item belongs
+ * @parent: the feed from which the new item belongs.
  *
- * To allocate a new empty #GrssFeedItem
+ * To allocate a new empty #GrssFeedItem.
  *
- * Return value: a new #GrssFeedItem
+ * Return value: a new #GrssFeedItem.
  */
 GrssFeedItem*
 grss_feed_item_new (GrssFeedChannel *parent)
@@ -142,11 +143,11 @@ grss_feed_item_new (GrssFeedChannel *parent)
 
 /**
  * grss_feed_item_get_parent:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
- * Retrieves the feed from which the item belongs
+ * Retrieves the feed from which the item belongs.
  *
- * Return value: the parent feed, as set in grss_feed_item_new()
+ * Return value: the parent feed, as set in grss_feed_item_new().
  */
 GrssFeedChannel*
 grss_feed_item_get_parent (GrssFeedItem *item)
@@ -156,11 +157,11 @@ grss_feed_item_get_parent (GrssFeedItem *item)
 
 /**
  * grss_feed_item_set_id:
- * @item: a #GrssFeedItem
- * @id: the new ID to set
+ * @item: a #GrssFeedItem.
+ * @id: the new ID to set.
  *
  * To set the ID of the @item. This parameter has not a particular format: it
- * is just a string used to identify in unique way the item
+ * is just a string used to identify in unique way the item.
  */
 void
 grss_feed_item_set_id (GrssFeedItem *item, gchar *id)
@@ -181,14 +182,14 @@ grss_feed_item_set_id (GrssFeedItem *item, gchar *id)
 
 /**
  * grss_feed_item_get_id:
- * @item: #GrssFeedItem from which retrieve the ID
+ * @item: #GrssFeedItem from which retrieve the ID.
  *
  * Retrieves the ID assigned to the @item. If no ID was set with
  * grss_feed_item_set_id() this returns the same of grss_feed_item_get_source().
  * Pay attention to the fact this library do not check uniqueness of assigned
- * IDs
+ * IDs.
  *
- * Return value: ID of the item
+ * Return value: ID of the item.
  */
 const gchar*
 grss_feed_item_get_id (GrssFeedItem *item)
@@ -201,10 +202,10 @@ grss_feed_item_get_id (GrssFeedItem *item)
 
 /**
  * grss_feed_item_set_title:
- * @item: a #GrssFeedItem
- * @title: title of the item
+ * @item: a #GrssFeedItem.
+ * @title: title of the item.
  *
- * To set a title to the @item
+ * To set a title to the @item.
  */
 void
 grss_feed_item_set_title (GrssFeedItem *item, gchar *title)
@@ -215,11 +216,11 @@ grss_feed_item_set_title (GrssFeedItem *item, gchar *title)
 
 /**
  * grss_feed_item_get_title:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
- * Retrieves the title assigned to @item
+ * Retrieves the title assigned to @item.
  *
- * Return value: title of the element
+ * Return value: title of the element.
  */
 const gchar*
 grss_feed_item_get_title (GrssFeedItem *item)
@@ -229,10 +230,10 @@ grss_feed_item_get_title (GrssFeedItem *item)
 
 /**
  * grss_feed_item_set_description:
- * @item: a #GrssFeedItem
- * @description: content of the item
+ * @item: a #GrssFeedItem.
+ * @description: content of the item.
  *
- * To set the description of @item. Usually "description" means his content
+ * To set the description of @item. Usually "description" means his content.
  */
 void
 grss_feed_item_set_description (GrssFeedItem *item, gchar *description)
@@ -243,11 +244,11 @@ grss_feed_item_set_description (GrssFeedItem *item, gchar *description)
 
 /**
  * grss_feed_item_get_description:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
- * Retrieves the description of the @item
+ * Retrieves the description of the @item.
  *
- * Return value: description of @item
+ * Return value: description of @item.
  */
 const gchar*
 grss_feed_item_get_description (GrssFeedItem *item)
@@ -257,11 +258,11 @@ grss_feed_item_get_description (GrssFeedItem *item)
 
 /**
  * grss_feed_item_add_category:
- * @item: a #GrssFeedItem
- * @category: a new category to assign to the item
+ * @item: a #GrssFeedItem.
+ * @category: a new category to assign to the item.
  *
  * Adds a category to the @item. The complete list can be obtained with
- * grss_feed_item_get_categories()
+ * grss_feed_item_get_categories().
  */
 void
 grss_feed_item_add_category (GrssFeedItem *item, gchar *category)
@@ -278,12 +279,12 @@ grss_feed_item_add_category (GrssFeedItem *item, gchar *category)
 
 /**
  * grss_feed_item_get_categories:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
- * Retrieves list of categories assigned to the @item
+ * Retrieves list of categories assigned to the @item.
  *
  * Return value: list of strings, one for assigned category. Do not free or
- * modify this list
+ * modify this list.
  */
 const GList*
 grss_feed_item_get_categories (GrssFeedItem *item)
@@ -293,10 +294,10 @@ grss_feed_item_get_categories (GrssFeedItem *item)
 
 /**
  * grss_feed_item_set_source:
- * @item: a #GrssFeedItem
- * @source: URL of the item
+ * @item: a #GrssFeedItem.
+ * @source: URL of the item.
  *
- * To set the source of the @item
+ * To set the source of the @item.
  */
 void
 grss_feed_item_set_source (GrssFeedItem *item, gchar *source)
@@ -307,11 +308,11 @@ grss_feed_item_set_source (GrssFeedItem *item, gchar *source)
 
 /**
  * grss_feed_item_get_source:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
- * Retrieves the URL where the @item can be found
+ * Retrieves the URL where the @item can be found.
  *
- * Return value: URL of the item, or NULL
+ * Return value: URL of the item, or %NULL.
  */
 const gchar*
 grss_feed_item_get_source (GrssFeedItem *item)
@@ -321,12 +322,12 @@ grss_feed_item_get_source (GrssFeedItem *item)
 
 /**
  * grss_feed_item_set_real_source:
- * @item: a #GrssFeedItem
- * @realsource: URL of the real source for the item
- * @title: title of the real source
+ * @item: a #GrssFeedItem.
+ * @realsource: URL of the real source for the item.
+ * @title: title of the real source.
  *
  * To set an alternative real source for @item. This parameter is used by web
- * aggregators to explicit the origin of a content reproduced in them
+ * aggregators to explicit the origin of a content reproduced in them.
  */
 void
 grss_feed_item_set_real_source (GrssFeedItem *item, gchar *realsource, gchar *title)
@@ -339,11 +340,11 @@ grss_feed_item_set_real_source (GrssFeedItem *item, gchar *realsource, gchar *ti
 
 /**
  * grss_feed_item_get_real_source:
- * @item: a #GrssFeedItem
- * @realsource: will be assigned to the URL of the real source, or NULL
- * @title: will be assigned to the title of the real source, or NULL
+ * @item: a #GrssFeedItem.
+ * @realsource: will be assigned to the URL of the real source, or %NULL.
+ * @title: will be assigned to the title of the real source, or %NULL.
  *
- * Retrieves references to the real source of @item
+ * Retrieves references to the real source of @item.
  */
 void
 grss_feed_item_get_real_source (GrssFeedItem *item, const gchar **realsource, const gchar **title)
@@ -356,10 +357,10 @@ grss_feed_item_get_real_source (GrssFeedItem *item, const gchar **realsource, co
 
 /**
  * grss_feed_item_set_related:
- * @item: a #GrssFeedItem
- * @related: reference to a related post
+ * @item: a #GrssFeedItem.
+ * @related: reference to a related post.
  *
- * To set reference to a post related to @item
+ * To set reference to a post related to @item.
  */
 void
 grss_feed_item_set_related (GrssFeedItem *item, gchar *related)
@@ -370,11 +371,11 @@ grss_feed_item_set_related (GrssFeedItem *item, gchar *related)
 
 /**
  * grss_feed_item_get_related:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
- * Retrieves indication about posts related to @item
+ * Retrieves indication about posts related to @item.
  *
- * Return value: related posts, or NULL
+ * Return value: related posts, or %NULL.
  */
 const gchar*
 grss_feed_item_get_related (GrssFeedItem *item)
@@ -384,10 +385,10 @@ grss_feed_item_get_related (GrssFeedItem *item)
 
 /**
  * grss_feed_item_set_copyright:
- * @item: a #GrssFeedItem
- * @copyright: copyright declaration for the item
+ * @item: a #GrssFeedItem.
+ * @copyright: copyright declaration for the item.
  *
- * To set a copyright reference to @item
+ * To set a copyright reference to @item.
  */
 void
 grss_feed_item_set_copyright (GrssFeedItem *item, gchar *copyright)
@@ -398,11 +399,11 @@ grss_feed_item_set_copyright (GrssFeedItem *item, gchar *copyright)
 
 /**
  * grss_feed_item_get_copyright:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
- * Retrieves copyright reference for the @item
+ * Retrieves copyright reference for the @item.
  *
- * Return value: copyright mark, or NULL
+ * Return value: copyright mark, or %NULL.
  */
 const gchar*
 grss_feed_item_get_copyright (GrssFeedItem *item)
@@ -412,10 +413,10 @@ grss_feed_item_get_copyright (GrssFeedItem *item)
 
 /**
  * grss_feed_item_set_author:
- * @item: a #GrssFeedItem
- * @author: name of the author
+ * @item: a #GrssFeedItem.
+ * @author: name of the author.
  *
- * To assign an author to the @item
+ * To assign an author to the @item.
  */
 void
 grss_feed_item_set_author (GrssFeedItem *item, gchar *author)
@@ -426,11 +427,11 @@ grss_feed_item_set_author (GrssFeedItem *item, gchar *author)
 
 /**
  * grss_feed_item_get_author:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
- * Retrieves the author of @item
+ * Retrieves the author of @item.
  *
- * Return value: author of the item, or NULL
+ * Return value: author of the item, or %NULL.
  */
 const gchar*
 grss_feed_item_get_author (GrssFeedItem *item)
@@ -440,10 +441,10 @@ grss_feed_item_get_author (GrssFeedItem *item)
 
 /**
  * grss_feed_item_add_contributor:
- * @item: a #GrssFeedItem
- * @contributor: name of the contributor for the item
+ * @item: a #GrssFeedItem.
+ * @contributor: name of the contributor for the item.
  *
- * To add a contributor to the @item
+ * To add a contributor to the @item.
  */
 void
 grss_feed_item_add_contributor (GrssFeedItem *item, gchar *contributor)
@@ -460,11 +461,11 @@ grss_feed_item_add_contributor (GrssFeedItem *item, gchar *contributor)
 
 /**
  * grss_feed_item_get_contributors:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
- * Retrieves contributors for @item
+ * Retrieves contributors for @item.
  *
- * Return value: list of contributors to the item
+ * Return value: list of contributors to the item.
  */
 const GList*
 grss_feed_item_get_contributors (GrssFeedItem *item)
@@ -474,10 +475,10 @@ grss_feed_item_get_contributors (GrssFeedItem *item)
 
 /**
  * grss_feed_item_set_comments_url:
- * @item: a #GrssFeedItem
- * @url: URL where to retrieve comments to the item
+ * @item: a #GrssFeedItem.
+ * @url: URL where to retrieve comments to the item.
  *
- * To assign the URL where to fetch comments for the item
+ * To assign the URL where to fetch comments for the item.
  */
 void
 grss_feed_item_set_comments_url (GrssFeedItem *item, gchar *url)
@@ -488,11 +489,11 @@ grss_feed_item_set_comments_url (GrssFeedItem *item, gchar *url)
 
 /**
  * grss_feed_item_get_comments_url:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
- * Retrieves the URL where to catch comments to the @item
+ * Retrieves the URL where to catch comments to the @item.
  *
- * Return value: URL to parse to read comments for @item, or NULL
+ * Return value: URL to parse to read comments for @item, or %NULL.
  */
 const gchar*
 grss_feed_item_get_comments_url (GrssFeedItem *item)
@@ -502,14 +503,14 @@ grss_feed_item_get_comments_url (GrssFeedItem *item)
 
 /**
  * grss_feed_item_set_geo_point:
- * @item: a #GrssFeedItem
- * @latitude: latitude of the point, or -1 to leave the previous one
- * @longitude: longitude of the point, or -1 to leave the previous one
+ * @item: a #GrssFeedItem.
+ * @latitude: latitude of the point, or -1 to leave the previous one.
+ * @longitude: longitude of the point, or -1 to leave the previous one.
  *
  * To assign geographic context to the @item.
  * Passing -1 as @latitude or @longitude, the relative value is untouched in
  * the object. This is to easy assignment of coordinates in more than a
- * single step. If both are -1, nothing happens
+ * single step. If both are -1, nothing happens.
  */
 void
 grss_feed_item_set_geo_point (GrssFeedItem *item, double latitude, double longitude)
@@ -528,15 +529,15 @@ grss_feed_item_set_geo_point (GrssFeedItem *item, double latitude, double longit
 
 /**
  * grss_feed_item_get_geo_point:
- * @item: a #GrssFeedItem
- * @latitude: will be assigned to the latitude of the point, or NULL
- * @longitude: will be assigned to the longitude of the point, or NULL
+ * @item: a #GrssFeedItem.
+ * @latitude: will be assigned to the latitude of the point, or %NULL.
+ * @longitude: will be assigned to the longitude of the point, or %NULL.
  *
- * Retrieves the geo reference of the @item
+ * Retrieves the geo reference of the @item.
  *
  * Return value: %TRUE if @item has geographic coordinates assigned and
  * @latitude and @longitude have been set, %FALSE if @item has not geo
- * reference
+ * reference.
  */
 gboolean
 grss_feed_item_get_geo_point (GrssFeedItem *item, double *latitude, double *longitude)
@@ -551,10 +552,10 @@ grss_feed_item_get_geo_point (GrssFeedItem *item, double *latitude, double *long
 
 /**
  * grss_feed_item_set_publish_time:
- * @item: a #GrssFeedItem
- * @publish: publishing timestamp of the item
+ * @item: a #GrssFeedItem.
+ * @publish: publishing timestamp of the item.
  *
- * To set the publish time of the item
+ * To set the publish time of the item.
  */
 void
 grss_feed_item_set_publish_time (GrssFeedItem *item, time_t publish)
@@ -564,13 +565,13 @@ grss_feed_item_set_publish_time (GrssFeedItem *item, time_t publish)
 
 /**
  * grss_feed_item_get_publish_time:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
  * Retrieves the publish time of the item. By default this value is the
- * current timestamp assigned when creating the #GrssFeedItem, and may be changed
- * with grss_feed_item_set_publish_time()
+ * current timestamp assigned when creating the #GrssFeedItem, and may be
+ * changed with grss_feed_item_set_publish_time().
  *
- * Return value: publish time of @item
+ * Return value: publish time of @item.
  */
 time_t
 grss_feed_item_get_publish_time (GrssFeedItem *item)
@@ -580,12 +581,12 @@ grss_feed_item_get_publish_time (GrssFeedItem *item)
 
 /**
  * grss_feed_item_add_enclosure:
- * @item: a #GrssFeedItem
- * @enclosure: a #GrssFeedEnclosure to add to the item
+ * @item: a #GrssFeedItem.
+ * @enclosure: a #GrssFeedEnclosure to add to the item.
  *
  * Adds an enclosure to the @item. That external elements may be references
  * to images, videos, or other contents (usually multimedial) embedded in the
- * element
+ * element.
  */
 void
 grss_feed_item_add_enclosure (GrssFeedItem *item, GrssFeedEnclosure *enclosure)
@@ -598,12 +599,12 @@ grss_feed_item_add_enclosure (GrssFeedItem *item, GrssFeedEnclosure *enclosure)
 
 /**
  * grss_feed_item_get_enclosures:
- * @item: a #GrssFeedItem
+ * @item: a #GrssFeedItem.
  *
- * Retrieves the list of enclosures added with grss_feed_item_add_enclosure()
+ * Retrieves the list of enclosures added with grss_feed_item_add_enclosure().
  *
  * Return value: a list of #GrssFeedEnclosure. This is a direct reference to the
- * internal list, do not free or modify it
+ * internal list, do not free or modify it.
  */
 const GList*
 grss_feed_item_get_enclosures (GrssFeedItem *item)

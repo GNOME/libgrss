@@ -27,9 +27,9 @@
  * SECTION: feed-enclosure
  * @short_description: a component attached to an item
  *
- * #GrssFeedEnclosure describes an external element embedded into a #GrssFeedItem: it
- * may be an image, a video of other kind of file to be presented with the
- * parent item
+ * #GrssFeedEnclosure describes an external element embedded into a
+ * #GrssFeedItem: it may be an image, a video of other kind of file to be
+ * presented with the parent item.
  */
 
 struct _GrssFeedEnclosurePrivate {
@@ -67,11 +67,11 @@ static void grss_feed_enclosure_init (GrssFeedEnclosure *node)
 
 /**
  * grss_feed_enclosure_new:
- * @url: URL of the external element
+ * @url: URL of the external element.
  *
- * Allocates a new #GrssFeedEnclosure, to be downloaded separately
+ * Allocates a new #GrssFeedEnclosure, to be downloaded separately.
  *
- * Return value: a new #GrssFeedEnclosure
+ * Return value: a new #GrssFeedEnclosure.
  */
 GrssFeedEnclosure* grss_feed_enclosure_new (gchar *url)
 {
@@ -84,11 +84,11 @@ GrssFeedEnclosure* grss_feed_enclosure_new (gchar *url)
 
 /**
  * grss_feed_enclosure_get_url:
- * @enclosure: a #GrssFeedEnclosure
+ * @enclosure: a #GrssFeedEnclosure.
  *
- * Retrieves the URL of the @enclosure
+ * Retrieves the URL of the @enclosure.
  *
- * Return value: the URL where the enclosure may be found
+ * Return value: the URL where the enclosure may be found.
  */
 const gchar* grss_feed_enclosure_get_url (GrssFeedEnclosure *enclosure)
 {
@@ -97,10 +97,10 @@ const gchar* grss_feed_enclosure_get_url (GrssFeedEnclosure *enclosure)
 
 /**
  * grss_feed_enclosure_set_format:
- * @enclosure: a #GrssFeedEnclosure
- * @type: type of content
+ * @enclosure: a #GrssFeedEnclosure.
+ * @type: type of content.
  *
- * To set the type of the external file
+ * To set the type of the external file.
  */
 void grss_feed_enclosure_set_format (GrssFeedEnclosure *enclosure, gchar *type)
 {
@@ -110,11 +110,11 @@ void grss_feed_enclosure_set_format (GrssFeedEnclosure *enclosure, gchar *type)
 
 /**
  * grss_feed_enclosure_get_format:
- * @enclosure: a #GrssFeedEnclosure
+ * @enclosure: a #GrssFeedEnclosure.
  *
- * Retrieves the format of the enclosed file
+ * Retrieves the format of the enclosed file.
  *
- * Return value: type of @enclosure
+ * Return value: type of @enclosure.
  */
 const gchar* grss_feed_enclosure_get_format (GrssFeedEnclosure *enclosure)
 {
@@ -123,10 +123,10 @@ const gchar* grss_feed_enclosure_get_format (GrssFeedEnclosure *enclosure)
 
 /**
  * grss_feed_enclosure_set_length:
- * @enclosure: a #GrssFeedEnclosure
- * @length: size of the enclosure, in bytes
+ * @enclosure: a #GrssFeedEnclosure.
+ * @length: size of the enclosure, in bytes.
  *
- * To set the size of the embedded @enclosure
+ * To set the size of the embedded @enclosure.
  */
 void grss_feed_enclosure_set_length (GrssFeedEnclosure *enclosure, gsize length)
 {
@@ -135,11 +135,11 @@ void grss_feed_enclosure_set_length (GrssFeedEnclosure *enclosure, gsize length)
 
 /**
  * grss_feed_enclosure_get_length:
- * @enclosure: a #GrssFeedEnclosure
+ * @enclosure: a #GrssFeedEnclosure.
  *
- * Retrieves the size of the embedded file
+ * Retrieves the size of the embedded file.
  *
- * Return value: size of the @enclosure, in bytes
+ * Return value: size of the @enclosure, in bytes.
  */
 gsize grss_feed_enclosure_get_length (GrssFeedEnclosure *enclosure)
 {

@@ -33,11 +33,11 @@
  * SECTION: feeds-publisher
  * @short_description: feed writer and PubSubHubBub publisher
  *
- * #GrssFeedsPublisher may be used to expose contents for any given #GrssFeedChannel,
- * both writing a file to be dispatched by the local webserver or providing
- * himself to distribute it, and implements a server able to receive
- * subscriptions by PubSubHubbub clients and deliver them new contents in
- * real-time.
+ * #GrssFeedsPublisher may be used to expose contents for any given
+ * #GrssFeedChannel, both writing a file to be dispatched by the local webserver
+ * or providing himself to distribute it, and implements a server able to
+ * receive subscriptions by PubSubHubbub clients and deliver them new contents
+ * in real-time.
  */
 
 static void	subscribe_verify_cb	(SoupSession *session, SoupMessage *msg, gpointer user_data);
@@ -165,11 +165,11 @@ grss_feeds_publisher_class_init (GrssFeedsPublisherClass *klass)
 
 	/**
 	 * GrssFeedsPublisher::new_subscription:
-	 * @pub: the #GrssFeedsPublisher emitting the signal
-	 * @topic: #GrssFeedChannel for which subscription has been added
-	 * @callback: callback required for new subscriber
+	 * @pub: the #GrssFeedsPublisher emitting the signal.
+	 * @topic: #GrssFeedChannel for which subscription has been added.
+	 * @callback: callback required for new subscriber.
 	 *
-	 * Emitted when a new remote client subscribes to this publisher
+	 * Emitted when a new remote client subscribes to this publisher.
 	 */
 	signals [SUBSCRIPTION_ADDED] = g_signal_new ("new-subscription", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
 	                                             NULL, NULL, feed_marshal_VOID__OBJECT_STRING,
@@ -177,11 +177,11 @@ grss_feeds_publisher_class_init (GrssFeedsPublisherClass *klass)
 
 	/**
 	 * GrssFeedsPublisher::new_subscription:
-	 * @pub: the #GrssFeedsPublisher emitting the signal
-	 * @topic: #GrssFeedChannel for which subscription has been removed
-	 * @callback: callback revoked by the subscriber
+	 * @pub: the #GrssFeedsPublisher emitting the signal.
+	 * @topic: #GrssFeedChannel for which subscription has been removed.
+	 * @callback: callback revoked by the subscriber.
 	 *
-	 * Emitted when a new remote client unsubscribes to this publisher
+	 * Emitted when a new remote client unsubscribes to this publisher.
 	 */
 	signals [SUBSCRIPTION_DELETED] = g_signal_new ("delete-subscription", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
 	                                               NULL, NULL, feed_marshal_VOID__OBJECT_STRING,
@@ -200,9 +200,9 @@ grss_feeds_publisher_init (GrssFeedsPublisher *node)
 /**
  * grss_feeds_publisher_new:
  *
- * Allocates a new #GrssFeedsPublisher
+ * Allocates a new #GrssFeedsPublisher.
  *
- * Return value: a new #GrssFeedsPublisher
+ * Return value: a new #GrssFeedsPublisher.
  */
 GrssFeedsPublisher*
 grss_feeds_publisher_new ()
@@ -479,17 +479,18 @@ feed_required_by_web_cb (SoupServer *server, SoupMessage *msg, const char *path,
 
 /**
  * grss_feeds_publisher_publish:
- * @pub: a #GrssFeedsPublisher
- * @channel: the #GrssFeedChannel to dump in the file
- * @items: list of #GrssFeedItems to be added in the feed
- * @id: name used in the external URL of the feed
- * @error: if an error occourred, %FALSE is returned and this is filled with the message
+ * @pub: a #GrssFeedsPublisher.
+ * @channel: the #GrssFeedChannel to dump in the file.
+ * @items: list of #GrssFeedItems to be added in the feed.
+ * @id: name used in the external URL of the feed.
+ * @error: if an error occourred, %FALSE is returned and this is filled with the
+ *         message.
  *
  * If the local web server has been executed (with
- * grss_feeds_publisher_hub_switch()) this function exposes the given @channel as
- * an Atom formatted file avalable to http://[LOCAL_IP:DEFINED_PORT]/@id
+ * grss_feeds_publisher_hub_switch()) this function exposes the given @channel
+ * as an Atom formatted file avalable to http://[LOCAL_IP:DEFINED_PORT]/@id .
  * 
- * Return value: %TRUE if the file is successfully written, %FALSE otherwise
+ * Return value: %TRUE if the file is successfully written, %FALSE otherwise.
  */
 gboolean
 grss_feeds_publisher_publish (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *id, GError **error)
@@ -521,18 +522,19 @@ grss_feeds_publisher_publish (GrssFeedsPublisher *pub, GrssFeedChannel *channel,
 
 /**
  * grss_feeds_publisher_publish_file:
- * @pub: a #GrssFeedsPublisher
- * @channel: the #GrssFeedChannel to dump in the file
- * @items: list of #GrssFeedItems to be added in the feed
- * @uri: URI of the file to write
- * @error: if an error occourred, %FALSE is returned and this is filled with the message
+ * @pub: a #GrssFeedsPublisher.
+ * @channel: the #GrssFeedChannel to dump in the file.
+ * @items: list of #GrssFeedItems to be added in the feed.
+ * @uri: URI of the file to write. The full path must exists.
+ * @error: if an error occourred, %FALSE is returned and this is filled with the
+ *         message.
  *
  * Dump the given @channel in an Atom formatted file in @path. If the local
  * PubSubHubbub hub has been activated (with grss_feeds_publisher_hub_switch())
  * notifies remote subscribers about the new items which has been added since
- * previous invocation of this function for the same #GrssFeedChannel
+ * previous invocation of this function for the same #GrssFeedChannel.
  * 
- * Return value: %TRUE if the file is successfully written, %FALSE otherwise
+ * Return value: %TRUE if the file is successfully written, %FALSE otherwise.
  */
 gboolean
 grss_feeds_publisher_publish_file (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *uri, GError **error)
@@ -873,12 +875,12 @@ create_and_run_server (GrssFeedsPublisher *pub)
 
 /**
  * grss_feeds_publisher_hub_set_port:
- * @pub: a #GrssFeedsPublisher
- * @port: new listening port for the server
+ * @pub: a #GrssFeedsPublisher.
+ * @port: new listening port for the server.
  *
  * To customize the port opened by the local server to deliver feeds and
  * catch incoming subscriptions. By default this is 80. Changing the port
- * while the hub is running imply restart the local server
+ * while the hub is running imply restart the local server.
  */
 void
 grss_feeds_publisher_hub_set_port (GrssFeedsPublisher *pub, int port)
@@ -895,15 +897,15 @@ grss_feeds_publisher_hub_set_port (GrssFeedsPublisher *pub, int port)
 
 /**
  * grss_feeds_publisher_hub_set_topics:
- * @pub: a #GrssFeedsPublisher
- * @topics: a list of #GrssFeedChannels
+ * @pub: a #GrssFeedsPublisher.
+ * @topics: a list of #GrssFeedChannels.
  *
  * To define a list of valid "topics" for which the #GrssFeedsPublisher will
  * deliver contents. Sources of those channels, as retrieved by
  * grss_feed_channel_get_source(), are accepted as "hub.topic" parameter in
  * PubSubHubbub registration requests from remote subscribers.
  * Pay attention to the fact subscriptions requests for different topic are
- * now rejected
+ * now rejected.
  */
 void
 grss_feeds_publisher_hub_set_topics (GrssFeedsPublisher *pub, GList *topics)
@@ -969,10 +971,10 @@ remove_refresh_handler (GrssFeedsPublisher *pub)
 
 /**
  * grss_feeds_publisher_hub_switch:
- * @pub: a #GrssFeedsPublisher
- * @run: %TRUE to run the local server, %FALSE to stop it
+ * @pub: a #GrssFeedsPublisher.
+ * @run: %TRUE to run the local server, %FALSE to stop it.
  *
- * Permits to start and stop the webserver implemented by this object
+ * Permits to start and stop the webserver implemented by this object.
  */
 void
 grss_feeds_publisher_hub_switch (GrssFeedsPublisher *pub, gboolean run)

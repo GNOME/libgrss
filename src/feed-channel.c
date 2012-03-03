@@ -29,7 +29,8 @@
  * SECTION: feed-channel
  * @short_description: a feed
  *
- * #GrssFeedChannel rappresents a single feed which may be fetched and parsed
+ * #GrssFeedChannel rappresents a single feed which may be fetched and parsed.
+ * It mostly is a passive container for attributes.
  */
 
 typedef struct {
@@ -130,9 +131,9 @@ grss_feed_channel_init (GrssFeedChannel *node)
 /**
  * grss_feed_channel_new:
  *
- * Allocates a new #GrssFeedChannel
+ * Allocates a new #GrssFeedChannel.
  *
- * Return value: a #GrssFeedChannel
+ * Return value: a #GrssFeedChannel.
  */
 GrssFeedChannel*
 grss_feed_channel_new ()
@@ -142,11 +143,11 @@ grss_feed_channel_new ()
 
 /**
  * grss_feed_channel_new_with_source:
- * @source: URL of the feed
+ * @source: URL of the feed.
  *
- * Allocates a new #GrssFeedChannel and assign it the given remote source
+ * Allocates a new #GrssFeedChannel and assign it the given remote source.
  *
- * Return value: a #GrssFeedChannel
+ * Return value: a #GrssFeedChannel.
  */
 GrssFeedChannel*
 grss_feed_channel_new_with_source (gchar *source)
@@ -160,15 +161,15 @@ grss_feed_channel_new_with_source (gchar *source)
 
 /**
  * grss_feed_channel_new_from_file:
- * @path: path of the file to parse
+ * @path: path of the file to parse.
  * @error: if an error occourred, %NULL is returned and this is filled with the
- *         message
+ *         message.
  *
  * Allocates a new #GrssFeedChannel and init it with contents found in specified
- * file
+ * file.
  *
  * Return value: a #GrssFeedChannel, or %NULL if the file in @path is not a
- * valid document
+ * valid document.
  */
 GrssFeedChannel*
 grss_feed_channel_new_from_file (const gchar *path, GError **error)
@@ -218,10 +219,11 @@ grss_feed_channel_new_from_file (const gchar *path, GError **error)
 
 /**
  * grss_feed_channel_set_format:
- * @channel: a #GrssFeedChannel
- * @format: format of the file, such as "application/atom+xml" or "application/rss+xml"
+ * @channel: a #GrssFeedChannel.
+ * @format: format of the file, such as "application/atom+xml" or
+ * "application/rss+xml".
  *
- * To assign a file format to the feed
+ * To assign a file format to the feed.
  */
 void
 grss_feed_channel_set_format (GrssFeedChannel *channel, gchar *format)
@@ -232,11 +234,11 @@ grss_feed_channel_set_format (GrssFeedChannel *channel, gchar *format)
 
 /**
  * grss_feed_channel_get_format:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves the file format of @channel
+ * Retrieves the file format of @channel.
  *
- * Return value: file format of channel
+ * Return value: file format of channel.
  */
 const gchar*
 grss_feed_channel_get_format (GrssFeedChannel *channel)
@@ -246,10 +248,10 @@ grss_feed_channel_get_format (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_source:
- * @channel: a #GrssFeedChannel
- * @source: URL of the feed
+ * @channel: a #GrssFeedChannel.
+ * @source: URL of the feed.
  *
- * To assign the URL where to fetch the feed
+ * To assign the URL where to fetch the feed.
  */
 void
 grss_feed_channel_set_source (GrssFeedChannel *channel, gchar *source)
@@ -263,11 +265,11 @@ grss_feed_channel_set_source (GrssFeedChannel *channel, gchar *source)
 
 /**
  * grss_feed_channel_get_source:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves URL where to fetch the @channel
+ * Retrieves URL where to fetch the @channel.
  *
- * Return value: URL of the channel
+ * Return value: URL of the channel.
  */
 const gchar*
 grss_feed_channel_get_source (GrssFeedChannel *channel)
@@ -277,10 +279,10 @@ grss_feed_channel_get_source (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_title:
- * @channel: a #GrssFeedChannel
- * @title: title of the feed
+ * @channel: a #GrssFeedChannel.
+ * @title: title of the feed.
  *
- * To set a title to the @channel
+ * To set a title to the @channel.
  */
 void
 grss_feed_channel_set_title (GrssFeedChannel *channel, gchar *title)
@@ -291,11 +293,11 @@ grss_feed_channel_set_title (GrssFeedChannel *channel, gchar *title)
 
 /**
  * grss_feed_channel_get_title:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves title of the @channel
+ * Retrieves title of the @channel.
  *
- * Return value: title of the feed, or NULL
+ * Return value: title of the feed, or %NULL.
  */
 const gchar*
 grss_feed_channel_get_title (GrssFeedChannel *channel)
@@ -305,10 +307,10 @@ grss_feed_channel_get_title (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_homepage:
- * @channel: a #GrssFeedChannel
- * @homepage: homepage for the main website
+ * @channel: a #GrssFeedChannel.
+ * @homepage: homepage for the main website.
  *
- * To set the homepage of the site the @channel belongs
+ * To set the homepage of the site the @channel belongs.
  */
 void
 grss_feed_channel_set_homepage (GrssFeedChannel *channel, gchar *homepage)
@@ -319,11 +321,11 @@ grss_feed_channel_set_homepage (GrssFeedChannel *channel, gchar *homepage)
 
 /**
  * grss_feed_channel_get_homepage:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves the homepage of the site for which @channel is the feed
+ * Retrieves the homepage of the site for which @channel is the feed.
  *
- * Return value: reference homepage of the feed, or NULL
+ * Return value: reference homepage of the feed, or %NULL.
  */
 const gchar*
 grss_feed_channel_get_homepage (GrssFeedChannel *channel)
@@ -333,10 +335,10 @@ grss_feed_channel_get_homepage (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_description:
- * @channel: a #GrssFeedChannel
- * @description: description of the feed
+ * @channel: a #GrssFeedChannel.
+ * @description: description of the feed.
  *
- * To set the description of @channel
+ * To set the description of @channel.
  */
 void
 grss_feed_channel_set_description (GrssFeedChannel *channel, gchar *description)
@@ -347,11 +349,11 @@ grss_feed_channel_set_description (GrssFeedChannel *channel, gchar *description)
 
 /**
  * grss_feed_channel_get_description:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves the description of @channel
+ * Retrieves the description of @channel.
  *
- * Return value: description of the feed, or NULL
+ * Return value: description of the feed, or %NULL.
  */
 const gchar*
 grss_feed_channel_get_description (GrssFeedChannel *channel)
@@ -361,10 +363,10 @@ grss_feed_channel_get_description (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_image:
- * @channel: a #GrssFeedChannel
- * @image: URL of the image
+ * @channel: a #GrssFeedChannel.
+ * @image: URL of the image.
  *
- * To set a rappresentative image to @channel
+ * To set a rappresentative image to @channel.
  */
 void
 grss_feed_channel_set_image (GrssFeedChannel *channel, gchar *image)
@@ -375,11 +377,11 @@ grss_feed_channel_set_image (GrssFeedChannel *channel, gchar *image)
 
 /**
  * grss_feed_channel_get_image:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves the URL of the image assigned to the channel
+ * Retrieves the URL of the image assigned to the channel.
  *
- * Return value: URL of the image, or NULL
+ * Return value: URL of the image, or %NULL.
  */
 const gchar*
 grss_feed_channel_get_image (GrssFeedChannel *channel)
@@ -389,10 +391,10 @@ grss_feed_channel_get_image (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_icon:
- * @channel: a #GrssFeedChannel
- * @icon: URL where to retrieve the favicon
+ * @channel: a #GrssFeedChannel.
+ * @icon: URL where to retrieve the favicon.
  *
- * To set the URL of the icon rappresenting @channel
+ * To set the URL of the icon rappresenting @channel.
  */
 void
 grss_feed_channel_set_icon (GrssFeedChannel *channel, gchar *icon)
@@ -403,12 +405,12 @@ grss_feed_channel_set_icon (GrssFeedChannel *channel, gchar *icon)
 
 /**
  * grss_feed_channel_get_icon:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
  * Retrieves URL of the favicon of the channel (and/or the website for which
- * this is the feed)
+ * this is the feed).
  *
- * Return value: URL of the favicon, or NULL
+ * Return value: URL of the favicon, or %NULL.
  */
 const gchar*
 grss_feed_channel_get_icon (GrssFeedChannel *channel)
@@ -418,10 +420,10 @@ grss_feed_channel_get_icon (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_language:
- * @channel: a #GrssFeedChannel
- * @language: string holding the language of the feed
+ * @channel: a #GrssFeedChannel.
+ * @language: string holding the language of the feed.
  *
- * To set the language of @channel
+ * To set the language of @channel.
  */
 void
 grss_feed_channel_set_language (GrssFeedChannel *channel, gchar *language)
@@ -432,11 +434,11 @@ grss_feed_channel_set_language (GrssFeedChannel *channel, gchar *language)
 
 /**
  * grss_feed_channel_get_language:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves the language of the @channel
+ * Retrieves the language of the @channel.
  *
- * Return value: string rappresenting the language of channel
+ * Return value: string rappresenting the language of channel, or %NULL.
  */
 const gchar*
 grss_feed_channel_get_language (GrssFeedChannel *channel)
@@ -446,10 +448,10 @@ grss_feed_channel_get_language (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_category:
- * @channel: a #GrssFeedChannel
- * @category: category of the feed
+ * @channel: a #GrssFeedChannel.
+ * @category: category of the feed.
  *
- * To set the category of the @channel
+ * To set the category of the @channel.
  */
 void
 grss_feed_channel_set_category (GrssFeedChannel *channel, gchar *category)
@@ -460,11 +462,11 @@ grss_feed_channel_set_category (GrssFeedChannel *channel, gchar *category)
 
 /**
  * grss_feed_channel_get_category:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves category of the @channel
+ * Retrieves category of the @channel.
  *
- * Return value: category of the feed, or NULL
+ * Return value: category of the feed, or %NULL.
  */
 const gchar*
 grss_feed_channel_get_category (GrssFeedChannel *channel)
@@ -474,11 +476,11 @@ grss_feed_channel_get_category (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_pubsubhub:
- * @channel: a #GrssFeedChannel
- * @hub: hub for the feed, or NULL
+ * @channel: a #GrssFeedChannel.
+ * @hub: hub for the feed, or %NULL.
  *
  * To set information about PubSubHubbub for the channel. To unset the hub,
- * pass %NULL as parameter
+ * pass %NULL as parameter.
  */
 void
 grss_feed_channel_set_pubsubhub (GrssFeedChannel *channel, gchar *hub)
@@ -491,13 +493,13 @@ grss_feed_channel_set_pubsubhub (GrssFeedChannel *channel, gchar *hub)
 
 /**
  * grss_feed_channel_get_pubsubhub:
- * @channel: a #GrssFeedChannel
- * @hub: location for the hub string, or NULL
+ * @channel: a #GrssFeedChannel.
+ * @hub: location for the hub string, or %NULL.
  *
- * Retrieves information about the PubSubHubbub hub of the channel
+ * Retrieves information about the PubSubHubbub hub of the channel.
  *
  * Return value: %TRUE if a valid PubSubHubbub hub has been set for the
- * @channel, %FALSE otherwise
+ * @channel, %FALSE otherwise.
  */
 gboolean
 grss_feed_channel_get_pubsubhub (GrssFeedChannel *channel, gchar **hub)
@@ -510,12 +512,12 @@ grss_feed_channel_get_pubsubhub (GrssFeedChannel *channel, gchar **hub)
 
 /**
  * grss_feed_channel_set_rsscloud:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  * @path: complete references of the URL where to register subscription, e.g.
- * http://example.com/rsscloudNotify
- * @protocol: type of protocol used for notifications
+ *        http://example.com/rsscloudNotify .
+ * @protocol: type of protocol used for notifications.
  *
- * To set information about RSSCloud notifications for the channel
+ * To set information about RSSCloud notifications for the channel.
  */
 void
 grss_feed_channel_set_rsscloud (GrssFeedChannel *channel, gchar *path, gchar *protocol)
@@ -531,14 +533,14 @@ grss_feed_channel_set_rsscloud (GrssFeedChannel *channel, gchar *path, gchar *pr
 
 /**
  * grss_feed_channel_get_rsscloud:
- * @channel: a #GrssFeedChannel
- * @path: location for the path string, or NULL
- * @protocol: location for the protocol string, or NULL
+ * @channel: a #GrssFeedChannel.
+ * @path: location for the path string, or %NULL.
+ * @protocol: location for the protocol string, or %NULL.
  *
- * Retrieves information about the RSSCloud coordinates of the channel
+ * Retrieves information about the RSSCloud coordinates of the channel.
  *
  * Return value: %TRUE if a valid RSSCloud path has been set for the
- * @channel, %FALSE otherwise
+ * @channel, %FALSE otherwise.
  */
 gboolean
 grss_feed_channel_get_rsscloud (GrssFeedChannel *channel, gchar **path, gchar **protocol)
@@ -553,10 +555,10 @@ grss_feed_channel_get_rsscloud (GrssFeedChannel *channel, gchar **path, gchar **
 
 /**
  * grss_feed_channel_set_copyright:
- * @channel: a #GrssFeedChannel
- * @copyright: copyright of the channel
+ * @channel: a #GrssFeedChannel.
+ * @copyright: copyright of the channel.
  *
- * To set the copyright of the feed
+ * To set the copyright of the feed.
  */
 void
 grss_feed_channel_set_copyright (GrssFeedChannel *channel, gchar *copyright)
@@ -567,11 +569,11 @@ grss_feed_channel_set_copyright (GrssFeedChannel *channel, gchar *copyright)
 
 /**
  * grss_feed_channel_get_copyright:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves indications about the copyright
+ * Retrieves indications about the copyright.
  *
- * Return value: copyright of the @channel, or NULL
+ * Return value: copyright of the @channel, or %NULL.
  */
 const gchar*
 grss_feed_channel_get_copyright (GrssFeedChannel *channel)
@@ -581,10 +583,10 @@ grss_feed_channel_get_copyright (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_editor:
- * @channel: a #GrssFeedChannel
- * @editor: editor of the feed
+ * @channel: a #GrssFeedChannel.
+ * @editor: editor of the feed.
  *
- * To set the editor of the @channel
+ * To set the editor of the @channel.
  */
 void
 grss_feed_channel_set_editor (GrssFeedChannel *channel, gchar *editor)
@@ -595,11 +597,11 @@ grss_feed_channel_set_editor (GrssFeedChannel *channel, gchar *editor)
 
 /**
  * grss_feed_channel_get_editor:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves reference to the editor or the @channel
+ * Retrieves reference to the editor or the @channel.
  *
- * Return value: editor of the feed, or NULL
+ * Return value: editor of the feed, or %NULL.
  */
 const gchar*
 grss_feed_channel_get_editor (GrssFeedChannel *channel)
@@ -609,10 +611,10 @@ grss_feed_channel_get_editor (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_add_contributor:
- * @channel: a #GrssFeedChannel
- * @contributor: contributor of the feed
+ * @channel: a #GrssFeedChannel.
+ * @contributor: contributor of the feed.
  *
- * To add a contributor to the @channel
+ * To add a contributor to the @channel.
  */
 void
 grss_feed_channel_add_contributor (GrssFeedChannel *channel, gchar *contributor)
@@ -629,11 +631,11 @@ grss_feed_channel_add_contributor (GrssFeedChannel *channel, gchar *contributor)
 
 /**
  * grss_feed_channel_get_contributors:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves reference to the contributors of the @channel
+ * Retrieves reference to the contributors of the @channel.
  *
- * Return value: list of contributors to the channel, or NULL
+ * Return value: list of contributors to the channel, or %NULL.
  */
 const GList*
 grss_feed_channel_get_contributors (GrssFeedChannel *channel)
@@ -643,10 +645,10 @@ grss_feed_channel_get_contributors (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_webmaster:
- * @channel: a #GrssFeedChannel
- * @webmaster: webmaster of the feed
+ * @channel: a #GrssFeedChannel.
+ * @webmaster: webmaster of the feed.
  *
- * To assign a webmaster to the @channel
+ * To assign a webmaster to the @channel.
  */
 void
 grss_feed_channel_set_webmaster (GrssFeedChannel *channel, gchar *webmaster)
@@ -657,11 +659,11 @@ grss_feed_channel_set_webmaster (GrssFeedChannel *channel, gchar *webmaster)
 
 /**
  * grss_feed_channel_get_webmaster:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves reference to the webmaster of the feed
+ * Retrieves reference to the webmaster of the feed.
  *
- * Return value: webmaster of @channel, or NULL
+ * Return value: webmaster of @channel, or %NULL.
  */
 const gchar*
 grss_feed_channel_get_webmaster (GrssFeedChannel *channel)
@@ -671,10 +673,10 @@ grss_feed_channel_get_webmaster (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_generator:
- * @channel: a #GrssFeedChannel
- * @generator: software generator of the feed
+ * @channel: a #GrssFeedChannel.
+ * @generator: software generator of the feed.
  *
- * To set information about the software generator of @channel
+ * To set information about the software generator of @channel.
  */
 void
 grss_feed_channel_set_generator (GrssFeedChannel *channel, gchar *generator)
@@ -685,11 +687,11 @@ grss_feed_channel_set_generator (GrssFeedChannel *channel, gchar *generator)
 
 /**
  * grss_feed_channel_get_generator:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves information about the feed's software generator
+ * Retrieves information about the feed's software generator.
  *
- * Return value: generator of @channel, or NULL
+ * Return value: generator of @channel, or %NULL.
  */
 const gchar*
 grss_feed_channel_get_generator (GrssFeedChannel *channel)
@@ -699,10 +701,10 @@ grss_feed_channel_get_generator (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_publish_time:
- * @channel: a #GrssFeedChannel
- * @publish: timestamp of publishing
+ * @channel: a #GrssFeedChannel.
+ * @publish: timestamp of publishing.
  *
- * To set the time of publishing for the feed
+ * To set the time of publishing for the feed.
  */
 void
 grss_feed_channel_set_publish_time (GrssFeedChannel *channel, time_t publish)
@@ -712,11 +714,11 @@ grss_feed_channel_set_publish_time (GrssFeedChannel *channel, time_t publish)
 
 /**
  * grss_feed_channel_get_publish_time:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves the publishing time of @channel
+ * Retrieves the publishing time of @channel.
  *
- * Return value: time of feed's publish
+ * Return value: time of feed's publish.
  */
 time_t
 grss_feed_channel_get_publish_time (GrssFeedChannel *channel)
@@ -726,10 +728,10 @@ grss_feed_channel_get_publish_time (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_update_time:
- * @channel: a #GrssFeedChannel
- * @update: update time of the feed
+ * @channel: a #GrssFeedChannel.
+ * @update: update time of the feed.
  *
- * To set the latest update time of @channel
+ * To set the latest update time of @channel.
  */
 void
 grss_feed_channel_set_update_time (GrssFeedChannel *channel, time_t update)
@@ -739,13 +741,13 @@ grss_feed_channel_set_update_time (GrssFeedChannel *channel, time_t update)
 
 /**
  * grss_feed_channel_get_update_time:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
- * Retrieves the update time of @channel
+ * Retrieves the update time of @channel.
  *
  * Return value: time of the feed's latest update. If this value was not set
  * (with grss_feed_channel_set_update_time()) returns
- * grss_feed_channel_get_publish_time()
+ * grss_feed_channel_get_publish_time().
  */
 time_t
 grss_feed_channel_get_update_time (GrssFeedChannel *channel)
@@ -755,10 +757,10 @@ grss_feed_channel_get_update_time (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_set_update_interval:
- * @channel: a #GrssFeedChannel
- * @minutes: update interval, in minutes
+ * @channel: a #GrssFeedChannel.
+ * @minutes: update interval, in minutes.
  *
- * To set the update interval for @channel
+ * To set the update interval for @channel.
  */
 void
 grss_feed_channel_set_update_interval (GrssFeedChannel *channel, int minutes)
@@ -768,14 +770,14 @@ grss_feed_channel_set_update_interval (GrssFeedChannel *channel, int minutes)
 
 /**
  * grss_feed_channel_get_update_interval:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  *
  * Retrieves the update interval for the feed. Pay attention to the fact the
  * value can be unset, and the function returns 0: in this case the caller
  * must manually set a default update interval with
- * grss_feed_channel_set_update_interval()
+ * grss_feed_channel_set_update_interval().
  *
- * Return value: update interval for the @channel, in minutes
+ * Return value: update interval for the @channel, in minutes.
  */
 int
 grss_feed_channel_get_update_interval (GrssFeedChannel *channel)
@@ -825,17 +827,17 @@ quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg, GList **save_
 
 /**
  * grss_feed_channel_fetch:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  * @error: if an error occourred, %FALSE is returned and this is filled with the
- *         message
+ *         message.
  *
  * Utility to fetch and populate a #GrssFeedChannel for the first time, and init
  * all his internal values. Only the source URL has to be set in @channel
  * (with grss_feed_channel_set_source()). Be aware this function is sync, do not
- * returns until the feed isn't downloaded and parsed
+ * returns until the feed isn't downloaded and parsed.
  *
  * Return value: %TRUE if the feed is correctly fetched and parsed, %FALSE
- * otherwise
+ * otherwise.
  */
 gboolean
 grss_feed_channel_fetch (GrssFeedChannel *channel, GError **error)
@@ -892,16 +894,16 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 
 /**
  * grss_feed_channel_fetch_finish:
- * @channel: a #GrssFeedChannel
- * @res: the #GAsyncResult passed to the callback
+ * @channel: a #GrssFeedChannel.
+ * @res: the #GAsyncResult passed to the callback.
  * @error: if an error occourred, %FALSE is returned and this is filled with the
- *         message
+ *         message.
  *
  * Finalizes an asyncronous operation started with
- * grss_feed_channel_fetch_async()
+ * grss_feed_channel_fetch_async().
  *
  * Return value: %TRUE if @channel informations have been successfully fetched,
- * %FALSE otherwise
+ * %FALSE otherwise.
  */
 gboolean
 grss_feed_channel_fetch_finish (GrssFeedChannel *channel, GAsyncResult *res, GError **error)
@@ -914,11 +916,11 @@ grss_feed_channel_fetch_finish (GrssFeedChannel *channel, GAsyncResult *res, GEr
 
 /**
  * grss_feed_channel_fetch_async:
- * @channel: a #GrssFeedChannel
- * @callback: function to invoke at the end of the download
- * @user_data: data passed to the callback
+ * @channel: a #GrssFeedChannel.
+ * @callback: function to invoke at the end of the download.
+ * @user_data: data passed to the callback.
  *
- * Similar to grss_feed_channel_fetch(), but asyncronous
+ * Similar to grss_feed_channel_fetch(), but asyncronous.
  */
 void
 grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data)
@@ -936,15 +938,15 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
 
 /**
  * grss_feed_channel_fetch_all:
- * @channel: a #GrssFeedChannel
+ * @channel: a #GrssFeedChannel.
  * @error: if an error occourred, %NULL is returned and this is filled with the
- *         message
+ *         message.
  *
  * Utility to fetch and populate a #GrssFeedChannel, and retrieve all its
- * items
+ * items.
  *
  * Return value: a GList of #GrssFeedItem, to be completely unreferenced and
- * freed when no longer in use, or %NULL if an error occurs
+ * freed when no longer in use, or %NULL if an error occurs.
  */
 GList*
 grss_feed_channel_fetch_all (GrssFeedChannel *channel, GError **error)
@@ -1019,11 +1021,11 @@ feed_downloaded_return_items (SoupSession *session, SoupMessage *msg, gpointer u
 
 /**
  * grss_feed_channel_fetch_all_async:
- * @channel: a #GrssFeedChannel
- * @callback: function to invoke at the end of the download
- * @user_data: data passed to the callback
+ * @channel: a #GrssFeedChannel.
+ * @callback: function to invoke at the end of the download.
+ * @user_data: data passed to the callback.
  *
- * Similar to grss_feed_channel_fetch_all(), but asyncronous
+ * Similar to grss_feed_channel_fetch_all(), but asyncronous.
  */
 void
 grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data)
@@ -1041,14 +1043,17 @@ grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback
 
 /**
  * grss_feed_channel_fetch_all_finish:
- * @channel: a #GrssFeedChannel
- * @res: the #GAsyncResult passed to the callback
- * @error: if an error occourred, NULL is returned and this is filled with the message
+ * @channel: a #GrssFeedChannel.
+ * @res: the #GAsyncResult passed to the callback.
+ * @error: if an error occourred, %NULL is returned and this is filled with the
+ *         message.
  *
- * Finalizes an asyncronous operation started with grss_feed_channel_fetch_all_async()
+ * Finalizes an asyncronous operation started with
+ * grss_feed_channel_fetch_all_async().
  *
- * Return value: list of items fetched from the #GrssFeedChannel, or NULL if @error is set. The
- * list (and contained items) is freed at the end of the callback
+ * Return value: list of items fetched from the #GrssFeedChannel, or %NULL if
+ * @error is set. The list (and contained items) is freed at the end of the
+ * callback
  */
 GList*
 grss_feed_channel_fetch_all_finish (GrssFeedChannel *channel, GAsyncResult *res, GError **error)

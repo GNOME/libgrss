@@ -55,12 +55,12 @@ grss_feeds_store_init (GrssFeedsStore *node)
 
 /**
  * grss_feeds_store_get_channels:
- * @store: a #GrssFeedsStore
+ * @store: a #GrssFeedsStore.
  *
- * To retrieve list of feeds permanently saved into the store
+ * To retrieve list of feeds permanently saved into the store.
  *
  * Return value: list of #GrssFeedChannel found in the @store. Do not modify or
- * free it
+ * free it.
  */
 GList*
 grss_feeds_store_get_channels (GrssFeedsStore *store)
@@ -70,14 +70,14 @@ grss_feeds_store_get_channels (GrssFeedsStore *store)
 
 /**
  * grss_feeds_store_get_items_by_channel:
- * @store: a #GrssFeedsStore
- * @channel: parent feed containing required items
+ * @store: a #GrssFeedsStore.
+ * @channel: parent feed containing required items.
  *
  * To retrieve list of items saved into the store, assigned to the given
- * @channel
+ * @channel.
  *
  * Return value: list of #GrssFeedItem found in the @store. Do not modify or free
- * it
+ * it.
  */
 GList*
 grss_feeds_store_get_items_by_channel (GrssFeedsStore *store, GrssFeedChannel *channel)
@@ -87,13 +87,13 @@ grss_feeds_store_get_items_by_channel (GrssFeedsStore *store, GrssFeedChannel *c
 
 /**
  * grss_feeds_store_has_item:
- * @store: a #GrssFeedsStore
- * @channel: parent feed containing required item
- * @id: unique ID to look for
+ * @store: a #GrssFeedsStore.
+ * @channel: parent feed containing required item.
+ * @id: unique ID to look for.
  *
- * To retrieve an item into a feed, given his unique ID
+ * To retrieve an item into a feed, given his unique ID.
  *
- * Return value: %TRUE if the specified item exists, %FALSE otherwise
+ * Return value: %TRUE if the specified item exists, %FALSE otherwise.
  */
 gboolean
 grss_feeds_store_has_item (GrssFeedsStore *store, GrssFeedChannel *channel, const gchar *id)
@@ -103,12 +103,12 @@ grss_feeds_store_has_item (GrssFeedsStore *store, GrssFeedChannel *channel, cons
 
 /**
  * grss_feeds_store_add_item_in_channel:
- * @store: a #GrssFeedsStore
- * @channel: parent feed for the new item
- * @item: new item to permanently save
+ * @store: a #GrssFeedsStore.
+ * @channel: parent feed for the new item.
+ * @item: new item to permanently save.
  *
  * To save a new #GrssFeedItem into the @store. It performs a check to grant
- * @item is not already saved
+ * @item is not already saved.
  */
 void
 grss_feeds_store_add_item_in_channel (GrssFeedsStore *store, GrssFeedChannel *channel, GrssFeedItem *item)
@@ -134,12 +134,12 @@ feed_fetched (GrssFeedsPool *pool, GrssFeedChannel *feed, GList *items, gpointer
 
 /**
  * grss_feeds_store_switch:
- * @store: a #GrssFeedsStore
- * @run: %TRUE to run the @store, %FALSE to stop
+ * @store: a #GrssFeedsStore.
+ * @run: %TRUE to run the @store, %FALSE to stop.
  *
  * This is to permit the @store to auto-update itself: it creates an internal
  * #GrssFeedsPool and listens for his signals, so to implement the whole loop
- * fetch-parse-save trasparently
+ * fetch-parse-save trasparently.
  */
 void
 grss_feeds_store_switch (GrssFeedsStore *store, gboolean run)

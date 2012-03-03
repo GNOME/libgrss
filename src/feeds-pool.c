@@ -32,7 +32,7 @@
  * The #GrssFeedsPool permits to automatically "listen" for more feeds: it
  * provides to fetch them on regular intervals (as defined by
  * grss_feed_channel_get_update_interval() for each channel), parse them with
- * #GrssFeedParser, and emits signals when feeds are ready
+ * #GrssFeedParser, and emits signals when feeds are ready.
  */
 
 struct _GrssFeedsPoolPrivate {
@@ -116,11 +116,11 @@ grss_feeds_pool_class_init (GrssFeedsPoolClass *klass)
 
 	/**
 	 * GrssFeedsPool::feed-fetching:
-	 * @pool: the #GrssFeedsPool emitting the signal
-	 * @feed: the #GrssFeedChannel which is going to be fetched
+	 * @pool: the #GrssFeedsPool emitting the signal.
+	 * @feed: the #GrssFeedChannel which is going to be fetched.
 	 *
 	 * Emitted when the @pool starts fetching a new #GrssFeedChannel. To be
-	 * used to know the internal status of the component
+	 * used to know the internal status of the component.
 	 */
 	signals [FEED_FETCHING] = g_signal_new ("feed-fetching", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
 	                                        NULL, NULL, g_cclosure_marshal_VOID__OBJECT,
@@ -128,15 +128,15 @@ grss_feeds_pool_class_init (GrssFeedsPoolClass *klass)
 
 	/**
 	 * GrssFeedsPool::feed-ready:
-	 * @pool: the #GrssFeedsPool emitting the signal
-	 * @feed: the #GrssFeedChannel which has been fetched and parsed
-	 * @items: list of #GrssFeedItem obtained parsing the feed
+	 * @pool: the #GrssFeedsPool emitting the signal.
+	 * @feed: the #GrssFeedChannel which has been fetched and parsed.
+	 * @items: list of #GrssFeedItem obtained parsing the feed.
 	 *
 	 * Emitted when a #GrssFeedChannel assigned to the @pool has been fetched
 	 * and parsed. All parsed items are exposed in the array, with no
 	 * regards about previously existing elements. @items may be NULL, if
 	 * an error occourred while fetching and/or parsing. List of @items
-	 * is freed, and his elements are unref'd, when signal ends
+	 * is freed, and his elements are unref'd, when signal ends.
 	 */
 	signals [FEED_READY] = g_signal_new ("feed-ready", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
 	                                     NULL, NULL, feed_marshal_VOID__OBJECT_POINTER,
@@ -155,9 +155,9 @@ grss_feeds_pool_init (GrssFeedsPool *node)
 /**
  * grss_feeds_pool_new:
  *
- * Allocates a new #GrssFeedsPool
+ * Allocates a new #GrssFeedsPool.
  *
- * Return value: a new #GrssFeedsPool
+ * Return value: a new #GrssFeedsPool.
  */
 GrssFeedsPool*
 grss_feeds_pool_new ()
@@ -190,15 +190,15 @@ create_listened (GrssFeedsPool *pool, GList *feeds)
 
 /**
  * grss_feeds_pool_listen:
- * @pool: a #GrssFeedsPool
- * @feeds: a list of #GrssFeedChannel
+ * @pool: a #GrssFeedsPool.
+ * @feeds: a list of #GrssFeedChannel.
  *
  * To set the list of feeds to be managed by the pool. The previous list, if
  * any, is invalidated. After invokation to the function, grss_feeds_pool_switch()
  * must be call to run the auto-fetching (always, also if previous state was
  * "running").
  * The list in @feeds can be freed after calling this; linked #GrssFeedChannel
- * are g_object_ref'd here
+ * are g_object_ref'd here.
  */
 void
 grss_feeds_pool_listen (GrssFeedsPool *pool, GList *feeds)
@@ -214,15 +214,15 @@ grss_feeds_pool_listen (GrssFeedsPool *pool, GList *feeds)
 
 /**
  * grss_feeds_pool_get_listened:
- * @pool: a #GrssFeedsPool
+ * @pool: a #GrssFeedsPool.
  *
  * Returns the list of feeds currently managed by the @pool. Please consider
  * this function has to build the list that returns, and of course this is a
  * time and resources consuming task: if you only need to know how many feeds
- * are currently handled, check grss_feeds_pool_get_listened_num()
+ * are currently handled, check grss_feeds_pool_get_listened_num().
  *
  * Return value: a list of #GrssFeedChannel, to be freed with g_list_free() when
- * no longer in use. Do not modify elements found in this list
+ * no longer in use. Do not modify elements found in this list.
  */
 GList*
 grss_feeds_pool_get_listened (GrssFeedsPool *pool)
@@ -244,9 +244,9 @@ grss_feeds_pool_get_listened (GrssFeedsPool *pool)
  *
  * Returns number of feeds under the @pool control, as provided by
  * grss_feeds_pool_listen(). To get the complete list of those feeds, check
- * grss_feeds_pool_get_listened()
+ * grss_feeds_pool_get_listened().
  *
- * Return value: number of feeds currently managed by the #GrssFeedsPool
+ * Return value: number of feeds currently managed by the #GrssFeedsPool.
  */
 int
 grss_feeds_pool_get_listened_num (GrssFeedsPool *pool)
@@ -340,11 +340,11 @@ run_scheduler (GrssFeedsPool *pool)
 
 /**
  * grss_feeds_pool_switch:
- * @pool: a #GrssFeedsPool
- * @run: %TRUE to run the pool, %FALSE to pause it
+ * @pool: a #GrssFeedsPool.
+ * @run: %TRUE to run the pool, %FALSE to pause it.
  *
  * Permits to pause or resume the @pool fetching feeds. If @run is %TRUE, the
- * @pool starts immediately
+ * @pool starts immediately.
  */
 void
 grss_feeds_pool_switch (GrssFeedsPool *pool, gboolean run)
@@ -364,11 +364,11 @@ grss_feeds_pool_switch (GrssFeedsPool *pool, gboolean run)
 
 /**
  * grss_feeds_pool_get_session:
- * @pool: a #GrssFeedsPool
+ * @pool: a #GrssFeedsPool.
  *
- * To access the internal #SoupSession used by the @pool to fetch items
+ * To access the internal #SoupSession used by the @pool to fetch items.
  *
- * Return value: istance of #SoupSession. Do not free it
+ * Return value: istance of #SoupSession. Do not free it.
  */
 SoupSession*
 grss_feeds_pool_get_session (GrssFeedsPool *pool)
