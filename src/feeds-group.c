@@ -130,7 +130,6 @@ retrieve_group_handler (GrssFeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
 		iter = g_slist_next (iter);
 	}
 
-	g_warning ("No suitable parser has been found.");
 	return NULL;
 }
 
@@ -186,16 +185,23 @@ grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **
 
 	do {
 		doc = file_to_xml (path);
-		g_set_error (error, FEEDS_GROUP_ERROR, FEEDS_GROUP_PARSE_ERROR, "Empty document");
-
-		if ((cur = xmlDocGetRootElement (doc)) == NULL)
+		if (doc == NULL) {
+			g_set_error (error, FEEDS_GROUP_ERROR, FEEDS_GROUP_PARSE_ERROR, "Empty document");
 			break;
+		}
+
+		if ((cur = xmlDocGetRootElement (doc)) == NULL) {
+			g_set_error (error, FEEDS_GROUP_ERROR, FEEDS_GROUP_PARSE_ERROR, "Empty document");
+			break;
+		}
 
 		while (cur && xmlIsBlankNode (cur))
 			cur = cur->next;
 
-		if (!cur)
+		if (!cur) {
+			g_set_error (error, FEEDS_GROUP_ERROR, FEEDS_GROUP_PARSE_ERROR, "Empty document");
 			break;
+		}
 
 		if (!cur->name) {
 			g_set_error (error, FEEDS_GROUP_ERROR, FEEDS_GROUP_PARSE_ERROR, "Invalid XML");
@@ -203,8 +209,10 @@ grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **
 		}
 
 		handler = retrieve_group_handler (group, doc, cur);
-		if (handler == NULL)
+		if (handler == NULL) {
+			g_set_error (error, FEEDS_GROUP_ERROR, FEEDS_GROUP_PARSE_ERROR, "Unrecognized format");
 			break;
+		}
 
 		items = grss_feeds_group_handler_parse (handler, doc, error);
 

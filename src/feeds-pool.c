@@ -261,7 +261,6 @@ static void
 feed_downloaded (GObject *source, GAsyncResult *res, gpointer user_data)
 {
 	GList *items;
-	GError *error;
 	GrssFeedChannelWrap *feed;
 
 	feed = (GrssFeedChannelWrap*) user_data;
@@ -269,14 +268,14 @@ feed_downloaded (GObject *source, GAsyncResult *res, gpointer user_data)
 		return;
 
 	error = NULL;
-	items = grss_feed_channel_fetch_all_finish (GRSS_FEED_CHANNEL (source), res, &error);
+	items = grss_feed_channel_fetch_all_finish (GRSS_FEED_CHANNEL (source), res, NULL);
 
-	if (items == NULL && error) {
-		g_warning ("Unable to parse feed at %s: %s", grss_feed_channel_get_source (feed->channel), error->message);
-		g_error_free (error);
-	}
+	/*
+		TODO	Emit specific signal also when operation fails
+	*/
 
-	g_signal_emit (feed->pool, signals [FEED_READY], 0, feed->channel, items, NULL);
+	if (items != NULL)
+		g_signal_emit (feed->pool, signals [FEED_READY], 0, feed->channel, items, NULL);
 
 	feed->next_fetch = time (NULL) + (grss_feed_channel_get_update_interval (feed->channel) * 60);
 }

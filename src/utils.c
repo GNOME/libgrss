@@ -565,6 +565,11 @@ date_to_ISO8601 (time_t date)
 	Copyright (C) 2000-2003  Andrew Lanoix
 	Copyright (C) 2007       Tim-Philipp Müller <tim centricular net>
 */
+
+/*
+	TODO	This function needs better error reporting
+*/
+
 GInetAddress*
 detect_internet_address ()
 {
@@ -589,13 +594,10 @@ detect_internet_address ()
 		return NULL;
 
 	sockfd = socket (AF_INET, SOCK_DGRAM, 0);
-	if (!sockfd) {
-		g_warning ("Unable to open a socket to detect interface exposed to Internet");
+	if (!sockfd)
 		return NULL;
-	}
 
 	if (connect (sockfd, (struct sockaddr*) &serv_add, sizeof (serv_add)) == -1) {
-		g_warning ("Unable to open a connection to detect interface exposed to Internet");
 		close (sockfd);
 		return NULL;
 	}
@@ -603,17 +605,14 @@ detect_internet_address ()
 	len = sizeof (myaddr);
 	if (getsockname (sockfd, (struct sockaddr*) &myaddr, &len) != 0) {
 		close (sockfd);
-		g_warning ("Unable to obtain information about interface exposed to Internet");
 		return NULL;
 	}
 
 	close (sockfd);
 	memset (ip, 0, sizeof (char) * 100);
 
-	if (inet_ntop (AF_INET, &(((struct sockaddr_in*) &myaddr)->sin_addr), ip, 100) == NULL) {
-		g_warning ("Unable to obtain IP exposed to Internet");
+	if (inet_ntop (AF_INET, &(((struct sockaddr_in*) &myaddr)->sin_addr), ip, 100) == NULL)
 		return NULL;
-	}
 
 	return g_inet_address_new_from_string (ip);
 }
