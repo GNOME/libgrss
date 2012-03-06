@@ -267,7 +267,6 @@ feed_downloaded (GObject *source, GAsyncResult *res, gpointer user_data)
 	if (feed->pool->priv->running == FALSE)
 		return;
 
-	error = NULL;
 	items = grss_feed_channel_fetch_all_finish (GRSS_FEED_CHANNEL (source), res, NULL);
 
 	/*
