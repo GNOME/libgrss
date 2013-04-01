@@ -1,6 +1,7 @@
 m4_define([libgrss_major_version], [0])
 m4_define([libgrss_minor_version], [5])
 m4_define([libgrss_micro_version], [0])
+m4_define([libgrss_api_version], [0.5])
 
 m4_define([libgrss_version],
           [libgrss_major_version.libgrss_minor_version.libgrss_micro_version])
@@ -46,10 +47,12 @@ AC_CHECK_FUNCS([strptime localtime_r])
 LIBGRSS_MAJOR_VERSION=libgrss_major_version
 LIBGRSS_MINOR_VERSION=libgrss_minor_version
 LIBGRSS_MICRO_VERSION=libgrss_micro_version
+LIBGRSS_API_VERSION=libgrss_api_version
 LIBGRSS_VERSION=libgrss_version
 AC_SUBST(LIBGRSS_MAJOR_VERSION)
 AC_SUBST(LIBGRSS_MICRO_VERSION)
 AC_SUBST(LIBGRSS_MINOR_VERSION)
+AC_SUBST(LIBGRSS_API_VERSION)
 AC_SUBST(LIBGRSS_VERSION)
 
 dnl libgrss checks

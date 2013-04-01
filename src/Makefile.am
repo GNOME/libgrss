@@ -74,18 +74,18 @@ feed-marshal.c: feed-marshal.list
 	echo "#include \"feed-marshal.h\"" > $@ &&    \
 		$(GLIB_GENMARSHAL) $< --prefix=feed_marshal --body >> $@
 
-lib_LTLIBRARIES = libgrss-1.0.la
+lib_LTLIBRARIES = libgrss-0.5.la
 
-libgrss_1_0_la_LIBADD = $(LIBGRSS_LIBS)
-libgrss_1_0_la_SOURCES = \
+libgrss_0_5_la_LIBADD = $(LIBGRSS_LIBS)
+libgrss_0_5_la_SOURCES = \
 	$(sources_public_h) \
 	$(sources_private_h) \
 	$(sources_c) \
 	$(NULL)
-libgrss_1_0_la_LDFLAGS = $(LDADD)
+libgrss_0_5_la_LDFLAGS = $(LDADD)
 
-libgrssincludedir = $(includedir)/libgrss
-libgrssinclude_DATA = $(sources_public_h)
+libgrss_0_5_ladir = $(includedir)/libgrss-@LIBGRSS_API_VERSION@
+libgrss_0_5_la_HEADERS = $(sources_public_h)
 
 CLEANFILES = $(pcfile_DATA)
 

@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: libgrss
 Description: GObject RSS handling library
 Version: @VERSION@
-Libs: -L${libdir} -lgrss-1.0
-Cflags: -I${includedir}/libgrss
+Libs: -L${libdir} -lgrss-@LIBGRSS_API_VERSION@
+Cflags: -I${includedir}/libgrss-@LIBGRSS_API_VERSION@
 Requires: gobject-2.0 libxml-2.0 libsoup-2.4
