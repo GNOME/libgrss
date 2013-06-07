@@ -110,8 +110,9 @@ grss_feed_channel_finalize (GObject *obj)
 			g_free (iter->data);
 		g_list_free (chan->priv->contributors);
 	}
+
 	if (chan->priv->jar != NULL)
-                g_free (chan->priv->jar);
+		g_free (chan->priv->jar);
 }
 
 static void
@@ -655,12 +656,11 @@ grss_feed_channel_get_contributors (GrssFeedChannel *channel)
 void
 grss_feed_channel_add_cookie (GrssFeedChannel *channel, SoupCookie *cookie)
 {
-	if (cookie != NULL)
-        {
-          if (channel->priv->jar == NULL)
-              channel->priv->jar = soup_cookie_jar_new();
-          soup_cookie_jar_add_cookie (channel->priv->jar, cookie);
-        }
+	if (cookie != NULL) {
+		if (channel->priv->jar == NULL)
+			channel->priv->jar = soup_cookie_jar_new ();
+		soup_cookie_jar_add_cookie (channel->priv->jar, cookie);
+	}
 }
 
 /**
@@ -888,17 +888,17 @@ quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg, GList **save_
 static void
 init_soup_session (SoupSession *session, GrssFeedChannel *channel)
 {
-  if (channel->priv->jar != NULL)
-      soup_session_add_feature(session, SOUP_SESSION_FEATURE(channel->priv->jar));
-  if (channel->priv->gzip == TRUE)
-      soup_session_add_feature_by_type (session, SOUP_TYPE_CONTENT_DECODER);
+	if (channel->priv->jar != NULL)
+		soup_session_add_feature (session, SOUP_SESSION_FEATURE (channel->priv->jar));
+	if (channel->priv->gzip == TRUE)
+		soup_session_add_feature_by_type (session, SOUP_TYPE_CONTENT_DECODER);
 }
 
 static void
 init_soup_message (SoupMessage* msg, GrssFeedChannel *channel)
 {
-  if (channel->priv->gzip == TRUE)
-    soup_message_headers_append(msg->request_headers, "Accept-encoding", "gzip");
+	if (channel->priv->gzip == TRUE)
+		soup_message_headers_append (msg->request_headers, "Accept-encoding", "gzip");
 }
 
 /**
@@ -1044,7 +1044,7 @@ grss_feed_channel_fetch_all (GrssFeedChannel *channel, GError **error)
 	init_soup_session (session, channel);
 
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
-	init_soup_message(msg, channel);
+	init_soup_message (msg, channel);
 
 	status = soup_session_send_message (session, msg);
 	items = NULL;
