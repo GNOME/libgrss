@@ -59,8 +59,10 @@ struct _GrssFeedChannelPrivate {
 	gchar		*copyright;
 	gchar		*editor;
 	GList		*contributors;
+	SoupCookieJar   *jar;
 	gchar		*webmaster;
 	gchar		*generator;
+	gboolean	gzip;
 
 	time_t		pub_time;
 	time_t		update_time;
@@ -108,6 +110,8 @@ grss_feed_channel_finalize (GObject *obj)
 			g_free (iter->data);
 		g_list_free (chan->priv->contributors);
 	}
+	if (chan->priv->jar != NULL)
+                g_free (chan->priv->jar);
 }
 
 static void
@@ -644,6 +648,39 @@ grss_feed_channel_get_contributors (GrssFeedChannel *channel)
 }
 
 /**
+ * grss_feed_channel_add_cookie:
+ * @channel: a #GrssFeedChannel.
+ * @cookie: HTML cookie to add to the channel's cookie jar
+ */
+void
+grss_feed_channel_add_cookie (GrssFeedChannel *channel, SoupCookie *cookie)
+{
+	if (cookie != NULL)
+        {
+          if (channel->priv->jar == NULL)
+              channel->priv->jar = soup_cookie_jar_new();
+          soup_cookie_jar_add_cookie (channel->priv->jar, cookie);
+        }
+}
+
+/**
+ * grss_feed_channel_get_cookies:
+ * @channel: a #GrssFeedChannel.
+ *
+ * Retrieves reference to the HTML cookies of the @channel.
+ * Must be freed with g_list_free.
+ *
+ * Return value: list of cookies to the channel, or %NULL.
+ */
+GList*
+grss_feed_channel_get_cookies (GrssFeedChannel *channel)
+{
+	if (channel->priv->jar != NULL)
+		return soup_cookie_jar_all_cookies(channel->priv->jar);
+	return NULL;
+}
+
+/**
  * grss_feed_channel_set_webmaster:
  * @channel: a #GrssFeedChannel.
  * @webmaster: webmaster of the feed.
@@ -686,6 +723,18 @@ grss_feed_channel_set_generator (GrssFeedChannel *channel, gchar *generator)
 }
 
 /**
+ * grss_feed_channel_set_gzip_compression:
+ * Set the Gzip compression for the channel to on or off
+ * @value either enable (TRUE) or disable compression (FALSE)
+ * 
+ */
+void
+grss_feed_channel_set_gzip_compression(GrssFeedChannel *channel, gboolean value)
+{
+	channel->priv->gzip = value;
+}
+
+/**
  * grss_feed_channel_get_generator:
  * @channel: a #GrssFeedChannel.
  *
@@ -698,6 +747,17 @@ grss_feed_channel_get_generator (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->generator;
 }
+
+/**
+ * grss_feed_channel_get_gzip_compression:
+ * 
+ * GZip Compression of the channel is either on or off
+ */
+gboolean
+grss_feed_channel_get_gzip_compression (GrssFeedChannel *channel)
+{
+	return channel->priv->gzip;
+}	
 
 /**
  * grss_feed_channel_set_publish_time:
@@ -825,6 +885,22 @@ quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg, GList **save_
 	}
 }
 
+static void
+init_soup_session (SoupSession *session, GrssFeedChannel *channel)
+{
+  if (channel->priv->jar != NULL)
+      soup_session_add_feature(session, SOUP_SESSION_FEATURE(channel->priv->jar));
+  if (channel->priv->gzip == TRUE)
+      soup_session_add_feature_by_type (session, SOUP_TYPE_CONTENT_DECODER);
+}
+
+static void
+init_soup_message (SoupMessage* msg, GrssFeedChannel *channel)
+{
+  if (channel->priv->gzip == TRUE)
+    soup_message_headers_append(msg->request_headers, "Accept-encoding", "gzip");
+}
+
 /**
  * grss_feed_channel_fetch:
  * @channel: a #GrssFeedChannel.
@@ -850,7 +926,11 @@ grss_feed_channel_fetch (GrssFeedChannel *channel, GError **error)
 	ret = FALSE;
 
 	session = soup_session_sync_new ();
+	init_soup_session (session, channel);
+
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
+	init_soup_message (msg, channel);
+
 	status = soup_session_send_message (session, msg);
 
 	if (status >= 200 && status <= 299) {
@@ -932,7 +1012,11 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
 	result = g_simple_async_result_new (G_OBJECT (channel), callback, user_data, grss_feed_channel_fetch_async);
 
 	session = soup_session_async_new ();
+	init_soup_session (session, channel);
+
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
+	init_soup_message (msg, channel);
+
 	soup_session_queue_message (session, msg, feed_downloaded, result);
 }
 
@@ -957,7 +1041,11 @@ grss_feed_channel_fetch_all (GrssFeedChannel *channel, GError **error)
 	SoupSession *session;
 
 	session = soup_session_sync_new ();
+	init_soup_session (session, channel);
+
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
+	init_soup_message(msg, channel);
+
 	status = soup_session_send_message (session, msg);
 	items = NULL;
 
@@ -1037,7 +1125,11 @@ grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback
 	result = g_simple_async_result_new (G_OBJECT (channel), callback, user_data, grss_feed_channel_fetch_async);
 
 	session = soup_session_async_new ();
+	init_soup_session (session, channel);
+
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
+	init_soup_message (msg, channel);
+
 	soup_session_queue_message (session, msg, feed_downloaded_return_items, result);
 }
 

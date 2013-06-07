@@ -77,10 +77,14 @@ void			grss_feed_channel_set_editor		(GrssFeedChannel *channel, gchar *editor);
 const gchar*		grss_feed_channel_get_editor		(GrssFeedChannel *channel);
 void			grss_feed_channel_add_contributor	(GrssFeedChannel *channel, gchar *contributor);
 const GList*		grss_feed_channel_get_contributors	(GrssFeedChannel *channel);
+void                    grss_feed_channel_add_cookie            (GrssFeedChannel *channel, SoupCookie *cookie);
+GList*                  grss_feed_channel_get_cookies           (GrssFeedChannel *channel);
 void			grss_feed_channel_set_webmaster		(GrssFeedChannel *channel, gchar *webmaster);
 const gchar*		grss_feed_channel_get_webmaster		(GrssFeedChannel *channel);
 void			grss_feed_channel_set_generator		(GrssFeedChannel *channel, gchar *generator);
 const gchar*		grss_feed_channel_get_generator		(GrssFeedChannel *channel);
+void			grss_feed_channel_set_gzip_compression(GrssFeedChannel *channel, gboolean value);
+gboolean 		grss_feed_channel_get_gzip_compression (GrssFeedChannel *channel);
 
 void			grss_feed_channel_set_publish_time	(GrssFeedChannel *channel, time_t publish);
 time_t			grss_feed_channel_get_publish_time	(GrssFeedChannel *channel);
