@@ -189,7 +189,7 @@ grss_feeds_publisher_class_init (GrssFeedsPublisherClass *klass)
 	                                             G_TYPE_NONE, 2, GRSS_FEED_CHANNEL_TYPE, G_TYPE_STRING);
 
 	/**
-	 * GrssFeedsPublisher::new_subscription:
+	 * GrssFeedsPublisher::delete_subscription:
 	 * @pub: the #GrssFeedsPublisher emitting the signal.
 	 * @topic: #GrssFeedChannel for which subscription has been removed.
 	 * @callback: callback revoked by the subscriber.
