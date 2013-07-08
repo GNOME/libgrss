@@ -93,6 +93,10 @@ GNOME_DOC_INIT
 
 GTK_DOC_CHECK([1.10])
 
+dnl GObject Introspection
+
+GOBJECT_INTROSPECTION_CHECK([1.30.0])
+
 AC_CONFIG_FILES([
         Makefile
         src/Makefile

@@ -96,3 +96,27 @@ BUILT_SOURCES = \
 EXTRA_DIST = \
 	feed-marshal.list   \
 	$(NULL)
+
+-include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_GIRS =
+INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir)
+INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
+
+if HAVE_INTROSPECTION
+introspection_sources = $(libgrss_0_5_la_SOURCES)
+
+Grss-0.5.gir: libgrss-0.5.la
+Grss_0_5_gir_INCLUDES = GObject-2.0
+Grss_0_5_gir_CFLAGS = $(INCLUDES)
+Grss_0_5_gir_LIBS = libgrss-0.5.la
+Grss_0_5_gir_FILES = $(introspection_sources)
+INTROSPECTION_GIRS += Grss-0.5.gir
+
+girdir = $(datadir)/gir-0.5
+gir_DATA = $(INTROSPECTION_GIRS)
+
+typelibdir = $(libdir)/girepository-0.5
+typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
+
+CLEANFILES += $(gir_DATA) $(typelib_DATA)
+endif

@@ -5,6 +5,8 @@
 *.pc
 *.stamp
 *~
+*.gir
+*.typelib
 .deps
 .libs
 Makefile

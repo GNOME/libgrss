@@ -6,7 +6,7 @@ CLEANFILES = libgrss-$(LIBGRSS_API_VERSION).pc
 pcfiledir = $(libdir)/pkgconfig
 pcfile_DATA = libgrss-$(LIBGRSS_API_VERSION).pc
 
-DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-introspection
 
 libgrss-$(LIBGRSS_API_VERSION).pc: libgrss.pc
 	@cp -f $< $@
