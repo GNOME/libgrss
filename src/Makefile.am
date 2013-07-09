@@ -38,25 +38,27 @@ sources_public_h = \
 	feeds-store.h                   \
 	feeds-subscriber.h
 
-sources_c = \
-	$(marshal_source)               \
-	feed-atom-handler.c             \
+sources_public_c = \
 	feed-channel.c                  \
 	feed-enclosure.c                \
-	feed-handler.c                  \
 	feed-item.c                     \
 	feed-parser.c                   \
-	feed-rss-handler.c              \
-	feed-pie-handler.c              \
 	feeds-group.c                   \
-	feeds-group-handler.c           \
-	feeds-opml-group-handler.c      \
 	feeds-pool.c                    \
 	feeds-publisher.c               \
 	feeds-store.c                   \
+	feeds-subscriber.c
+
+sources_private_c = \
+	$(marshal_source)               \
+	feed-atom-handler.c             \
+	feed-handler.c                  \
+	feed-rss-handler.c              \
+	feed-pie-handler.c              \
+	feeds-group-handler.c           \
+	feeds-opml-group-handler.c      \
 	feeds-pubsubhubbub-subscriber.c \
 	feeds-rsscloud-subscriber.c     \
-	feeds-subscriber.c              \
 	feeds-subscriber-handler.c      \
 	feeds-xbel-group-handler.c      \
 	feeds-xoxo-group-handler.c      \
@@ -80,7 +82,8 @@ libgrss_0_5_la_LIBADD = $(LIBGRSS_LIBS)
 libgrss_0_5_la_SOURCES = \
 	$(sources_public_h) \
 	$(sources_private_h) \
-	$(sources_c) \
+	$(sources_public_c) \
+	$(sources_private_c) \
 	$(NULL)
 libgrss_0_5_la_LDFLAGS = $(LDADD)
 
@@ -99,14 +102,17 @@ EXTRA_DIST = \
 
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir)
+INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) $(GIFLAGS)
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 
 if HAVE_INTROSPECTION
-introspection_sources = $(libgrss_0_5_la_SOURCES)
+introspection_sources = \
+	$(sources_public_h) \
+	$(sources_public_c) \
+	$(NULL)
 
 Grss-0.5.gir: libgrss-0.5.la
-Grss_0_5_gir_INCLUDES = GObject-2.0
+Grss_0_5_gir_INCLUDES = GObject-2.0 Gio-2.0 Soup-2.4 libxml2-2.0
 Grss_0_5_gir_CFLAGS = $(INCLUDES)
 Grss_0_5_gir_LIBS = libgrss-0.5.la
 Grss_0_5_gir_FILES = $(introspection_sources)
