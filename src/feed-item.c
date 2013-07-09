@@ -147,7 +147,7 @@ grss_feed_item_new (GrssFeedChannel *parent)
  *
  * Retrieves the feed from which the item belongs.
  *
- * Return value: the parent feed, as set in grss_feed_item_new().
+ * Return value: (transfer none) the parent feed, as set in grss_feed_item_new().
  */
 GrssFeedChannel*
 grss_feed_item_get_parent (GrssFeedItem *item)
@@ -283,8 +283,8 @@ grss_feed_item_add_category (GrssFeedItem *item, gchar *category)
  *
  * Retrieves list of categories assigned to the @item.
  *
- * Return value: list of strings, one for assigned category. Do not free or
- * modify this list.
+ * Return value: (element-type utf8) (transfer none) list of strings,
+ * one for assigned category. Do not free or modify this list.
  */
 const GList*
 grss_feed_item_get_categories (GrssFeedItem *item)
@@ -465,7 +465,8 @@ grss_feed_item_add_contributor (GrssFeedItem *item, gchar *contributor)
  *
  * Retrieves contributors for @item.
  *
- * Return value: list of contributors to the item.
+ * Return value: (element-type utf8) (transfer none) list of
+ * contributors to the item.
  */
 const GList*
 grss_feed_item_get_contributors (GrssFeedItem *item)
@@ -603,7 +604,8 @@ grss_feed_item_add_enclosure (GrssFeedItem *item, GrssFeedEnclosure *enclosure)
  *
  * Retrieves the list of enclosures added with grss_feed_item_add_enclosure().
  *
- * Return value: a list of #GrssFeedEnclosure. This is a direct reference to the
+ * Return value: (element-type GrssFeedEnclosure) (transfer none) a
+ * list of #GrssFeedEnclosure. This is a direct reference to the
  * internal list, do not free or modify it.
  */
 const GList*

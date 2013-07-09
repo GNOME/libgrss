@@ -139,8 +139,9 @@ retrieve_group_handler (GrssFeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
  *
  * Returns the list of supported file formats.
  *
- * Return value: a list of constant strings with names of supported formats. The
- * list must be freed when no longer used
+ * Return value: (element-type utf8) (transfer full) a list of
+ * constant strings with names of supported formats. The list must be
+ * freed when no longer used
  */
 GList*
 grss_feeds_group_get_formats (GrssFeedsGroup *group)
@@ -169,8 +170,9 @@ grss_feeds_group_get_formats (GrssFeedsGroup *group)
  *
  * Parses the given file to obtain list of listed feeds.
  *
- * Return value: a list of #GrssFeedChannels, or NULL if an error occours and
- * @error is set.
+ * Return value: (element-type GrssFeedChannel) (transfer full) a list
+ * of #GrssFeedChannels, or NULL if an error occours and @error is
+ * set.
  */
 GList*
 grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **error)
@@ -227,7 +229,7 @@ grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **
 /**
  * grss_feeds_group_export_file:
  * @group: a #GrssFeedsGroup.
- * @channels: list of #GrssFeedChannels.
+ * @channels: (element-type GrssFeedChannel) list of #GrssFeedChannels.
  * @format: string rappresenting the desired export format, as returnes by
  *          grss_feeds_group_get_formats().
  * @uri: URI of the file to write.

@@ -191,7 +191,7 @@ create_listened (GrssFeedsPool *pool, GList *feeds)
 /**
  * grss_feeds_pool_listen:
  * @pool: a #GrssFeedsPool.
- * @feeds: a list of #GrssFeedChannel.
+ * @feeds: (element-type GrssFeedChannel) a list of #GrssFeedChannel.
  *
  * To set the list of feeds to be managed by the pool. The previous list, if
  * any, is invalidated. After invokation to the function, grss_feeds_pool_switch()
@@ -221,8 +221,9 @@ grss_feeds_pool_listen (GrssFeedsPool *pool, GList *feeds)
  * time and resources consuming task: if you only need to know how many feeds
  * are currently handled, check grss_feeds_pool_get_listened_num().
  *
- * Return value: a list of #GrssFeedChannel, to be freed with g_list_free() when
- * no longer in use. Do not modify elements found in this list.
+ * Return value: (element-type GrssFeedChannel) (transfer container) a
+ * list of #GrssFeedChannel, to be freed with g_list_free() when no
+ * longer in use. Do not modify elements found in this list.
  */
 GList*
 grss_feeds_pool_get_listened (GrssFeedsPool *pool)
@@ -366,7 +367,7 @@ grss_feeds_pool_switch (GrssFeedsPool *pool, gboolean run)
  *
  * To access the internal #SoupSession used by the @pool to fetch items.
  *
- * Return value: istance of #SoupSession. Do not free it.
+ * Return value: (transfer none) instance of #SoupSession. Do not free it.
  */
 SoupSession*
 grss_feeds_pool_get_session (GrssFeedsPool *pool)

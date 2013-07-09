@@ -251,7 +251,7 @@ create_listened (GrssFeedsSubscriber *sub, GList *feeds)
 /**
  * grss_feeds_subscriber_listen:
  * @sub: a #GrssFeedsSubscriber.
- * @feeds: a list of #GrssFeedChannel.
+ * @feeds: (element-type GrssFeedChannel) a list of #GrssFeedChannel.
  *
  * To set the list of feeds to be managed by @sub. The previous list, if any,
  * is invalidated. After invokation to the function, grss_feeds_subscriber_switch()
@@ -275,8 +275,9 @@ grss_feeds_subscriber_listen (GrssFeedsSubscriber *sub, GList *feeds)
  *
  * Returns the list of feeds currently managed by @sub.
  *
- * Return value: a list of #GrssFeedChannel, to be freed with g_list_free() when
- * no longer in use. Do not modify elements found in this list.
+ * Return value: (element-type GrssFeedChannel) (transfer container) a
+ * list of #GrssFeedChannel, to be freed with g_list_free() when no
+ * longer in use. Do not modify elements found in this list.
  */
 GList*
 grss_feeds_subscriber_get_listened (GrssFeedsSubscriber *sub)
@@ -621,8 +622,8 @@ grss_feeds_subscriber_switch (GrssFeedsSubscriber *sub, gboolean run)
  * external events. It is often required by #GrssFeedsSubscriberHandlers while
  * subscribing contents to specify the local endpoint for communications.
  *
- * Return value: the #GInetAddress used by @sub, or %NULL if the
- * #GrssFeedsSubscriber is switched off.
+ * Return value: (transfer none) the #GInetAddress used by @sub, or
+ * %NULL if the #GrssFeedsSubscriber is switched off.
  */
 GInetAddress*
 grss_feeds_subscriber_get_address (GrssFeedsSubscriber *sub)
@@ -653,7 +654,8 @@ grss_feeds_subscriber_get_port (GrssFeedsSubscriber *sub)
  * To obtain the internal #SoupSession of a #GrssFeedsSubscriber, so to re-use
  * it in #GrssFeedsSubscriberHandlers or similar tasks.
  * 
- * Return value: the #SoupSession used by the provided #GrssFeedsSubscriber.
+ * Return value: (transfer none) the #SoupSession used by the provided
+ * #GrssFeedsSubscriber.
  */
 SoupSession*
 grss_feeds_subscriber_get_session (GrssFeedsSubscriber *sub)

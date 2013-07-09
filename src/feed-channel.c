@@ -640,7 +640,7 @@ grss_feed_channel_add_contributor (GrssFeedChannel *channel, gchar *contributor)
  *
  * Retrieves reference to the contributors of the @channel.
  *
- * Return value: list of contributors to the channel, or %NULL.
+ * Return value: (element-type utf8) (transfer none) list of contributors to the channel, or %NULL.
  */
 const GList*
 grss_feed_channel_get_contributors (GrssFeedChannel *channel)
@@ -668,11 +668,12 @@ grss_feed_channel_add_cookie (GrssFeedChannel *channel, SoupCookie *cookie)
  * @channel: a #GrssFeedChannel.
  *
  * Retrieves reference to the HTML cookies of the @channel.
- * Must be freed with g_list_free.
+ * The list and the individual cookies should all be freed after use.
+ * You can use soup_cookies_free.
  *
- * Return value: list of cookies to the channel, or %NULL.
+ * Return value: (element-type SoupCookie) (transfer full) list of cookies to the channel, or %NULL.
  */
-GList*
+GSList*
 grss_feed_channel_get_cookies (GrssFeedChannel *channel)
 {
 	if (channel->priv->jar != NULL)
@@ -1029,8 +1030,9 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
  * Utility to fetch and populate a #GrssFeedChannel, and retrieve all its
  * items.
  *
- * Return value: a GList of #GrssFeedItem, to be completely unreferenced and
- * freed when no longer in use, or %NULL if an error occurs.
+ * Return value: (element-type GrssFeedItem) (transfer full) a GList
+ * of #GrssFeedItem, to be completely unreferenced and freed when no
+ * longer in use, or %NULL if an error occurs.
  */
 GList*
 grss_feed_channel_fetch_all (GrssFeedChannel *channel, GError **error)
@@ -1143,8 +1145,9 @@ grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback
  * Finalizes an asyncronous operation started with
  * grss_feed_channel_fetch_all_async().
  *
- * Return value: list of items fetched from the #GrssFeedChannel, or %NULL if
- * @error is set. The list (and contained items) is freed at the end of the
+ * Return value: (element-type GrssFeedItem) (transfer none) list of
+ * items fetched from the #GrssFeedChannel, or %NULL if @error is
+ * set. The list (and contained items) is freed at the end of the
  * callback
  */
 GList*

@@ -159,8 +159,9 @@ retrieve_feed_handler (GrssFeedParser *parser, xmlDocPtr doc, xmlNodePtr cur)
  * Parses the given XML @doc, belonging to the given @feed, to obtain a list
  * of #GrssFeedItem.
  *
- * Return value: a list of #GrssFeedItem, to be freed when no longer in use, or
- * NULL if an error occours and @error is set.
+ * Return value: (element-type GrssFeedItem) (transfer full) a list of
+ * #GrssFeedItem, to be freed when no longer in use, or NULL if an
+ * error occours and @error is set.
  */
 GList*
 grss_feed_parser_parse (GrssFeedParser *parser, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
