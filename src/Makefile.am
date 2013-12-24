@@ -102,7 +102,7 @@ EXTRA_DIST = \
 
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) $(GIFLAGS)
+INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --warn-all $(GIFLAGS)
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 
 if HAVE_INTROSPECTION

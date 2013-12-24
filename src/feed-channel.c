@@ -640,7 +640,8 @@ grss_feed_channel_add_contributor (GrssFeedChannel *channel, gchar *contributor)
  *
  * Retrieves reference to the contributors of the @channel.
  *
- * Return value: (element-type utf8) (transfer none) list of contributors to the channel, or %NULL.
+ * Return value: (element-type utf8) (transfer none): list of contributors to
+ * the channel, or %NULL.
  */
 const GList*
 grss_feed_channel_get_contributors (GrssFeedChannel *channel)
@@ -671,7 +672,8 @@ grss_feed_channel_add_cookie (GrssFeedChannel *channel, SoupCookie *cookie)
  * The list and the individual cookies should all be freed after use.
  * You can use soup_cookies_free.
  *
- * Return value: (element-type SoupCookie) (transfer full) list of cookies to the channel, or %NULL.
+ * Return value: (element-type SoupCookie) (transfer full): list of cookies to
+ * the channel, or %NULL.
  */
 GSList*
 grss_feed_channel_get_cookies (GrssFeedChannel *channel)
@@ -727,7 +729,7 @@ grss_feed_channel_set_generator (GrssFeedChannel *channel, gchar *generator)
  * grss_feed_channel_set_gzip_compression:
  * Set the Gzip compression for the channel to on or off
  * @value either enable (TRUE) or disable compression (FALSE)
- * 
+ *
  */
 void
 grss_feed_channel_set_gzip_compression(GrssFeedChannel *channel, gboolean value)
@@ -751,14 +753,14 @@ grss_feed_channel_get_generator (GrssFeedChannel *channel)
 
 /**
  * grss_feed_channel_get_gzip_compression:
- * 
+ *
  * GZip Compression of the channel is either on or off
  */
 gboolean
 grss_feed_channel_get_gzip_compression (GrssFeedChannel *channel)
 {
 	return channel->priv->gzip;
-}	
+}
 
 /**
  * grss_feed_channel_set_publish_time:
@@ -1030,7 +1032,7 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
  * Utility to fetch and populate a #GrssFeedChannel, and retrieve all its
  * items.
  *
- * Return value: (element-type GrssFeedItem) (transfer full) a GList
+ * Return value: (element-type GrssFeedItem) (transfer full): a GList
  * of #GrssFeedItem, to be completely unreferenced and freed when no
  * longer in use, or %NULL if an error occurs.
  */
@@ -1145,7 +1147,7 @@ grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback
  * Finalizes an asyncronous operation started with
  * grss_feed_channel_fetch_all_async().
  *
- * Return value: (element-type GrssFeedItem) (transfer none) list of
+ * Return value: (element-type GrssFeedItem) (transfer none): list of
  * items fetched from the #GrssFeedChannel, or %NULL if @error is
  * set. The list (and contained items) is freed at the end of the
  * callback

@@ -227,8 +227,8 @@ grss_feeds_publisher_new ()
  * grss_feeds_publisher_format_content:
  * @pub: a #GrssFeedsPublisher.
  * @channel: the #GrssFeedChannel to dump in the file.
- * @items: (element-type GrssFeedItem) list of #GrssFeedItems to be
- *         added in the feed.
+ * @items: (element-type GrssFeedItem): list of #GrssFeedItems to be added in
+ *         the feed.
  * @error: if an error occourred, %NULL is returned and this is filled with the
  *         message.
  * 
@@ -493,8 +493,8 @@ feed_required_by_web_cb (SoupServer *server, SoupMessage *msg, const char *path,
  * grss_feeds_publisher_publish_web:
  * @pub: a #GrssFeedsPublisher.
  * @channel: the #GrssFeedChannel to dump in the file.
- * @items: (element-type GrssFeedItem) list of #GrssFeedItems to be
- *         added in the feed.
+ * @items: (element-type GrssFeedItem): list of #GrssFeedItems to be added in
+ *         the feed.
  * @id: name used in the external URL of the feed.
  * @error: if an error occourred, %FALSE is returned and this is filled with the
  *         message.
@@ -530,8 +530,8 @@ grss_feeds_publisher_publish_web (GrssFeedsPublisher *pub, GrssFeedChannel *chan
  * grss_feeds_publisher_publish_file:
  * @pub: a #GrssFeedsPublisher.
  * @channel: the #GrssFeedChannel to dump in the file.
- * @items: (element-type GrssFeedItem) list of #GrssFeedItems to be
- * added in the feed.
+ * @items: (element-type GrssFeedItem): list of #GrssFeedItems to be added in
+ *         the feed.
  * @uri: URI of the file to write. The full path must exists.
  * @error: if an error occourred, %FALSE is returned and this is filled with the
  *         message.
@@ -909,7 +909,7 @@ grss_feeds_publisher_hub_set_port (GrssFeedsPublisher *pub, int port)
 /**
  * grss_feeds_publisher_hub_set_topics:
  * @pub: a #GrssFeedsPublisher.
- * @topics: (element-type GrssFeedChannel) a list of #GrssFeedChannels.
+ * @topics: (element-type GrssFeedChannel): a list of #GrssFeedChannels.
  *
  * To define a list of valid "topics" for which the #GrssFeedsPublisher will
  * deliver contents. Sources of those channels, as retrieved by

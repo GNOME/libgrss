@@ -41,7 +41,7 @@
  * engage a subscription for each #GrssFeedChannel passed with
  * grss_feeds_subscriber_listen(), and waits for direct notifications by the
  * remote server.
- * 
+ *
  * Pay attention to the fact this object doesn't provides any NAT traversing
  * method to receive notification while behind a NAT.
  */
@@ -251,7 +251,7 @@ create_listened (GrssFeedsSubscriber *sub, GList *feeds)
 /**
  * grss_feeds_subscriber_listen:
  * @sub: a #GrssFeedsSubscriber.
- * @feeds: (element-type GrssFeedChannel) a list of #GrssFeedChannel.
+ * @feeds: (element-type GrssFeedChannel): a list of #GrssFeedChannel.
  *
  * To set the list of feeds to be managed by @sub. The previous list, if any,
  * is invalidated. After invokation to the function, grss_feeds_subscriber_switch()
@@ -275,7 +275,7 @@ grss_feeds_subscriber_listen (GrssFeedsSubscriber *sub, GList *feeds)
  *
  * Returns the list of feeds currently managed by @sub.
  *
- * Return value: (element-type GrssFeedChannel) (transfer container) a
+ * Return value: (element-type GrssFeedChannel) (transfer container): a
  * list of #GrssFeedChannel, to be freed with g_list_free() when no
  * longer in use. Do not modify elements found in this list.
  */
@@ -622,7 +622,7 @@ grss_feeds_subscriber_switch (GrssFeedsSubscriber *sub, gboolean run)
  * external events. It is often required by #GrssFeedsSubscriberHandlers while
  * subscribing contents to specify the local endpoint for communications.
  *
- * Return value: (transfer none) the #GInetAddress used by @sub, or
+ * Return value: (transfer none): the #GInetAddress used by @sub, or
  * %NULL if the #GrssFeedsSubscriber is switched off.
  */
 GInetAddress*
@@ -638,7 +638,7 @@ grss_feeds_subscriber_get_address (GrssFeedsSubscriber *sub)
  * This function returns the Internet port where @sub is listening for
  * external events. It is often required by #GrssFeedsSubscriberHandlers while
  * subscribing contents to specify the local endpoint for communications.
- * 
+ *
  * Return value: the port of the socket locally opened by @sub.
  */
 int
@@ -653,8 +653,8 @@ grss_feeds_subscriber_get_port (GrssFeedsSubscriber *sub)
  *
  * To obtain the internal #SoupSession of a #GrssFeedsSubscriber, so to re-use
  * it in #GrssFeedsSubscriberHandlers or similar tasks.
- * 
- * Return value: (transfer none) the #SoupSession used by the provided
+ *
+ * Return value: (transfer none): the #SoupSession used by the provided
  * #GrssFeedsSubscriber.
  */
 SoupSession*

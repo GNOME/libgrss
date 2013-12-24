@@ -52,6 +52,7 @@ typedef struct {
 enum {
 	FEED_FETCHING,
 	FEED_READY,
+	FEED_FAIL,
 	LAST_SIGNAL
 };
 
@@ -141,6 +142,18 @@ grss_feeds_pool_class_init (GrssFeedsPoolClass *klass)
 	signals [FEED_READY] = g_signal_new ("feed-ready", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
 	                                     NULL, NULL, feed_marshal_VOID__OBJECT_POINTER,
 	                                     G_TYPE_NONE, 2, G_TYPE_OBJECT, G_TYPE_POINTER);
+
+	/**
+	 * GrssFeedsPool::feed-fail:
+	 * @pool: the #GrssFeedsPool emitting the signal.
+	 * @feed: the #GrssFeedChannel which failed to fetch or parse.
+	 *
+	 * Emitted when an error raises in fetching or parsing a #GrssFeedChannel
+	 * assigned to the @pool.
+	 */
+	signals [FEED_FAIL] = g_signal_new ("feed-fail", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
+	                                    NULL, NULL, feed_marshal_VOID__OBJECT,
+	                                    G_TYPE_NONE, 1, G_TYPE_OBJECT);
 }
 
 static void
@@ -191,7 +204,7 @@ create_listened (GrssFeedsPool *pool, GList *feeds)
 /**
  * grss_feeds_pool_listen:
  * @pool: a #GrssFeedsPool.
- * @feeds: (element-type GrssFeedChannel) a list of #GrssFeedChannel.
+ * @feeds: (element-type GrssFeedChannel): a list of #GrssFeedChannel.
  *
  * To set the list of feeds to be managed by the pool. The previous list, if
  * any, is invalidated. After invokation to the function, grss_feeds_pool_switch()
@@ -221,9 +234,9 @@ grss_feeds_pool_listen (GrssFeedsPool *pool, GList *feeds)
  * time and resources consuming task: if you only need to know how many feeds
  * are currently handled, check grss_feeds_pool_get_listened_num().
  *
- * Return value: (element-type GrssFeedChannel) (transfer container) a
- * list of #GrssFeedChannel, to be freed with g_list_free() when no
- * longer in use. Do not modify elements found in this list.
+ * Return value: (element-type GrssFeedChannel) (transfer container): a
+ * list of #GrssFeedChannel, to be freed with g_list_free() when no longer in
+ * use. Do not modify elements found in this list.
  */
 GList*
 grss_feeds_pool_get_listened (GrssFeedsPool *pool)
@@ -270,12 +283,10 @@ feed_downloaded (GObject *source, GAsyncResult *res, gpointer user_data)
 
 	items = grss_feed_channel_fetch_all_finish (GRSS_FEED_CHANNEL (source), res, NULL);
 
-	/*
-		TODO	Emit specific signal also when operation fails
-	*/
-
 	if (items != NULL)
 		g_signal_emit (feed->pool, signals [FEED_READY], 0, feed->channel, items, NULL);
+	else
+		g_signal_emit (feed->pool, signals [FEED_FAIL], 0, feed->channel, NULL);
 
 	feed->next_fetch = time (NULL) + (grss_feed_channel_get_update_interval (feed->channel) * 60);
 }
@@ -367,7 +378,7 @@ grss_feeds_pool_switch (GrssFeedsPool *pool, gboolean run)
  *
  * To access the internal #SoupSession used by the @pool to fetch items.
  *
- * Return value: (transfer none) instance of #SoupSession. Do not free it.
+ * Return value: (transfer none): instance of #SoupSession. Do not free it.
  */
 SoupSession*
 grss_feeds_pool_get_session (GrssFeedsPool *pool)
