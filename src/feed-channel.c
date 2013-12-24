@@ -257,15 +257,21 @@ grss_feed_channel_get_format (GrssFeedChannel *channel)
  * @source: URL of the feed.
  *
  * To assign the URL where to fetch the feed.
+ * 
+ * Return value: %TRUE if @source is a valid URL, %FALSE otherwise
  */
-void
+gboolean
 grss_feed_channel_set_source (GrssFeedChannel *channel, gchar *source)
 {
-	/*
-		TODO	Check if the provided string is a valid URL
-	*/
 	FREE_STRING (channel->priv->source);
-	channel->priv->source = g_strdup (source);
+
+	if (test_url ((const gchar*) source) == TRUE) {
+		channel->priv->source = SET_STRING (source);
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
 }
 
 /**
@@ -316,12 +322,21 @@ grss_feed_channel_get_title (GrssFeedChannel *channel)
  * @homepage: homepage for the main website.
  *
  * To set the homepage of the site the @channel belongs.
+ * 
+ * Return value: %TRUE if @homepage is a valid URL, %FALSE otherwise
  */
-void
+gboolean
 grss_feed_channel_set_homepage (GrssFeedChannel *channel, gchar *homepage)
 {
 	FREE_STRING (channel->priv->homepage);
-	channel->priv->homepage = g_strdup (homepage);
+
+	if (test_url ((const gchar*) homepage) == TRUE) {
+		channel->priv->homepage = SET_STRING (homepage);
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
 }
 
 /**
@@ -372,12 +387,21 @@ grss_feed_channel_get_description (GrssFeedChannel *channel)
  * @image: URL of the image.
  *
  * To set a rappresentative image to @channel.
+ * 
+ * Return value: %TRUE if @image is a valid URL, %FALSE otherwise
  */
-void
+gboolean
 grss_feed_channel_set_image (GrssFeedChannel *channel, gchar *image)
 {
 	FREE_STRING (channel->priv->image);
-	channel->priv->image = g_strdup (image);
+
+	if (test_url ((const gchar*) image) == TRUE) {
+		channel->priv->image = SET_STRING (image);
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
 }
 
 /**
@@ -400,12 +424,21 @@ grss_feed_channel_get_image (GrssFeedChannel *channel)
  * @icon: URL where to retrieve the favicon.
  *
  * To set the URL of the icon rappresenting @channel.
+ * 
+ * Return value: %TRUE if @icon is a valid URL, %FALSE otherwise
  */
-void
+gboolean
 grss_feed_channel_set_icon (GrssFeedChannel *channel, gchar *icon)
 {
 	FREE_STRING (channel->priv->icon);
-	channel->priv->icon = g_strdup (icon);
+
+	if (test_url ((const gchar*) icon) == TRUE) {
+		channel->priv->icon = SET_STRING (icon);
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
 }
 
 /**
@@ -486,14 +519,21 @@ grss_feed_channel_get_category (GrssFeedChannel *channel)
  *
  * To set information about PubSubHubbub for the channel. To unset the hub,
  * pass %NULL as parameter.
+ * 
+ * Return value: %TRUE if @hub is a valid URL, %FALSE otherwise
  */
-void
+gboolean
 grss_feed_channel_set_pubsubhub (GrssFeedChannel *channel, gchar *hub)
 {
 	FREE_STRING (channel->priv->pubsub.hub);
 
-	if (hub != NULL)
-		channel->priv->pubsub.hub = g_strdup (hub);
+	if (test_url ((const gchar*) hub) == TRUE) {
+		channel->priv->pubsub.hub = SET_STRING (hub);
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
 }
 
 /**
@@ -652,7 +692,10 @@ grss_feed_channel_get_contributors (GrssFeedChannel *channel)
 /**
  * grss_feed_channel_add_cookie:
  * @channel: a #GrssFeedChannel.
- * @cookie: HTML cookie to add to the channel's cookie jar
+ * @cookie: HTML cookie to add to the #GrssFeedChannel's cookie jar
+ * 
+ * To add a cookie related to the @channel, will be involved in HTTP sessions
+ * while fetching it. More cookie can be added to every #GrssFeedChannel
  */
 void
 grss_feed_channel_add_cookie (GrssFeedChannel *channel, SoupCookie *cookie)
@@ -680,6 +723,7 @@ grss_feed_channel_get_cookies (GrssFeedChannel *channel)
 {
 	if (channel->priv->jar != NULL)
 		return soup_cookie_jar_all_cookies(channel->priv->jar);
+
 	return NULL;
 }
 
@@ -726,18 +770,6 @@ grss_feed_channel_set_generator (GrssFeedChannel *channel, gchar *generator)
 }
 
 /**
- * grss_feed_channel_set_gzip_compression:
- * Set the Gzip compression for the channel to on or off
- * @value either enable (TRUE) or disable compression (FALSE)
- *
- */
-void
-grss_feed_channel_set_gzip_compression(GrssFeedChannel *channel, gboolean value)
-{
-	channel->priv->gzip = value;
-}
-
-/**
  * grss_feed_channel_get_generator:
  * @channel: a #GrssFeedChannel.
  *
@@ -749,6 +781,19 @@ const gchar*
 grss_feed_channel_get_generator (GrssFeedChannel *channel)
 {
 	return (const gchar*) channel->priv->generator;
+}
+
+/**
+ * grss_feed_channel_set_gzip_compression:
+ * @channel: a #GrssFeedChannel.
+ * @value: %TRUE to enable GZIP compression when fetching the channel
+ * 
+ * Set the GZIP compression for the channel to on or off.
+ */
+void
+grss_feed_channel_set_gzip_compression(GrssFeedChannel *channel, gboolean value)
+{
+	channel->priv->gzip = value;
 }
 
 /**

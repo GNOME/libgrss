@@ -41,6 +41,7 @@
 
 #define FREE_STRING(__str)	if (__str) { g_free (__str); __str = NULL; }
 #define FREE_OBJECT(__obj)	if (__obj) { g_object_unref (__obj); __obj = NULL; }
+#define SET_STRING(__str)	(__str == NULL ? NULL : g_strdup (__str))
 
 gchar*		unhtmlize		(gchar *string);
 gchar*		unxmlize		(gchar * string);
@@ -55,5 +56,7 @@ gchar*		date_to_ISO8601		(time_t date);
 
 GInetAddress*	detect_internet_address	();
 gboolean	address_seems_public	(GInetAddress *addr);
+
+gboolean	test_url		(const gchar *url);
 
 #endif /* __UTILS_LIBGRSS_H__ */

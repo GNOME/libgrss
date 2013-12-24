@@ -50,23 +50,23 @@ GrssFeedChannel*	grss_feed_channel_new_from_file		(const gchar *path, GError **e
 
 void			grss_feed_channel_set_format		(GrssFeedChannel *channel, gchar *format);
 const gchar*		grss_feed_channel_get_format		(GrssFeedChannel *channel);
-void			grss_feed_channel_set_source		(GrssFeedChannel *channel, gchar *source);
+gboolean		grss_feed_channel_set_source		(GrssFeedChannel *channel, gchar *source);
 const gchar*		grss_feed_channel_get_source		(GrssFeedChannel *channel);
 void			grss_feed_channel_set_title		(GrssFeedChannel *channel, gchar *title);
 const gchar*		grss_feed_channel_get_title		(GrssFeedChannel *channel);
-void			grss_feed_channel_set_homepage		(GrssFeedChannel *channel, gchar *homepage);
+gboolean		grss_feed_channel_set_homepage		(GrssFeedChannel *channel, gchar *homepage);
 const gchar*		grss_feed_channel_get_homepage		(GrssFeedChannel *channel);
 void			grss_feed_channel_set_description	(GrssFeedChannel *channel, gchar *description);
 const gchar*		grss_feed_channel_get_description	(GrssFeedChannel *channel);
-void			grss_feed_channel_set_image		(GrssFeedChannel *channel, gchar *image);
+gboolean		grss_feed_channel_set_image		(GrssFeedChannel *channel, gchar *image);
 const gchar*		grss_feed_channel_get_image		(GrssFeedChannel *channel);
-void			grss_feed_channel_set_icon		(GrssFeedChannel *channel, gchar *icon);
+gboolean		grss_feed_channel_set_icon		(GrssFeedChannel *channel, gchar *icon);
 const gchar*		grss_feed_channel_get_icon		(GrssFeedChannel *channel);
 void			grss_feed_channel_set_language		(GrssFeedChannel *channel, gchar *language);
 const gchar*		grss_feed_channel_get_language		(GrssFeedChannel *channel);
 void			grss_feed_channel_set_category		(GrssFeedChannel *channel, gchar *category);
 const gchar*		grss_feed_channel_get_category		(GrssFeedChannel *channel);
-void			grss_feed_channel_set_pubsubhub		(GrssFeedChannel *channel, gchar *hub);
+gboolean		grss_feed_channel_set_pubsubhub		(GrssFeedChannel *channel, gchar *hub);
 gboolean		grss_feed_channel_get_pubsubhub		(GrssFeedChannel *channel, gchar **hub);
 void			grss_feed_channel_set_rsscloud		(GrssFeedChannel *channel, gchar *path, gchar *protocol);
 gboolean		grss_feed_channel_get_rsscloud		(GrssFeedChannel *channel, gchar **path, gchar **protocol);

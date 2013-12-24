@@ -629,3 +629,29 @@ address_seems_public (GInetAddress *addr)
 	        g_inet_address_get_is_mc_org_local (addr) == FALSE &&
 	        g_inet_address_get_is_mc_global (addr) == FALSE);
 }
+
+gboolean
+test_url (const gchar *url)
+{
+	gboolean ret;
+	SoupURI *test_uri;
+
+	if (url == NULL)
+		return TRUE;
+
+	ret = TRUE;
+	test_uri = soup_uri_new (url);
+
+	if (test_uri == NULL) {
+		ret = FALSE;
+	}
+	else {
+		if (SOUP_URI_VALID_FOR_HTTP (test_uri) == FALSE)
+			ret = FALSE;
+
+		soup_uri_free (test_uri);
+	}
+
+	return ret;
+}
+

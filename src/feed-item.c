@@ -33,9 +33,6 @@
  * attributes.
  */
 
-/*
-	TODO	Drop this structure and migrate to libchamplain
-*/
 typedef struct {
 	gboolean	has;
 	double		lat;
@@ -298,12 +295,21 @@ grss_feed_item_get_categories (GrssFeedItem *item)
  * @source: URL of the item.
  *
  * To set the source of the @item.
+ * 
+ * Return value: %TRUE if @source is a valid URL, %FALSE otherwise
  */
-void
+gboolean
 grss_feed_item_set_source (GrssFeedItem *item, gchar *source)
 {
 	FREE_STRING (item->priv->source);
-	item->priv->source = g_strdup (source);
+
+	if (test_url ((const gchar*) source) == TRUE) {
+		item->priv->source = SET_STRING (source);
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
 }
 
 /**
@@ -328,14 +334,23 @@ grss_feed_item_get_source (GrssFeedItem *item)
  *
  * To set an alternative real source for @item. This parameter is used by web
  * aggregators to explicit the origin of a content reproduced in them.
+ * 
+ * Return value: %TRUE if @realsource is a valid URL, %FALSE otherwise
  */
-void
+gboolean
 grss_feed_item_set_real_source (GrssFeedItem *item, gchar *realsource, gchar *title)
 {
 	FREE_STRING (item->priv->real_source_url);
-	item->priv->real_source_url = g_strdup (realsource);
 	FREE_STRING (item->priv->real_source_title);
-	item->priv->real_source_title = g_strdup (title);
+
+	if (test_url ((const gchar*) realsource) == TRUE) {
+		item->priv->real_source_url = SET_STRING (realsource);
+		item->priv->real_source_title = SET_STRING (title);
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
 }
 
 /**
@@ -480,12 +495,21 @@ grss_feed_item_get_contributors (GrssFeedItem *item)
  * @url: URL where to retrieve comments to the item.
  *
  * To assign the URL where to fetch comments for the item.
+ * 
+ * Return value: %TRUE if @url is a valid URL, %FALSE otherwise
  */
-void
+gboolean
 grss_feed_item_set_comments_url (GrssFeedItem *item, gchar *url)
 {
 	FREE_STRING (item->priv->comments_url);
-	item->priv->comments_url = g_strdup (url);
+
+	if (test_url ((const gchar*) url) == TRUE) {
+		item->priv->comments_url = SET_STRING (url);
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
 }
 
 /**
