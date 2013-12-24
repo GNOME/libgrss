@@ -16,9 +16,9 @@ m4_define([lt_revision], [libgrss_interface_age])
 m4_define([lt_age],
           [m4_eval(libgrss_binary_age - libgrss_interface_age)])
 
-m4_define([glib_req_version], [2.30.2])
+m4_define([glib_req_version], [2.32.4])
 m4_define([xml_req_version], [2.7.8])
-m4_define([soup_req_version], [2.36.1])
+m4_define([soup_req_version], [2.38.1])
 
 AC_PREREQ([2.59])
 AC_INIT([libgrss], [libgrss_version], [], [libgrss])
