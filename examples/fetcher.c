@@ -56,7 +56,6 @@ int main ()
 	GrssFeedsPool *pool;
 
 	g_type_init ();
-	g_thread_init (NULL);
 
 	list = NULL;
 

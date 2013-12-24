@@ -56,11 +56,6 @@ main ()
 
 	g_type_init ();
 
-	/*
-		This is required for correct behaviour in libsoup
-	*/
-	g_thread_init (NULL);
-
 	list = NULL;
 	printf ("Initing, please wait...\n");
 	printf ("... fetching feeds...\n");

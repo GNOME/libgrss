@@ -43,7 +43,6 @@ main (int argc, char **argv)
 	}
 
 	g_type_init ();
-	g_thread_init (NULL);
 
 	parser = grss_feeds_group_new ();
 
