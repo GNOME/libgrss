@@ -52,4 +52,8 @@ const gchar*		grss_feed_enclosure_get_format	(GrssFeedEnclosure *enclosure);
 void			grss_feed_enclosure_set_length	(GrssFeedEnclosure *enclosure, gsize length);
 gsize			grss_feed_enclosure_get_length	(GrssFeedEnclosure *enclosure);
 
+GFile*			grss_feed_enclosure_fetch		(GrssFeedEnclosure *enclosure, GError **error);
+void			grss_feed_enclosure_fetch_async		(GrssFeedEnclosure *enclosure, GAsyncReadyCallback callback, gpointer user_data);
+GFile*			grss_feed_enclosure_fetch_finish	(GrssFeedEnclosure *enclosure, GAsyncResult *res, GError **error);
+
 #endif /* __FEED_ENCLOSURE_H__ */

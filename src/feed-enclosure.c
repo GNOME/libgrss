@@ -21,7 +21,8 @@
 #include "utils.h"
 #include "feed-enclosure.h"
 
-#define FEED_ENCLOSURE_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GRSS_FEED_ENCLOSURE_TYPE, GrssFeedEnclosurePrivate))
+#define FEED_ENCLOSURE_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GRSS_FEED_ENCLOSURE_TYPE, GrssFeedEnclosurePrivate))
+#define FEED_ENCLOSURE_ERROR		feed_enclosure_error_quark()
 
 /**
  * SECTION: feed-enclosure
@@ -38,7 +39,18 @@ struct _GrssFeedEnclosurePrivate {
 	gsize	length;
 };
 
+enum {
+	FEED_ENCLOSURE_FETCH_ERROR,
+	FEED_ENCLOSURE_FILE_ERROR,
+};
+
 G_DEFINE_TYPE (GrssFeedEnclosure, grss_feed_enclosure, G_TYPE_OBJECT);
+
+static GQuark
+feed_enclosure_error_quark ()
+{
+	return g_quark_from_static_string ("feed_enclosure_error");
+}
 
 static void grss_feed_enclosure_finalize (GObject *obj)
 {
@@ -144,4 +156,146 @@ void grss_feed_enclosure_set_length (GrssFeedEnclosure *enclosure, gsize length)
 gsize grss_feed_enclosure_get_length (GrssFeedEnclosure *enclosure)
 {
 	return enclosure->priv->length;
+}
+
+static GFile*
+msg_to_internal_file (GrssFeedEnclosure *enclosure, SoupMessage *msg, GError **error)
+{
+	gboolean test;
+	GFile *ret;
+	GFileIOStream *stream;
+	GOutputStream *stream_out;
+
+	ret = g_file_new_tmp ("enclosure_XXXXXX", &stream, error);
+
+	if (ret != NULL) {
+		stream_out = g_io_stream_get_output_stream (G_IO_STREAM (stream));
+		test = g_output_stream_write_all (stream_out, msg->response_body->data, msg->response_body->length,
+		                                  NULL, NULL, error);
+
+		if (test == FALSE) {
+			g_object_unref (ret);
+			ret = NULL;
+		}
+
+		g_object_unref (stream_out);
+		g_object_unref (stream);
+	}
+
+	return ret;
+}
+
+/**
+ * grss_feed_enclosure_fetch:
+ * @enclosure: a #GrssFeedEnclosure.
+ * @error: if an error occourred, %NULL is returned and this is filled with the
+ *         message.
+ *
+ * Utility to fetch a #GrssFeedEnclosure. Contents are stored in a temporary
+ * #GFile, which is suggested to move on a permanent location to keep it over
+ * time.
+ *
+ * Return value: (transfer full): temporary file where the contents have been
+ * written, or %NULL if an error occours.
+ */
+GFile*
+grss_feed_enclosure_fetch (GrssFeedEnclosure *enclosure, GError **error)
+{
+	const gchar *url;
+	guint status;
+	GFile *ret;
+	SoupMessage *msg;
+	SoupSession *session;
+
+	ret = NULL;
+	url = grss_feed_enclosure_get_url (enclosure);
+
+	session = soup_session_sync_new ();
+	msg = soup_message_new ("GET", url);
+	status = soup_session_send_message (session, msg);
+
+	if (status >= 200 && status <= 299)
+		ret = msg_to_internal_file (enclosure, msg, error);
+	else
+		g_set_error (error, FEED_ENCLOSURE_ERROR, FEED_ENCLOSURE_FETCH_ERROR,
+		             "Unable to download from %s", url);
+
+	g_object_unref (session);
+	g_object_unref (msg);
+	return ret;
+}
+
+static void
+enclosure_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
+	guint status;
+	const gchar *url;
+	GFile *file;
+	GSimpleAsyncResult *result;
+	GrssFeedEnclosure *enclosure;
+	GError *error;
+
+	result = user_data;
+	enclosure = GRSS_FEED_ENCLOSURE (g_async_result_get_source_object (G_ASYNC_RESULT (result)));
+	url = grss_feed_enclosure_get_url (enclosure);
+	g_object_get (msg, "status-code", &status, NULL);
+
+	if (status >= 200 && status <= 299) {
+		error = NULL;
+		file = msg_to_internal_file (enclosure, msg, &error);
+
+		if (file != NULL)
+			g_simple_async_result_set_op_res_gpointer (result, file, g_object_unref);
+		else
+			g_simple_async_result_take_error (result, error);
+	}
+	else {
+		g_simple_async_result_set_error (result, FEED_ENCLOSURE_ERROR, FEED_ENCLOSURE_FETCH_ERROR,
+						 "Unable to download from %s", url);
+	}
+
+	g_simple_async_result_complete_in_idle (result);
+	g_object_unref (result);
+}
+
+/**
+ * grss_feed_enclosure_fetch_async:
+ * @enclosure: a #GrssFeedEnclosure.
+ * @callback: function to invoke at the end of the download.
+ * @user_data: data passed to the callback.
+ *
+ * Similar to grss_feed_enclosure_fetch(), but asyncronous.
+ */
+void
+grss_feed_enclosure_fetch_async (GrssFeedEnclosure *enclosure, GAsyncReadyCallback callback, gpointer user_data)
+{
+	GSimpleAsyncResult *result;
+	SoupMessage *msg;
+	SoupSession *session;
+
+	result = g_simple_async_result_new (G_OBJECT (enclosure), callback, user_data, grss_feed_enclosure_fetch_async);
+	session = soup_session_async_new ();
+	msg = soup_message_new ("GET", grss_feed_enclosure_get_url (enclosure));
+	soup_session_queue_message (session, msg, enclosure_downloaded, result);
+}
+
+/**
+ * grss_feed_enclosure_fetch_finish:
+ * @enclosure: a #GrssFeedEnclosure.
+ * @res: the #GAsyncResult passed to the callback.
+ * @error: if an error occourred, %NULL is returned and this is filled with the
+ *         message.
+ *
+ * Finalizes an asyncronous operation started with
+ * grss_feed_enclosure_fetch_async().
+ *
+ * Return value: (transfer full): temporary file where the contents have been
+ * written, or %NULL if an error occours.
+ */
+GFile*
+grss_feed_enclosure_fetch_finish (GrssFeedEnclosure *enclosure, GAsyncResult *res, GError **error)
+{
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (res), error))
+		return NULL;
+	else
+		return (GFile*) g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (res));
 }
