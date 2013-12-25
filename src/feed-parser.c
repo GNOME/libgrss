@@ -148,29 +148,13 @@ retrieve_feed_handler (GrssFeedParser *parser, xmlDocPtr doc, xmlNodePtr cur)
 	return NULL;
 }
 
-/**
- * grss_feed_parser_parse:
- * @parser: a #GrssFeedParser.
- * @feed: a #GrssFeedChannel to be parsed.
- * @doc: XML document extracted from the contents of the feed, which must
- *       already been fetched.
- * @error: location for eventual errors.
- *
- * Parses the given XML @doc, belonging to the given @feed, to obtain a list
- * of #GrssFeedItem.
- *
- * Return value: (element-type GrssFeedItem) (transfer full): a list of
- * #GrssFeedItem, to be freed when no longer in use, or NULL if anerror occours
- * and @error is set.
- */
-GList*
-grss_feed_parser_parse (GrssFeedParser *parser, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
+static FeedHandler*
+init_parsing (GrssFeedParser *parser, xmlDocPtr doc, GError **error)
 {
 	xmlNodePtr cur;
-	GList *items;
 	FeedHandler *handler;
 
-	items = NULL;
+	handler = NULL;
 
 	do {
 		if ((cur = xmlDocGetRootElement (doc)) == NULL) {
@@ -197,9 +181,62 @@ grss_feed_parser_parse (GrssFeedParser *parser, GrssFeedChannel *feed, xmlDocPtr
 			break;
 		}
 
-		items = feed_handler_parse (handler, feed, doc, error);
-
 	} while (0);
 
-	return items;
+	return handler;
 }
+
+/**
+ * grss_feed_parser_parse:
+ * @parser: a #GrssFeedParser.
+ * @feed: a #GrssFeedChannel to be parsed.
+ * @doc: XML document extracted from the contents of the feed, which must
+ *       already been fetched.
+ * @error: location for eventual errors.
+ *
+ * Parses the given XML @doc, belonging to the given @feed, to obtain a list
+ * of #GrssFeedItem.
+ *
+ * Return value: (element-type GrssFeedItem) (transfer full): a list of
+ * #GrssFeedItem, to be freed when no longer in use, or NULL if anerror occours
+ * and @error is set.
+ */
+GList*
+grss_feed_parser_parse (GrssFeedParser *parser, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
+{
+	FeedHandler *handler;
+
+	handler = init_parsing (parser, doc, error);
+
+	if (handler != NULL)
+		return feed_handler_parse (handler, feed, doc, TRUE, error);
+	else
+		return NULL;
+}
+
+/**
+ * grss_feed_parser_parse_channel:
+ * @parser: a #GrssFeedParser.
+ * @feed: a #GrssFeedChannel to be parsed.
+ * @doc: XML document extracted from the contents of the feed, which must
+ *       already been fetched.
+ * @error: location for eventual errors.
+ *
+ * Parses the given XML @doc, belonging to the given @feed.
+ * 
+ * Similar to grss_feed_parser_parse(), but grss_feed_parser_parse_channel()
+ * skips parsing of items into the document.
+ */
+void
+grss_feed_parser_parse_channel (GrssFeedParser *parser, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
+{
+	FeedHandler *handler;
+
+	handler = init_parsing (parser, doc, error);
+
+	if (handler != NULL)
+		return feed_handler_parse (handler, feed, doc, FALSE, error);
+	else
+		return NULL;
+}
+

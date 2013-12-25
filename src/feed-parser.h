@@ -47,5 +47,6 @@ GType		grss_feed_parser_get_type	() G_GNUC_CONST;
 GrssFeedParser*	grss_feed_parser_new		();
 
 GList*		grss_feed_parser_parse		(GrssFeedParser *parser, GrssFeedChannel *feed, xmlDocPtr doc, GError **error);
+void		grss_feed_parser_parse_channel	(GrssFeedParser *parser, GrssFeedChannel *feed, xmlDocPtr doc, GError **error);
 
 #endif /* __FEED_PARSER_H__ */

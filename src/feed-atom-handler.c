@@ -765,7 +765,7 @@ atom10_parse_feed_updated (xmlNodePtr cur, GrssFeedChannel *feed)
 }
 
 static GList*
-feed_atom_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
+feed_atom_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, gboolean do_items, GError **error)
 {
 	time_t now;
 	xmlNodePtr cur;
@@ -821,7 +821,7 @@ feed_atom_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc
 			if (func) {
 				(*func) (cur, feed);
 			}
-			else if (xmlStrEqual (cur->name, BAD_CAST"entry")) {
+			else if (do_items == TRUE && xmlStrEqual (cur->name, BAD_CAST"entry")) {
 				item = atom10_parse_entry (self, feed, cur);
 				if (item) {
 					if (grss_feed_item_get_publish_time (item) == 0)

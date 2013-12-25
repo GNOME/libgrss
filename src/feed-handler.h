@@ -37,13 +37,13 @@ struct _FeedHandlerInterface {
 
 	void (*set_ns_handler) (FeedHandler *self, NSHandler *handler);
 	gboolean (*check_format) (FeedHandler *self, xmlDocPtr doc, xmlNodePtr cur);
-	GList* (*parse) (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, GError **error);
+	GList* (*parse) (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, gboolean do_items, GError **error);
 };
 
 GType		feed_handler_get_type		();
 
 void		feed_handler_set_ns_handler	(FeedHandler *self, NSHandler *handler);
 gboolean	feed_handler_check_format	(FeedHandler *self, xmlDocPtr doc, xmlNodePtr cur);
-GList*		feed_handler_parse		(FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, GError **error);
+GList*		feed_handler_parse		(FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, gboolean do_items, GError **error);
 
 #endif /* __FEED_HANDLER_H__ */

@@ -424,7 +424,7 @@ parse_image (xmlNodePtr cur) {
 }
 
 static GList*
-feed_rss_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
+feed_rss_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, gboolean do_items, GError **error)
 {
 	gchar *tmp;
 	gboolean rdf;
@@ -499,7 +499,7 @@ feed_rss_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 				g_free (tmp);
 			}
 		}
-		else if ((!xmlStrcmp (cur->name, BAD_CAST"items"))) { /* RSS 1.1 */
+		else if (do_items == TRUE && (!xmlStrcmp (cur->name, BAD_CAST"items"))) { /* RSS 1.1 */
 			xmlNodePtr iter = cur->xmlChildrenNode;
 
 			while (iter) {
@@ -514,7 +514,7 @@ feed_rss_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 				iter = iter->next;
 			}
 		}
-		else if ((!xmlStrcmp (cur->name, BAD_CAST"item"))) { /* RSS 1.0, 2.0 */
+		else if (do_items == TRUE && (!xmlStrcmp (cur->name, BAD_CAST"item"))) { /* RSS 1.0, 2.0 */
 			item = parse_rss_item (parser, feed, doc, cur);
 
 			if (item != NULL) {
@@ -522,7 +522,6 @@ feed_rss_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 					grss_feed_item_set_publish_time (item, now);
 				items = g_list_append (items, item);
 			}
-
 		}
 
 		cur = cur->next;

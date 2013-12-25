@@ -180,7 +180,6 @@ GrssFeedChannel*
 grss_feed_channel_new_from_file (const gchar *path, GError **error)
 {
 	struct stat sbuf;
-	GList *items;
 	GList *iter;
 	xmlDocPtr doc;
 	GrssFeedParser *parser;
@@ -201,20 +200,7 @@ grss_feed_channel_new_from_file (const gchar *path, GError **error)
 
 	ret = g_object_new (GRSS_FEED_CHANNEL_TYPE, NULL);
 	parser = grss_feed_parser_new ();
-
-	/*
-		TODO	This function is quite inefficent because parses all
-			the feed with a GrssFeedParser and then trash obtained
-			GrssFeedItems. Perhaps a more aimed function in
-			GrssFeedParser would help...
-	*/
-	items = grss_feed_parser_parse (parser, ret, doc, NULL);
-
-	if (items != NULL) {
-		for (iter = items; iter; iter = g_list_next (iter))
-			g_object_unref (iter->data);
-		g_list_free (items);
-	}
+	grss_feed_parser_parse_channel (parser, ret, doc, NULL);
 
 	g_object_unref (parser);
 	xmlFreeDoc (doc);
@@ -901,26 +887,16 @@ quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg, GList **save_
 	xmlDocPtr doc;
 	GrssFeedParser *parser;
 
-	/*
-		TODO	This function is quite inefficent because parses all
-			the feed with a GrssFeedParser also when not required
-			(save_items == NULL) and wastes time obtained
-			GrssFeedItems. Perhaps a more aimed function in
-			GrssFeedParser would help...
-	*/
-
 	doc = content_to_xml (msg->response_body->data, msg->response_body->length);
 
 	if (doc != NULL) {
 		parser = grss_feed_parser_new ();
-		items = grss_feed_parser_parse (parser, channel, doc, NULL);
 
-		if (save_items == NULL && items != NULL) {
-			for (iter = items; iter; iter = g_list_next (iter))
-				g_object_unref (iter->data);
-			g_list_free (items);
+		if (save_items == NULL) {
+			grss_feed_parser_parse_channel (parser, channel, doc, NULL);
 		}
 		else {
+			items = grss_feed_parser_parse (parser, channel, doc, NULL);
 			*save_items = items;
 		}
 

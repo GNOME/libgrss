@@ -300,7 +300,7 @@ parse_entry (FeedPieHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xmlNo
 }
 
 static GList*
-feed_pie_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
+feed_pie_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, gboolean do_items, GError **error)
 {
 	gchar *tmp2;
 	gchar *tmp = NULL;
@@ -440,7 +440,7 @@ feed_pie_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 					g_free (tmp);
 				}
 			}
-			else if ((!xmlStrcmp (cur->name, BAD_CAST"entry"))) {
+			else if (do_items == TRUE && (!xmlStrcmp (cur->name, BAD_CAST"entry"))) {
 				item = parse_entry (parser, feed, doc, cur);
 				if (item) {
 					if (grss_feed_item_get_publish_time (item) == 0)

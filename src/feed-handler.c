@@ -63,10 +63,10 @@ feed_handler_check_format (FeedHandler *self, xmlDocPtr doc, xmlNodePtr cur)
 }
 
 GList*
-feed_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, GError **error)
+feed_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc, gboolean do_items, GError **error)
 {
 	if (IS_FEED_HANDLER (self) == FALSE)
 		return FALSE;
 
-	return FEED_HANDLER_GET_INTERFACE (self)->parse (self, feed, doc, error);
+	return FEED_HANDLER_GET_INTERFACE (self)->parse (self, feed, doc, do_items, error);
 }
