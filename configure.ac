@@ -1,116 +1,110 @@
-m4_define([libgrss_major_version], [0])
-m4_define([libgrss_minor_version], [5])
-m4_define([libgrss_micro_version], [0])
-m4_define([libgrss_api_version], [0.5])
+AC_PREREQ(2.62)
 
-m4_define([libgrss_version],
-          [libgrss_major_version.libgrss_minor_version.libgrss_micro_version])
+m4_define([grss_major_version], [0])
+m4_define([grss_minor_version], [5])
+m4_define([grss_micro_version], [0])
+m4_define([grss_api_version], [0.5])
+m4_define([grss_version],
+          [grss_major_version.grss_minor_version.grss_micro_version])
 
-m4_define([libgrss_interface_age], [0])
-m4_define([libgrss_binary_age],
-          [m4_eval(100 * libgrss_minor_version + libgrss_micro_version)])
+AC_INIT([libgrss], [grss_version], [])
 
-m4_define([lt_current],
-          [m4_eval(100 * libgrss_minor_version + libgrss_micro_version - libgrss_interface_age)])
-m4_define([lt_revision], [libgrss_interface_age])
-m4_define([lt_age],
-          [m4_eval(libgrss_binary_age - libgrss_interface_age)])
+AC_CONFIG_HEADERS(config.h)
 
-m4_define([glib_req_version], [2.32.4])
-m4_define([xml_req_version], [2.7.8])
-m4_define([soup_req_version], [2.38.1])
+AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz tar-ustar])
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_CONFIG_MACRO_DIR([m4])
 
-AC_PREREQ([2.59])
-AC_INIT([libgrss], [libgrss_version], [], [libgrss])
+GNOME_MAINTAINER_MODE_DEFINES
 
-AM_INIT_AUTOMAKE([1.10])
-AM_CONFIG_HEADER([config.h])
+GRSS_MAJOR_VERSION=grss_major_version
+GRSS_MINOR_VERSION=grss_minor_version
+GRSS_MICRO_VERSION=grss_micro_version
+LIBGRSS_API_VERSION=grss_api_version
+LIBGRSS_VERSION=grss_version
+AC_SUBST(GRSS_MAJOR_VERSION)
+AC_SUBST(GRSS_MINOR_VERSION)
+AC_SUBST(GRSS_MICRO_VERSION)
+AC_SUBST(LIBGRSS_API_VERSION)
+AC_SUBST(LIBGRSS_VERSION)
 
-GNOME_COMMON_INIT
-GNOME_COMPILE_WARNINGS
-GNOME_DEBUG_CHECK
+LT_PREREQ([2.2.6])
+LT_INIT([dlopen disable-static])
 
-AM_DISABLE_STATIC
-AM_PATH_GLIB_2_0
-AM_PROG_CC_C_O
-AM_PROG_LIBTOOL
+IT_PROG_INTLTOOL([0.40.6])
 
-AC_HEADER_STDC
-AC_CHECK_HEADERS([unistd.h])
-AC_C_CONST
-AC_FUNC_MALLOC
-AC_FUNC_MMAP
+AC_PROG_CC
+
+GNOME_COMPILE_WARNINGS([maximum])
+
+AC_ARG_ENABLE(deprecation_flags,
+              [AC_HELP_STRING([--enable-deprecation-flags],
+                              [use *_DISABLE_DEPRECATED flags @<:@default=no@:>@])],,
+              [enable_deprecation_flags=no])
+
+if test "x$enable_deprecation_flags" = "xyes"; then
+   DISABLE_DEPRECATED_CFLAGS=$DISABLE_DEPRECATED
+   AC_SUBST(DISABLE_DEPRECATED_CFLAGS)
+fi
+
+GETTEXT_PACKAGE=libgrss
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Package name])
+
+AM_GLIB_GNU_GETTEXT
+
+# AM_GLIB_GNU_GETTEXT above substs $DATADIRNAME
+# this is the directory where the *.{mo,gmo} files are installed
+grsslocaledir='${prefix}/${DATADIRNAME}/locale'
+AC_SUBST(grsslocaledir)
+
+AC_PATH_PROG(PKG_CONFIG, pkg-config)
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
 AC_CHECK_FUNCS([strptime localtime_r])
 
-LIBGRSS_MAJOR_VERSION=libgrss_major_version
-LIBGRSS_MINOR_VERSION=libgrss_minor_version
-LIBGRSS_MICRO_VERSION=libgrss_micro_version
-LIBGRSS_API_VERSION=libgrss_api_version
-LIBGRSS_VERSION=libgrss_version
-AC_SUBST(LIBGRSS_MAJOR_VERSION)
-AC_SUBST(LIBGRSS_MICRO_VERSION)
-AC_SUBST(LIBGRSS_MINOR_VERSION)
-AC_SUBST(LIBGRSS_API_VERSION)
-AC_SUBST(LIBGRSS_VERSION)
+AC_CHECK_LIBM
+AC_SUBST(LIBM)
 
-dnl libgrss checks
-PKG_CHECK_MODULES(LIBGRSS,
-                  gobject-2.0 >= glib_req_version dnl
-                  libxml-2.0 >= xml_req_version dnl
-                  libsoup-2.4 >= soup_req_version)
-AC_SUBST(LIBGRSS_CFLAGS)
-AC_SUBST(LIBGRSS_LIBS)
+PKG_CHECK_MODULES([LIBGRSS],[
+	glib-2.0 >= 2.32.4
+	libsoup-2.4 >= 2.38.1
+	libxml-2.0 >= 2.7.8
+])
 
-dnl = Enable strict compiler flags =========================================
-
-# use strict compiler flags only on development releases
-#m4_define([maintainer_flags_default],
-#          m4_if(m4_eval(libgrss_minor_version % 2), [1], [yes], [no]))
-m4_define([maintainer_flags_default], [no])
-AC_ARG_ENABLE([maintainer-flags],
-              AC_HELP_STRING([--enable-maintainer-flags=@<:@no/yes@:>@],
-                             [Use strict compiler flags @<:@default=maintainer_flags_default@:>@]),,
-              enable_maintainer_flags=maintainer_flags_default)
-
-if test "x$enable_maintainer_flags" = "xyes"; then
-  CPPFLAGS="$CPPFLAGS -g -Wall -Wshadow -Wcast-align -Wno-uninitialized -Werror"
-else
-  CPPFLAGS="$CPPFLAGS -g -Wall"
-fi
-
-dnl Internationalization
-GETTEXT_PACKAGE=libgrss
-AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], "$GETTEXT_PACKAGE", [Define the gettext package to use])
-AC_SUBST(GETTEXT_PACKAGE)
-AM_GLIB_GNU_GETTEXT
-
-AM_CONDITIONAL(GTK_DOC_BUILD_HTML, true)
-AM_CONDITIONAL(GTK_DOC_BUILD_PDF, false)
-dnl gnome-doc-utils stuff
-GNOME_DOC_INIT
-
-GTK_DOC_CHECK([1.10])
-
-dnl GObject Introspection
+##################################################
+# Checks for gtk-doc and docbook-tools
+##################################################
+GTK_DOC_CHECK([1.9])
 
 GOBJECT_INTROSPECTION_CHECK([1.30.0])
 
-AC_CONFIG_FILES([
-        Makefile
-        src/Makefile
-        doc/Makefile
-        doc/reference/Makefile
-        doc/reference/version.xml
-        libgrss.pc
+AC_OUTPUT([
+	Makefile
+	src/Makefile
+	doc/Makefile
+	doc/reference/Makefile
+	doc/reference/version.xml
+	po/Makefile.in
+	libgrss.pc
 ])
 
-AC_OUTPUT
+dnl ---------------------------------------------------------------------------
+dnl - Show summary
+dnl ---------------------------------------------------------------------------
 
-echo ""
-echo "                libgrss: $VERSION"
-echo ""
-echo "                 Prefix: ${prefix}"
-echo "         Compiler flags: ${CPPFLAGS}"
-echo ""
+echo "
+              libgrss $VERSION
+              `echo libgrss $VERSION | sed "s/./=/g"`
+
+        prefix:                       ${prefix}
+        source code location:         ${srcdir}
+        compiler:                     ${CC}
+        cflags:                       ${CFLAGS}
+        Maintainer mode:              ${USE_MAINTAINER_MODE}
+        Use *_DISABLE_DEPRECATED:     ${enable_deprecation_flags}
+
+        Build introspection support:  ${found_introspection}
+        Build gtk-doc documentation:  ${enable_gtk_doc}
+
+"
