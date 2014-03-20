@@ -233,10 +233,7 @@ grss_feed_parser_parse_channel (GrssFeedParser *parser, GrssFeedChannel *feed, x
 	FeedHandler *handler;
 
 	handler = init_parsing (parser, doc, error);
-
 	if (handler != NULL)
-		return feed_handler_parse (handler, feed, doc, FALSE, error);
-	else
-		return NULL;
+		feed_handler_parse (handler, feed, doc, FALSE, error);
 }
 

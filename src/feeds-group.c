@@ -139,13 +139,14 @@ retrieve_group_handler (GrssFeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
  *
  * Returns the list of supported file formats.
  *
- * Return value: (element-type utf8) (transfer full): a list of
+ * Return value: (element-type utf8) (transfer container): a list of
  * constant strings with names of supported formats. The list must be
  * freed when no longer used
  */
 GList*
 grss_feeds_group_get_formats (GrssFeedsGroup *group)
 {
+	gchar *name;
 	GSList *iter;
 	GList *names;
 	GrssFeedsGroupHandler *handler;
@@ -155,7 +156,8 @@ grss_feeds_group_get_formats (GrssFeedsGroup *group)
 
 	while (iter) {
 		handler = (GrssFeedsGroupHandler*) (iter->data);
-		names = g_list_prepend (names, grss_feeds_group_handler_get_name (handler));
+		name = (gchar*) grss_feeds_group_handler_get_name (handler);
+		names = g_list_prepend (names, name);
 		iter = g_slist_next (iter);
 	}
 

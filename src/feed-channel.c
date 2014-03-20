@@ -784,8 +784,11 @@ grss_feed_channel_set_gzip_compression(GrssFeedChannel *channel, gboolean value)
 
 /**
  * grss_feed_channel_get_gzip_compression:
+ * @channel: a #GrssFeedChannel.
  *
- * GZip Compression of the channel is either on or off
+ * GZIP compression of the channel is either on or off.
+ *
+ * Return value: %TRUE if @channel has GZIP compression on.
  */
 gboolean
 grss_feed_channel_get_gzip_compression (GrssFeedChannel *channel)
