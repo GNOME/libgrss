@@ -165,6 +165,61 @@ grss_feed_channel_new_with_source (gchar *source)
 }
 
 /**
+ * grss_feed_channel_new_from_xml:
+ * @doc: an XML document previously parsed with libxml2.
+ * @error: if an error occourred, %NULL is returned and this is filled with the
+ *         message.
+ *
+ * Allocates a new #GrssFeedChannel and init it with contents found in specified
+ * XML document.
+ *
+ * Return value: a #GrssFeedChannel, or %NULL if an error occurs.
+ */
+GrssFeedChannel*
+grss_feed_channel_new_from_xml (xmlDocPtr doc, GError **error)
+{
+	GrssFeedParser *parser;
+	GrssFeedChannel *ret;
+
+	ret = g_object_new (GRSS_FEED_CHANNEL_TYPE, NULL);
+	parser = grss_feed_parser_new ();
+
+	grss_feed_parser_parse_channel (parser, ret, doc, error);
+	if (error != NULL) {
+		g_object_unref (ret);
+		ret = NULL;
+	}
+
+	g_object_unref (parser);
+	return ret;
+}
+
+/**
+ * grss_feed_channel_new_from_memory:
+ * @data: string to parse.
+ * @error: if an error occourred, %NULL is returned and this is filled with the
+ *         message.
+ *
+ * Allocates a new #GrssFeedChannel and init it with contents found in specified
+ * memory block.
+ *
+ * Return value: a #GrssFeedChannel, or %NULL if an error occurs.
+ */
+GrssFeedChannel*
+grss_feed_channel_new_from_memory (const gchar *data, GError **error)
+{
+	xmlDocPtr doc;
+
+	doc = content_to_xml (data, strlen (data));
+	if (doc == NULL) {
+		g_set_error (error, FEED_CHANNEL_ERROR, FEED_CHANNEL_PARSE_ERROR, "Unable to parse data");
+		return NULL;
+	}
+
+	return grss_feed_channel_new_from_xml (doc, error);
+}
+
+/**
  * grss_feed_channel_new_from_file:
  * @path: path of the file to parse.
  * @error: if an error occourred, %NULL is returned and this is filled with the
@@ -180,9 +235,7 @@ GrssFeedChannel*
 grss_feed_channel_new_from_file (const gchar *path, GError **error)
 {
 	struct stat sbuf;
-	GList *iter;
 	xmlDocPtr doc;
-	GrssFeedParser *parser;
 	GrssFeedChannel *ret;
 
 	ret = NULL;
@@ -198,13 +251,9 @@ grss_feed_channel_new_from_file (const gchar *path, GError **error)
 		return NULL;
 	}
 
-	ret = g_object_new (GRSS_FEED_CHANNEL_TYPE, NULL);
-	parser = grss_feed_parser_new ();
-	grss_feed_parser_parse_channel (parser, ret, doc, NULL);
+	ret = grss_feed_channel_new_from_xml (doc, error);
 
-	g_object_unref (parser);
 	xmlFreeDoc (doc);
-
 	return ret;
 }
 

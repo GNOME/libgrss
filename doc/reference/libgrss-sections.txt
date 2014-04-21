@@ -110,6 +110,8 @@ grss_feed_parser_parse
 GrssFeedChannel
 grss_feed_channel_new
 grss_feed_channel_new_with_source
+grss_feed_channel_new_from_xml
+grss_feed_channel_new_from_memory
 grss_feed_channel_new_from_file
 grss_feed_channel_set_format
 grss_feed_channel_get_format

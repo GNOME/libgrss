@@ -46,6 +46,8 @@ GType			grss_feed_channel_get_type		(void) G_GNUC_CONST;
 
 GrssFeedChannel*	grss_feed_channel_new			();
 GrssFeedChannel*	grss_feed_channel_new_with_source	(gchar *source);
+GrssFeedChannel*	grss_feed_channel_new_from_xml		(xmlDocPtr doc, GError **error);
+GrssFeedChannel*	grss_feed_channel_new_from_memory	(const gchar *data, GError **error);
 GrssFeedChannel*	grss_feed_channel_new_from_file		(const gchar *path, GError **error);
 
 void			grss_feed_channel_set_format		(GrssFeedChannel *channel, gchar *format);
