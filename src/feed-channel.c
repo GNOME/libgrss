@@ -167,7 +167,7 @@ grss_feed_channel_new_with_source (gchar *source)
 /**
  * grss_feed_channel_new_from_xml:
  * @doc: an XML document previously parsed with libxml2.
- * @error: if an error occourred, %NULL is returned and this is filled with the
+ * @error: if an error occurred, %NULL is returned and this is filled with the
  *         message.
  *
  * Allocates a new #GrssFeedChannel and init it with contents found in specified
@@ -197,7 +197,7 @@ grss_feed_channel_new_from_xml (xmlDocPtr doc, GError **error)
 /**
  * grss_feed_channel_new_from_memory:
  * @data: string to parse.
- * @error: if an error occourred, %NULL is returned and this is filled with the
+ * @error: if an error occurred, %NULL is returned and this is filled with the
  *         message.
  *
  * Allocates a new #GrssFeedChannel and init it with contents found in specified
@@ -222,7 +222,7 @@ grss_feed_channel_new_from_memory (const gchar *data, GError **error)
 /**
  * grss_feed_channel_new_from_file:
  * @path: path of the file to parse.
- * @error: if an error occourred, %NULL is returned and this is filled with the
+ * @error: if an error occurred, %NULL is returned and this is filled with the
  *         message.
  *
  * Allocates a new #GrssFeedChannel and init it with contents found in specified
@@ -980,7 +980,7 @@ init_soup_message (SoupMessage* msg, GrssFeedChannel *channel)
 /**
  * grss_feed_channel_fetch:
  * @channel: a #GrssFeedChannel.
- * @error: if an error occourred, %FALSE is returned and this is filled with the
+ * @error: if an error occurred, %FALSE is returned and this is filled with the
  *         message.
  *
  * Utility to fetch and populate a #GrssFeedChannel for the first time, and init
@@ -1052,7 +1052,7 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
  * grss_feed_channel_fetch_finish:
  * @channel: a #GrssFeedChannel.
  * @res: the #GAsyncResult passed to the callback.
- * @error: if an error occourred, %FALSE is returned and this is filled with the
+ * @error: if an error occurred, %FALSE is returned and this is filled with the
  *         message.
  *
  * Finalizes an asyncronous operation started with
@@ -1099,7 +1099,7 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
 /**
  * grss_feed_channel_fetch_all:
  * @channel: a #GrssFeedChannel.
- * @error: if an error occourred, %NULL is returned and this is filled with the
+ * @error: if an error occurred, %NULL is returned and this is filled with the
  *         message.
  *
  * Utility to fetch and populate a #GrssFeedChannel, and retrieve all its
@@ -1214,7 +1214,7 @@ grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback
  * grss_feed_channel_fetch_all_finish:
  * @channel: a #GrssFeedChannel.
  * @res: the #GAsyncResult passed to the callback.
- * @error: if an error occourred, %NULL is returned and this is filled with the
+ * @error: if an error occurred, %NULL is returned and this is filled with the
  *         message.
  *
  * Finalizes an asyncronous operation started with

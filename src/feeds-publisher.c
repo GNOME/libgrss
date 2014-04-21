@@ -229,7 +229,7 @@ grss_feeds_publisher_new ()
  * @channel: the #GrssFeedChannel to dump in the file.
  * @items: (element-type GrssFeedItem): list of #GrssFeedItems to be added in
  *         the feed.
- * @error: if an error occourred, %NULL is returned and this is filled with the
+ * @error: if an error occurred, %NULL is returned and this is filled with the
  *         message.
  * 
  * Format a #GrssFeedChannel in Atom and returns the resulting string.
@@ -496,7 +496,7 @@ feed_required_by_web_cb (SoupServer *server, SoupMessage *msg, const char *path,
  * @items: (element-type GrssFeedItem): list of #GrssFeedItems to be added in
  *         the feed.
  * @id: name used in the external URL of the feed.
- * @error: if an error occourred, %FALSE is returned and this is filled with the
+ * @error: if an error occurred, %FALSE is returned and this is filled with the
  *         message.
  *
  * If the local web server has been executed (with
@@ -533,7 +533,7 @@ grss_feeds_publisher_publish_web (GrssFeedsPublisher *pub, GrssFeedChannel *chan
  * @items: (element-type GrssFeedItem): list of #GrssFeedItems to be added in
  *         the feed.
  * @uri: URI of the file to write. The full path must exists.
- * @error: if an error occourred, %FALSE is returned and this is filled with the
+ * @error: if an error occurred, %FALSE is returned and this is filled with the
  *         message.
  *
  * Dump the given @channel in an Atom formatted file in @path. If the local

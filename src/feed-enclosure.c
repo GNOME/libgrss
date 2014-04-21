@@ -188,7 +188,7 @@ msg_to_internal_file (GrssFeedEnclosure *enclosure, SoupMessage *msg, GError **e
 /**
  * grss_feed_enclosure_fetch:
  * @enclosure: a #GrssFeedEnclosure.
- * @error: if an error occourred, %NULL is returned and this is filled with the
+ * @error: if an error occurred, %NULL is returned and this is filled with the
  *         message.
  *
  * Utility to fetch a #GrssFeedEnclosure. Contents are stored in a temporary
@@ -282,7 +282,7 @@ grss_feed_enclosure_fetch_async (GrssFeedEnclosure *enclosure, GAsyncReadyCallba
  * grss_feed_enclosure_fetch_finish:
  * @enclosure: a #GrssFeedEnclosure.
  * @res: the #GAsyncResult passed to the callback.
- * @error: if an error occourred, %NULL is returned and this is filled with the
+ * @error: if an error occurred, %NULL is returned and this is filled with the
  *         message.
  *
  * Finalizes an asyncronous operation started with

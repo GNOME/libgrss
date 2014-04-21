@@ -136,7 +136,7 @@ grss_feeds_pool_class_init (GrssFeedsPoolClass *klass)
 	 * Emitted when a #GrssFeedChannel assigned to the @pool has been fetched
 	 * and parsed. All parsed items are exposed in the array, with no
 	 * regards about previously existing elements. @items may be NULL, if
-	 * an error occourred while fetching and/or parsing. List of @items
+	 * an error occurred while fetching and/or parsing. List of @items
 	 * is freed, and his elements are unref'd, when signal ends.
 	 */
 	signals [FEED_READY] = g_signal_new ("feed-ready", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0,
