@@ -1,0 +1,1454 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:planet="http://planet.intertwingly.net/" xmlns:indexing="urn:atom-extension:indexing" indexing:index="no"><access:restriction xmlns:access="http://www.bloglines.com/about/specs/fac-1.0" relationship="deny"/>
+  <title>Planet GNU</title>
+  <updated>2013-12-26T15:18:51Z</updated>
+  <generator uri="http://intertwingly.net/code/venus/">Venus</generator>
+  <author>
+    <name>GNU webmasters admins</name>
+    <email>planet@gnu.org</email>
+  </author>
+  <id>http://planet.gnu.org/atom.xml</id>
+  <link href="http://planet.gnu.org/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="http://planet.gnu.org/" rel="alternate"/>
+
+  <entry xml:lang="en">
+    <id>https://gnunet.org/2271 at https://gnunet.org</id>
+    <link href="https://gnunet.org/gns-key-exchange-party-30c3" rel="alternate" type="text/html"/>
+    <title xml:lang="en">Join GNS Key Exchange Party at 30C3 Hamburg</title>
+    <summary type="xhtml" xml:lang="en"><div xmlns="http://www.w3.org/1999/xhtml"><div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>The GNU Name System (aka  <i>GNS</i>) is a fully decentralized, censorship resistant naming system based on the idea of a pet name system not relying on centralized organizations. Every user manages his own namespace. To access names and records of other user's you have to exchange some specific information which can be done in a convinient way using a business card with a QR code containing your GNS information.</p></div></div></div></div>
+    </summary>
+    <updated>2013-12-25T11:25:28Z</updated>
+    <author>
+      <name>Matthias Wachs</name>
+    </author>
+    <source>
+      <id>https://gnunet.org/frontpage</id>
+      <link href="https://gnunet.org/frontpage" rel="alternate" type="text/html"/>
+      <link href="https://gnunet.org/rss.xml" rel="self" type="application/rss+xml"/>
+      <title xml:lang="en">GNUnet - GNU's Framework for Secure Peer-to-Peer Networking</title>
+      <updated>2013-12-26T15:15:10Z</updated>
+    </source>
+  </entry>
+
+  <entry xml:lang="en">
+    <id>https://gnunet.org/2258 at https://gnunet.org</id>
+    <link href="https://gnunet.org/gnunet0-10-0" rel="alternate" type="text/html"/>
+    <title xml:lang="en">GNUnet 0.10.0</title>
+    <summary type="xhtml" xml:lang="en"><div xmlns="http://www.w3.org/1999/xhtml"><div class="field field-name-field-platform field-type-list-text field-label-above"><div class="field-label">Platform: </div><div class="field-items"><div class="field-item even">Source Code (TGZ)</div></div></div><div class="field field-name-field-downloadlink field-type-link-field field-label-above"><div class="field-label">Download link: </div><div class="field-items"><div class="field-item even"><a href="http://ftpmirror.gnu.org/gnunet/gnunet-0.10.0.tar.gz">http://ftpmirror.gnu.org/gnunet/gnunet-0.10.0.tar.gz</a></div><div class="field-item odd"><a href="http://ftpmirror.gnu.org/gnunet/gnunet-0.10.0.tar.gz.sig">http://ftpmirror.gnu.org/gnunet/gnunet-0.10.0.tar.gz.sig</a></div><div class="field-item even"><a href="http://ftpmirror.gnu.org/gnunet/gnunet-fuse-0.10.0.tar.gz">http://ftpmirror.gnu.org/gnunet/gnunet-fuse-0.10.0.tar.gz</a></div><div class="field-item odd"><a href="http://ftpmirror.gnu.org/gnunet/gnunet-fuse-0.10.0.tar.gz.sig">http://ftpmirror.gnu.org/gnunet/gnunet-fuse-0.10.0.tar.gz.sig</a></div><div class="field-item even"><a href="http://ftpmirror.gnu.org/gnunet/gnunet-gtk-0.10.0.tar.gz">http://ftpmirror.gnu.org/gnunet/gnunet-gtk-0.10.0.tar.gz</a></div><div class="field-item odd"><a href="http://ftpmirror.gnu.org/gnunet/gnunet-gtk-0.10.0.tar.gz.sig">http://ftpmirror.gnu.org/gnunet/gnunet-gtk-0.10.0.tar.gz.sig</a></div></div></div><div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>We are pleased to announce the release of GNUnet 0.10.0. This release represents a major overhaul of the cryptographic primitives used by the system. GNUnet used RSA 2048 since its inception in 2001, but as of GNUnet 0.10.0, we are "powered by Curve25519". Naturally, changing cryptographic primitives like this breaks backwards compatibility entirely.  We have used this opportunity to implement protocol improvements all over the system.</p></div></div></div></div>
+    </summary>
+    <updated>2013-12-24T21:15:17Z</updated>
+    <author>
+      <name>Christian Grothoff</name>
+    </author>
+    <source>
+      <id>https://gnunet.org/frontpage</id>
+      <link href="https://gnunet.org/frontpage" rel="alternate" type="text/html"/>
+      <link href="https://gnunet.org/rss.xml" rel="self" type="application/rss+xml"/>
+      <title xml:lang="en">GNUnet - GNU's Framework for Secure Peer-to-Peer Networking</title>
+      <updated>2013-12-26T15:15:10Z</updated>
+    </source>
+  </entry>
+
+  <entry xml:lang="en">
+    <id>https://gnunet.org/2267 at https://gnunet.org</id>
+    <link href="https://gnunet.org/30c3" rel="alternate" type="text/html"/>
+    <title xml:lang="en">GNUnet at the 30th Chaos Communication Congress (30c3)</title>
+    <summary type="xhtml" xml:lang="en"><div xmlns="http://www.w3.org/1999/xhtml"><div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>We're happy to participate in various ways at this year's <a href="https://events.ccc.de/congress/2013/">30c3</a>:</p></div></div></div></div>
+    </summary>
+    <updated>2013-12-24T15:14:47Z</updated>
+    <author>
+      <name>Christian Grothoff</name>
+    </author>
+    <source>
+      <id>https://gnunet.org/frontpage</id>
+      <link href="https://gnunet.org/frontpage" rel="alternate" type="text/html"/>
+      <link href="https://gnunet.org/rss.xml" rel="self" type="application/rss+xml"/>
+      <title xml:lang="en">GNUnet - GNU's Framework for Secure Peer-to-Peer Networking</title>
+      <updated>2013-12-26T15:15:10Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://savannah.gnu.org/forum/forum.php?forum_id=7825</id>
+    <link href="http://savannah.gnu.org/forum/forum.php?forum_id=7825" rel="alternate" type="text/html"/>
+    <title>GNU Automake 1.14.1 released</title>
+    <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>See full announcement at:
+<br/>
+&lt;<a href="http://lists.gnu.org/archive/html/automake/2013-12/msg00024.html">http://lists.gnu.org/archive/html/automake/2013-12/msg00024.html</a>&gt;<br/>
+</p></div>
+    </content>
+    <updated>2013-12-24T14:38:46Z</updated>
+    <author>
+      <name>Stefano Lattarini</name>
+    </author>
+    <source>
+      <id>http://savannah.gnu.org/news/atom.php?group=automake</id>
+      <link href="http://savannah.gnu.org/news/atom.php?group=automake" rel="self" type="application/atom+xml"/>
+      <title>Automake - News</title>
+      <updated>2013-12-24T14:48:59Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/blogs/community/libreplanet-for-all</id>
+    <link href="http://www.fsf.org/blogs/community/libreplanet-for-all" rel="alternate" type="text/html"/>
+    <title>LibrePlanet for all!</title>
+    <summary>I can't even tell you how excited I am for LibrePlanet 2014
+on March 22 and 23, 2014, which is fast approaching! Right now,
+the rest of the FSF staff and I are working hard on the program
+for our annual conference so that in the next few weeks we'll be
+able to share our amazing roster of speakers with you.</summary>
+    <updated>2013-12-23T23:16:25Z</updated>
+    <source>
+      <id>http://www.fsf.org/blogs/recent-blog-posts</id>
+      <author>
+        <name>FSF Blogs</name>
+      </author>
+      <link href="http://www.fsf.org/blogs/recent-blog-posts" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/blogs.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Writing by representatives of the Free Software Foundation.</subtitle>
+      <title>FSF's blog</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/blogs/membership/a-last-minute-gift</id>
+    <link href="http://www.fsf.org/blogs/membership/a-last-minute-gift" rel="alternate" type="text/html"/>
+    <title>A last-minute gift that will capture the true spirit of Christmas</title>
+    <summary>'Tis the night before... the night before Christmas, and
+[groan] your shopping list has some names left on it.  Are you
+still searching for a gift for a friend, family member, or
+coworker, but not all that motivated to join the swarm of people
+milling about the consumerist landscape in an attempt to squeeze
+in the last few purchases?</summary>
+    <updated>2013-12-23T21:55:58Z</updated>
+    <source>
+      <id>http://www.fsf.org/blogs/recent-blog-posts</id>
+      <author>
+        <name>FSF Blogs</name>
+      </author>
+      <link href="http://www.fsf.org/blogs/recent-blog-posts" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/blogs.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Writing by representatives of the Free Software Foundation.</subtitle>
+      <title>FSF's blog</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://savannah.gnu.org/forum/forum.php?forum_id=7824</id>
+    <link href="http://savannah.gnu.org/forum/forum.php?forum_id=7824" rel="alternate" type="text/html"/>
+    <title>Binary packages for Windows and GNU/Linux</title>
+    <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>Now available binary packages for GNU/Linux 32 bits and Windows.<br/>
+</p></div>
+    </content>
+    <updated>2013-12-21T23:48:50Z</updated>
+    <author>
+      <name>Germán Arias</name>
+    </author>
+    <source>
+      <id>http://savannah.gnu.org/news/atom.php?group=fisicalab</id>
+      <link href="http://savannah.gnu.org/news/atom.php?group=fisicalab" rel="self" type="application/atom+xml"/>
+      <title>FísicaLab - News</title>
+      <updated>2013-12-21T23:49:07Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://savannah.gnu.org/forum/forum.php?forum_id=7823</id>
+    <link href="http://savannah.gnu.org/forum/forum.php?forum_id=7823" rel="alternate" type="text/html"/>
+    <title>GNU Parallel 20131222 ('玉兔 Mandela') released</title>
+    <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>GNU Parallel 20131222 ('玉兔 Mandela') has been released. It is available for download at: <a href="http://ftp.gnu.org/gnu/parallel/">http://ftp.gnu.org/gnu/parallel/</a>
+<br/>
+</p>
+<p>New in this release:
+<br/>
+</p>
+<ul>
+<li>GNU Parallel now has a motto: For people who live life in the parallel lane.
+</li>
+</ul>
+<ul>
+<li>Detection whether the buffer dir $TMPDIR runs out of space. This changes a central piece of code, making this release alpha quality.
+</li>
+</ul>
+<ul>
+<li>--keep-order --(n)onall will sort according to the sshlogin.
+</li>
+</ul>
+<ul>
+<li>Detection number of CPUs on DEC Tru64.
+</li>
+</ul>
+<ul>
+<li>GNU sql: --list-tables for sqlite3.
+</li>
+</ul>
+<ul>
+<li>GNU Parallel was cited in: Variational Message-Passing: Extension to Continuous Variables and Applications in Multi-Target Tracking <a href="http://www.ics.uci.edu/~ajfrank/pubs/thesis.pdf">http://www.ics.uci.edu/~ajfrank/pubs/thesis.pdf</a>
+</li>
+</ul>
+<ul>
+<li>GNU Parallel was cited in: Genome Assembly: Scaffolding Guided by Related Genomes <a href="https://www.duo.uio.no/handle/10852/37431">https://www.duo.uio.no/handle/10852/37431</a>
+</li>
+</ul>
+<ul>
+<li>GNU Parallel was cited in: Metagenomic analysis of Mariana Trench sediment samples <a href="http://repositorio.ul.pt/handle/10451/9436">http://repositorio.ul.pt/handle/10451/9436</a>
+</li>
+</ul>
+<ul>
+<li>GNU Parallel was cited in: Diacritization, automatic segmentation and labeling for Levantine Arabic speech <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp">http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp</a>=&amp;arnumber=6642556
+</li>
+</ul>
+<ul>
+<li>GNU Parallel was cited in: Investigation of emotion classification using speech rhythm metrics <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp">http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp</a>=&amp;arnumber=6642591
+</li>
+</ul>
+<ul>
+<li>GNU Parallel was cited in: A Rhythm-Based Analysis of Arabic Native and Non-Native Speaking Styles <a href="http://www.ijsps.com/uploadfile/2013/1128/20131128014413279.pdf">http://www.ijsps.com/uploadfile/2013/1128/20131128014413279.pdf</a>
+</li>
+</ul>
+<ul>
+<li>GNU Parallel was cited in: Evolutionary optimization of wetlands design <a href="http://dl.acm.org/citation.cfm?id=2480400">http://dl.acm.org/citation.cfm?id=2480400</a>
+</li>
+</ul>
+<ul>
+<li>GNU Parallel was cited (unfortunately with wrong citation) in: RDBMS vs NoSQL: Performance and Scaling Comparison <a href="http://www.epcc.ed.ac.uk/sites/default/files/Dissertations/2012-2013/RDBMS%20vs%20NoSQL%20-%20Performance%20and%20Scaling%20Comparison.pdf">http://www.epcc.ed.ac.uk/sites/default/files/Dissertations/2012-2013/RDBMS%20vs%20NoSQL%20-%20Performance%20and%20Scaling%20Comparison.pdf</a>
+</li>
+</ul>
+<ul>
+<li>GNU Parallel was used (without proper citation) in: Comprehensive Analysis Pipeline for Discovery of Human Genetic Variation <a href="http://www.google.com/patents/US20130311106">http://www.google.com/patents/US20130311106</a>
+</li>
+</ul>
+<ul>
+<li>Encrypt and decrypt in parallel with GPG <a href="http://blog.tkassembled.com/412/encrypt-and-decrypt-in-parallel-with-gpg/">http://blog.tkassembled.com/412/encrypt-and-decrypt-in-parallel-with-gpg/</a>
+</li>
+</ul>
+<ul>
+<li>Using GNU Parallel to create a SVM classifier <a href="http://ivanyu.me/blog/2013/12/01/parallel/">http://ivanyu.me/blog/2013/12/01/parallel/</a>
+</li>
+</ul>
+<ul>
+<li>Parallel xz compression <a href="http://anthon.home.xs4all.nl/rants/2013/parallel_xz/">http://anthon.home.xs4all.nl/rants/2013/parallel_xz/</a>
+</li>
+</ul>
+<ul>
+<li>Got CPUs to burn? Put 'em to work with GNU parallel <a href="http://baoilleach.blogspot.dk/2013/11/got-cpus-to-burn-put-em-to-work-with.html">http://baoilleach.blogspot.dk/2013/11/got-cpus-to-burn-put-em-to-work-with.html</a>
+</li>
+</ul>
+<ul>
+<li>Parallel rsync <a href="http://pastebin.com/JmnB9ffq">http://pastebin.com/JmnB9ffq</a>
+</li>
+</ul>
+<ul>
+<li>Gnu Parallel for fun and profit <a href="https://gist.github.com/celoyd/f7eb55ad69c9b33fd8c3">https://gist.github.com/celoyd/f7eb55ad69c9b33fd8c3</a>
+</li>
+</ul>
+<ul>
+<li>Parallelization of Exploitation <a href="http://rantsideasstuff.com/parallelization-of-exploitation/">http://rantsideasstuff.com/parallelization-of-exploitation/</a>
+</li>
+</ul>
+<ul>
+<li>Running assemblies in parallel <a href="https://khmer-protocols.readthedocs.org/en/v0.8.3/metagenomics/4-assemble.html">https://khmer-protocols.readthedocs.org/en/v0.8.3/metagenomics/4-assemble.html</a>
+</li>
+</ul>
+<ul>
+<li>Procesando la contabilidad del PP <a href="http://www.neorazorx.com/2013/07/procesando-la-contabilidad-del-pp.html">http://www.neorazorx.com/2013/07/procesando-la-contabilidad-del-pp.html</a>
+</li>
+</ul>
+<ul>
+<li>Mon make à moi (French) <a href="http://www.slideshare.net/lindenb/mon-make-moi-tout-sauf-galaxy">http://www.slideshare.net/lindenb/mon-make-moi-tout-sauf-galaxy</a>
+</li>
+</ul>
+<ul>
+<li>Bug fixes and man page updates.
+</li>
+</ul>
+
+<h3>About GNU Parallel</h3>
+
+<p>GNU Parallel is a shell tool for executing jobs in parallel using one or more computers. A job is can be a single command or a small script that has to be run for each of the lines in the input. The typical input is a list of files, a list of hosts, a list of users, a list of URLs, or a list of tables. A job can also be a command that reads from a pipe. GNU Parallel can then split the input and pipe it into commands in parallel.
+<br/>
+</p>
+<p>If you use xargs and tee today you will find GNU Parallel very easy to use as GNU Parallel is written to have the same options as xargs. If you write loops in shell, you will find GNU Parallel may be able to replace most of the loops and make them run faster by running several jobs in parallel. GNU Parallel can even replace nested loops.
+<br/>
+</p>
+<p>GNU Parallel makes sure output from the commands is the same output as you would get had you run the commands sequentially. This makes it possible to use output from GNU Parallel as input for other programs.
+<br/>
+</p>
+<p>You can find more about GNU Parallel at: <a href="http://www.gnu.org/s/parallel/">http://www.gnu.org/s/parallel/</a>
+<br/>
+</p>
+<p>You can install GNU Parallel in just 10 seconds with:
+<br/>
+(wget -O - pi.dk/3 || curl pi.dk/3/) | bash
+<br/>
+</p>
+<p>Watch the intro video on
+<br/>
+<a href="http://www.youtube.com/playlist?list=PL284C9FF2488BC6D1">http://www.youtube.com/playlist?list=PL284C9FF2488BC6D1</a>
+<br/>
+</p>
+<p>Walk through the tutorial (man parallel_tutorial). Your commandline will love you for it.
+<br/>
+</p>
+<p>When using programs that use GNU Parallel to process data for publication please cite:
+<br/>
+</p>
+<p>O. Tange (2011): GNU Parallel - The Command-Line Power Tool, ;login: The USENIX Magazine, February 2011:42-47.
+<br/>
+</p>
+
+<h3>About GNU SQL</h3>
+
+<p>GNU sql aims to give a simple, unified interface for accessing databases through all the different databases' command line clients. So far the focus has been on giving a common way to specify login information (protocol, username, password, hostname, and port number), size (database and table size), and running queries.
+<br/>
+</p>
+<p>The database is addressed using a DBURL. If commands are left out you will get that database's interactive shell.
+<br/>
+</p>
+<p>When using GNU SQL for a publication please cite:
+<br/>
+</p>
+<p>O. Tange (2011): GNU SQL - A Command Line Tool for Accessing Different Databases Using DBURLs, ;login: The USENIX Magazine, April 2011:29-32.
+<br/>
+</p>
+
+<h3>About GNU Niceload</h3>
+
+<p>GNU niceload slows down a program when the computer load average (or other system activity) is above a certain limit. When the limit is reached the program will be suspended for some time. If the limit is a soft limit the program will be allowed to run for short amounts of time before being suspended again. If the limit is a hard limit the program will only be allowed to run when the system is below the limit.<br/>
+</p></div>
+    </content>
+    <updated>2013-12-21T23:07:53Z</updated>
+    <author>
+      <name>Ole Tange</name>
+    </author>
+    <source>
+      <id>http://savannah.gnu.org/news/atom.php?group=parallel</id>
+      <link href="http://savannah.gnu.org/news/atom.php?group=parallel" rel="self" type="application/atom+xml"/>
+      <title>GNU Parallel - build and execute command lines from standard input in parallel - News</title>
+      <updated>2013-12-21T23:09:26Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/blogs/community/our-holiday-visit-to-the-apple-store-with-photos</id>
+    <link href="http://www.fsf.org/blogs/community/our-holiday-visit-to-the-apple-store-with-photos" rel="alternate" type="text/html"/>
+    <title>Our holiday visit to the Apple store (with photos)</title>
+    <summary>Ever wonder if you're the only one concerned about software
+freedom when you're doing your holiday shopping? We hit the
+streets yesterday to make sure that you aren't.</summary>
+    <updated>2013-12-20T23:37:53Z</updated>
+    <source>
+      <id>http://www.fsf.org/blogs/recent-blog-posts</id>
+      <author>
+        <name>FSF Blogs</name>
+      </author>
+      <link href="http://www.fsf.org/blogs/recent-blog-posts" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/blogs.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Writing by representatives of the Free Software Foundation.</subtitle>
+      <title>FSF's blog</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/events/20140118-hyderabad</id>
+    <link href="http://www.fsf.org/events/20140118-hyderabad" rel="alternate" type="text/html"/>
+    <title>Richard Stallman to speak in Hyderabad, India</title>
+    <summary>Hyderabad, India - [Title, exact time, and detailed location to be determined.]</summary>
+    <updated>2013-12-20T23:32:59Z</updated>
+    <category term="RMS Speech"/>
+    <source>
+      <id>http://www.fsf.org/events/aggregator</id>
+      <author>
+        <name>FSF Events</name>
+      </author>
+      <link href="http://www.fsf.org/events/aggregator" rel="alternate" type="text/html"/>
+      <link href="http://static.fsf.org/fsforg/rss/events.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Site Events</subtitle>
+      <title>Events</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/events/20140116-thiruvananthapuram</id>
+    <link href="http://www.fsf.org/events/20140116-thiruvananthapuram" rel="alternate" type="text/html"/>
+    <title>Richard Stallman to speak in Thiruvananthapuram, India</title>
+    <summary>Thiruvananthapuram, India - [Speech title, exact time, and detailed location to be determined.]</summary>
+    <updated>2013-12-20T22:45:00Z</updated>
+    <category term="RMS Speech"/>
+    <source>
+      <id>http://www.fsf.org/events/aggregator</id>
+      <author>
+        <name>FSF Events</name>
+      </author>
+      <link href="http://www.fsf.org/events/aggregator" rel="alternate" type="text/html"/>
+      <link href="http://static.fsf.org/fsforg/rss/events.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Site Events</subtitle>
+      <title>Events</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/news/gift-giving-gnu-advises-shoppers-to-give-freely</id>
+    <link href="http://www.fsf.org/news/gift-giving-gnu-advises-shoppers-to-give-freely" rel="alternate" type="text/html"/>
+    <title>Gift giving gnu advises shoppers to "give freely"</title>
+    <summary>BOSTON, Massachusetts, USA -- Friday, December 20th, 2013 --
+Yesterday, Free Software Foundation activists visited the Boston
+Apple store to raise awareness of more ethical alternatives for
+technology gifts. The activists were accompanied by a gnu (the free
+software movement's buffalo-like mascot) and sported Santa hats in the
+spirit of the season. Shoppers were surprised to see such an
+unusual Santa, and many took stickers and copies of the
+FSF's "Giving Guide," which contains tips for purchasing tech
+gifts that respect computer users' freedom, privacy and security.</summary>
+    <updated>2013-12-20T21:48:35Z</updated>
+    <source>
+      <id>http://www.fsf.org/news/aggregator</id>
+      <author>
+        <name>FSF News</name>
+      </author>
+      <link href="http://www.fsf.org/news/aggregator" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/news.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Latest news from the Free Software Foundation</subtitle>
+      <title>FSF News</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/blogs/licensing/interview-with-frank-karlitschek-of-owncloud</id>
+    <link href="http://www.fsf.org/blogs/licensing/interview-with-frank-karlitschek-of-owncloud" rel="alternate" type="text/html"/>
+    <title>Interview with Frank Karlitschek of ownCloud</title>
+    <summary>This is the latest installment of our Licensing and Compliance Lab's series on free software developers who choose GNU licenses for their works.</summary>
+    <updated>2013-12-20T21:30:00Z</updated>
+    <category term="GPL-interview"/>
+    <source>
+      <id>http://www.fsf.org/blogs/recent-blog-posts</id>
+      <author>
+        <name>FSF Blogs</name>
+      </author>
+      <link href="http://www.fsf.org/blogs/recent-blog-posts" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/blogs.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Writing by representatives of the Free Software Foundation.</subtitle>
+      <title>FSF's blog</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.gnutls.org/news.html#2013-12-20</id>
+    <link href="http://www.gnutls.org/news.html#2013-12-20" rel="alternate" type="text/html"/>
+    <title>GnuTLS 3.2.8 and 3.1.18</title>
+    <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>
+Released <a href="http://article.gmane.org/gmane.comp.encryption.gpg.gnutls.devel/7189">GnuTLS
+3.2.8</a> which adds new features and optimizations in the next stable branch;
+<a href="http://article.gmane.org/gmane.comp.encryption.gpg.gnutls.devel/7190">GnuTLS
+3.1.18</a>, is a bug-fix release on the current stable branch. 
+</p></div>
+    </content>
+    <updated>2013-12-20T00:00:00Z</updated>
+    <author>
+      <name>Nikos Mavrogiannopoulos</name>
+      <email>nmav@gnutls.org</email>
+    </author>
+    <source>
+      <id>http://www.gnutls.org/news.atom</id>
+      <link href="http://www.gnutls.org/news.atom" rel="self" type="application/atom+xml"/>
+      <title>GnuTLS - News</title>
+      <updated>2013-12-20T19:52:59Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/news/gluglug-x60-laptop-now-certified-to-respect-your-freedom</id>
+    <link href="http://www.fsf.org/news/gluglug-x60-laptop-now-certified-to-respect-your-freedom" rel="alternate" type="text/html"/>
+    <title>Gluglug X60 Laptop now certified to Respect Your Freedom</title>
+    <summary>BOSTON, Massachusetts, USA -- Thursday, December 19, 2013 -- The Free
+Software Foundation (FSF) today awarded Respects Your Freedom (RYF)
+certification to Gluglug X60 laptops. The RYF certification mark means
+that the product meets the FSF's standards in regard to users'
+freedom, control over the product, and privacy. This is the first
+laptop to receive RYF certification from the FSF.</summary>
+    <updated>2013-12-19T20:30:00Z</updated>
+    <source>
+      <id>http://www.fsf.org/news/aggregator</id>
+      <author>
+        <name>FSF News</name>
+      </author>
+      <link href="http://www.fsf.org/news/aggregator" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/news.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Latest news from the Free Software Foundation</subtitle>
+      <title>FSF News</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/blogs/directory/friday-free-software-directory-irc-meetup-december-20</id>
+    <link href="http://www.fsf.org/blogs/directory/friday-free-software-directory-irc-meetup-december-20" rel="alternate" type="text/html"/>
+    <title>Friday Free Software Directory IRC meetup: December 20</title>
+    <updated>2013-12-19T00:50:23Z</updated>
+    <source>
+      <id>http://www.fsf.org/blogs/recent-blog-posts</id>
+      <author>
+        <name>FSF Blogs</name>
+      </author>
+      <link href="http://www.fsf.org/blogs/recent-blog-posts" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/blogs.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Writing by representatives of the Free Software Foundation.</subtitle>
+      <title>FSF's blog</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/blogs/licensing/upcoming-changes-for-ututo</id>
+    <link href="http://www.fsf.org/blogs/licensing/upcoming-changes-for-ututo" rel="alternate" type="text/html"/>
+    <title>Upcoming changes for Ututo</title>
+    <summary>The oldest fully free GNU/Linux distribution comes to an end.</summary>
+    <updated>2013-12-18T23:47:33Z</updated>
+    <source>
+      <id>http://www.fsf.org/blogs/recent-blog-posts</id>
+      <author>
+        <name>FSF Blogs</name>
+      </author>
+      <link href="http://www.fsf.org/blogs/recent-blog-posts" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/blogs.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Writing by representatives of the Free Software Foundation.</subtitle>
+      <title>FSF's blog</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://savannah.gnu.org/forum/forum.php?forum_id=7819</id>
+    <link href="http://savannah.gnu.org/forum/forum.php?forum_id=7819" rel="alternate" type="text/html"/>
+    <title>FisicaLab 0.3.3 in Gentoo and OpenBSD</title>
+    <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>The 0.3.3 version is now available at official repositories of Gentoo and OpenBSD ports.<br/>
+</p></div>
+    </content>
+    <updated>2013-12-17T00:15:33Z</updated>
+    <author>
+      <name>Germán Arias</name>
+    </author>
+    <source>
+      <id>http://savannah.gnu.org/news/atom.php?group=fisicalab</id>
+      <link href="http://savannah.gnu.org/news/atom.php?group=fisicalab" rel="self" type="application/atom+xml"/>
+      <title>FísicaLab - News</title>
+      <updated>2013-12-21T23:49:07Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>urn:x-gnucash:news:.%2Fnews%2F131215-announce-2.5.10.news</id>
+    <link href="http://www.gnucash.org/#n-131215-announce-2.5.10.news" rel="alternate" type="text/html"/>
+    <title>Announcement: GnuCash 2.5.10 (Unstable) Release</title>
+    <updated>2013-12-15T06:00:00Z</updated>
+    <author>
+      <name>GnuCash Developers</name>
+      <email>gnucash-devel@gnucash.org</email>
+    </author>
+    <source>
+      <id>http://www.gnucash.org/</id>
+      <logo>http://www.gnucash.org/images/icons/gnc-icon.png</logo>
+      <link href="http://www.gnucash.org/" rel="alternate" type="text/html"/>
+      <link href="http://www.gnucash.org/atom.php" rel="self" type="application/atom+xml"/>
+      <subtitle>GnuCash is personal and small-business financial-accounting software, freely licensed under the GNU GPL and available for GNU/Linux, BSD, Solaris, Mac OS X and Microsoft Windows.</subtitle>
+      <title>GnuCash News</title>
+      <updated>2013-12-15T06:00:00Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://savannah.gnu.org/forum/forum.php?forum_id=7816</id>
+    <link href="http://savannah.gnu.org/forum/forum.php?forum_id=7816" rel="alternate" type="text/html"/>
+    <title>FisicaLab 0.3.3 bugfix release</title>
+    <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>WHAT IS IT
+<br/>
+==========
+<br/>
+</p>
+<p>FisicaLab (can be pronounced as PhysicsLab) is an educational application to solve physics problems. Its main objective is let the user to focus in physics concepts, leaving aside the mathematical details (FisicaLab take care of them). This allows the user to become familiar with the physical concepts without running the risk of getting lost in mathematical details. And so, when the user gain confidence in applying physical concepts, will be better prepared to solve the problems by hand (with pen and paper).
+<br/>
+</p>
+<p>WHAT NEWS?
+<br/>
+==============
+<br/>
+This is a bugfix release:
+<br/>
+</p>
+<p>    * Fix a problem with the data viewer (a table view).
+<br/>
+    * Fix some problems in English interface.
+<br/>
+</p>
+<p>COPYING
+<br/>
+=========
+<br/>
+</p>
+<p>This program is free software, released under GPLv3, or
+<br/>
+(at your option) any later version.
+<br/>
+</p>
+<p>OBTAINING FISICALAB
+<br/>
+=======================
+<br/>
+</p>
+<p>Source code are available here:
+<br/>
+</p>
+<p><a href="http://download.savannah.gnu.org/releases/fisicalab/">http://download.savannah.gnu.org/releases/fisicalab/</a>
+<br/>
+</p>
+<p>Next week will be available the binary packages.
+<br/>
+</p>
+<p>MORE INFO
+<br/>
+============
+<br/>
+</p>
+<p>More info at official website:
+<br/>
+</p>
+<p><a href="http://www.nongnu.org/fisicalab/">http://www.nongnu.org/fisicalab/</a><br/>
+</p></div>
+    </content>
+    <updated>2013-12-14T02:02:05Z</updated>
+    <author>
+      <name>Germán Arias</name>
+    </author>
+    <source>
+      <id>http://savannah.gnu.org/news/atom.php?group=fisicalab</id>
+      <link href="http://savannah.gnu.org/news/atom.php?group=fisicalab" rel="self" type="application/atom+xml"/>
+      <title>FísicaLab - News</title>
+      <updated>2013-12-21T23:49:07Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://savannah.gnu.org/forum/forum.php?forum_id=7815</id>
+    <link href="http://savannah.gnu.org/forum/forum.php?forum_id=7815" rel="alternate" type="text/html"/>
+    <title>coreutils-8.22 released [stable]</title>
+    <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><textarea class="verbatim" cols="80" readonly="readonly" rows="20">There have been 195 commits by 32 people in the 10 months since 8.21
+
+Executive summary: 8.22 is mainly a bug fix and performance improvement release.
+tail(1) has fixes for handling initially non existent files, and df now has
+better handling of specified disk device nodes.  On the performance side,
+there have been many improvements to the memory usage of various tools, which
+are detailed at http://www.pixelbeat.org/programming/avoiding_large_buffers.html
+There have been large throughput improvements in cut(1) and base64 encoding.
+Also the md5sum and sha*sum utilities have support for using architecture
+specific routines to improve performance, if allowed on your distribution.
+There are also new features available, including SELinux "restorecon" support
+in various file creation utilities through the -Z option, and shred has a new
+--repeat option to continually select random items from the input.
+
+See the NEWS below for more details.
+
+Thanks to everyone who has contributed!
+The following people contributed changes to this release:
+
+  Andreas Mohr (1)
+  Anton Ovchinnikov (2)
+  Assaf Gordon (8)
+  Benno Schulenberg (2)
+  Bernhard Voelker (28)
+  Cojocaru Alexandru (4)
+  Colin Leitner (1)
+  D. Hugh Redelmeier (1)
+  Daniel J Walsh (1)
+  Enrico Scholz (1)
+  Eric Blake (1)
+  FUJIWARA Katsunori (1)
+  Filipus Klutiero (1)
+  Gian Piero Carrubba (1)
+  Jarkko Sakkinen (4)
+  Javier López (1)
+  Jim Meyering (6)
+  Joachim Schmitz (2)
+  John (1)
+  Karl Berry (1)
+  Ken Booth (1)
+  Mike Frysinger (1)
+  Ondrej Oprala (2)
+  Ondřej Vašík (2)
+  Paul Eggert (10)
+  Pádraig Brady (106)
+  Rasmus Villemoes (1)
+  Rémy Lefevre (1)
+  Sergio Durigan Junior (1)
+  Stefano Lattarini (3)
+  Tiger Lee (1)
+  Torbjörn Granlund (1)
+
+Special thanks to Bernhard Voelker for his many considered patches and reviews,
+and to Assaf Gordon for his work on new (and future) features.
+
+Pádraig [on behalf of the coreutils maintainers]
+
+==================================================================
+
+Here is the GNU coreutils home page:
+    http://gnu.org/s/coreutils/
+
+For a summary of changes and contributors, see:
+  http://git.sv.gnu.org/gitweb/?p=coreutils.git;a=shortlog;h=v8.22
+or run this command from a git-cloned coreutils directory:
+  git shortlog v8.21..v8.22
+
+To summarize the 255 gnulib-related changes, run these commands
+From a git-cloned coreutils directory:
+  git checkout v8.22
+  git submodule summary v8.21
+
+==================================================================
+
+Here are the compressed sources and a GPG detached signature[*]:
+  http://ftp.gnu.org/gnu/coreutils/coreutils-8.22.tar.xz
+  http://ftp.gnu.org/gnu/coreutils/coreutils-8.22.tar.xz.sig
+
+Use a mirror for higher download bandwidth:
+  http://ftpmirror.gnu.org/coreutils/coreutils-8.22.tar.xz
+  http://ftpmirror.gnu.org/coreutils/coreutils-8.22.tar.xz.sig
+
+[*] Use a .sig file to verify that the corresponding file (without the
+.sig suffix) is intact.  First, be sure to download both the .sig file
+and the corresponding tarball.  Then, run a command like this:
+
+  gpg --verify coreutils-8.22.tar.xz.sig
+
+If that command fails because you don't have the required public key,
+then run this command to import it:
+
+  gpg --keyserver keys.gnupg.net --recv-keys DF6FD971306037D9
+
+and rerun the 'gpg --verify' command.
+
+This release was bootstrapped with the following tools:
+  Autoconf 2.69
+  Automake 1.13.4
+  Gnulib v0.1-38-g0658e50
+  Bison 2.7
+
+NEWS
+
+* Noteworthy changes in release 8.22 (2013-12-13) [stable]
+
+** Bug fixes
+
+  df now processes the mount list correctly in the presence of unstatable
+  mount points.  Previously it may have failed to output some mount points.
+  [bug introduced in coreutils-8.21]
+
+  df now processes symbolic links and relative paths to special files containing
+  a mounted file system correctly.  Previously df displayed the statistics about
+  the file system the file is stored on rather than the one inside.
+  [This bug was present in "the beginning".]
+
+  df now processes disk device nodes correctly in the presence of bind mounts.
+  Now df shows the base mounted file system rather than the last one mounted.
+  [This bug was present in "the beginning".]
+
+  install now removes the target file if the strip program failed for any
+  reason.  Before, that file was left behind, sometimes even with wrong
+  permissions.
+  [This bug was present in "the beginning".]
+
+  ln --relative now updates existing symlinks correctly.  Previously it based
+  the relative link on the dereferenced path of an existing link.
+  [This bug was introduced when --relative was added in coreutils-8.16.]
+
+  ls --recursive will no longer exit with "serious" exit code (2), if there
+  is an error reading a directory not specified on the command line.
+  [Bug introduced in coreutils-5.3.0]
+
+  mkdir, mkfifo, and mknod now work better when creating a file in a directory
+  with a default ACL whose umask disagrees with the process's umask, on a
+  system such as GNU/Linux where directory ACL umasks override process umasks.
+  [bug introduced in coreutils-6.0]
+
+  mv will now replace empty directories in the destination with directories
+  from the source, when copying across file systems.
+  [This bug was present in "the beginning".]
+
+  od -wN with N larger than 64K on a system with 32-bit size_t would
+  print approximately 2*N bytes of extraneous padding.
+  [Bug introduced in coreutils-7.0]
+
+  rm -I now prompts for confirmation before removing a write protected file.
+  [Bug introduced in coreutils-6.8]
+
+  shred once again uses direct I/O on systems requiring aligned buffers.
+  Also direct I/O failures for odd sized writes at end of file are now handled.
+  [The "last write" bug was introduced in coreutils-5.3.0 but masked
+   by the alignment bug introduced in coreutils-6.0]
+
+  tail --retry -f now waits for the files specified to appear.  Before, tail
+  would immediately exit when such a file is initially inaccessible.
+  [This bug was introduced when inotify support was added in coreutils-7.5]
+
+  tail -F has improved handling of symlinks.  Previously tail didn't respond
+  to the symlink target (re)appearing after being (re)created.
+  [This bug was introduced when inotify support was added in coreutils-7.5]
+
+** New features
+
+  cp, install, mkdir, mknod, mkfifo and mv now support "restorecon"
+  functionality through the -Z option, to set the SELinux context
+  appropriate for the new item location in the file system.
+
+  csplit accepts a new option: --suppressed-matched, to elide the lines
+  used to identify the split points.
+
+  df --output now accepts a 'file' field, to propagate a specified
+  command line argument through to the output.
+
+  du accepts a new option: --inodes to show the number of inodes instead
+  of the blocks used.
+
+  id accepts a new option: --zero (-z) to delimit the output entries by
+  a NUL instead of a white space character.
+
+  id and ls with -Z report the SMACK security context where available.
+  mkdir, mkfifo and mknod with -Z set the SMACK context where available.
+
+  id can now lookup by user ID, in addition to the existing name lookup.
+
+  join accepts a new option: --zero-terminated (-z). As with the sort,uniq
+  option of the same name, this makes join consume and produce NUL-terminated
+  lines rather than newline-terminated lines.
+
+  uniq accepts a new option: --group to print all items, while separating
+  unique groups with empty lines.
+
+  shred accepts new parameters to the --remove option to give greater
+  control over that operation, which can greatly reduce sync overhead.
+
+  shuf accepts a new option: --repeat (-r), which can repeat items in
+  the output.
+
+** Changes in behavior
+
+  cp --link now dereferences a symbolic link as source before creating the
+  hard link in the destination unless the -P,--no-deref option is specified.
+  Previously, it would create a hard link of the symbolic link, even when
+  the dereferencing options -L or -H were specified.
+
+  cp, install, mkdir, mknod and mkfifo no longer accept an argument to the
+  short -Z option.  The --context equivalent still takes an optional argument.
+
+  dd status=none now suppresses all non fatal diagnostic messages,
+  not just the transfer counts.
+
+  df no longer accepts the long-obsolescent --megabytes option.
+
+  stdbuf now requires at least one buffering mode option to be specified,
+  as per the documented interface.
+
+** Improvements
+
+  base64 encoding throughput for bulk data is increased by about 60%.
+
+  md5sum can use libcrypto hash routines where allowed to potentially
+  get better performance through using more system specific logic.
+  sha1sum for example has improved throughput by 40% on an i3-2310M.
+  This also affects sha1sum, sha224sum, sha256sum, sha384sum and sha512sum.
+
+  stat and tail work better with EFIVARFS, EXOFS, F2FS, HOSTFS, SMACKFS, SNFS
+  and UBIFS.  stat -f --format=%T now reports the file system type, and tail -f
+  now uses inotify for files on all those except SNFS, rather than the default
+  (for unknown file system types) of issuing a warning and reverting to polling.
+
+  shuf outputs subsets of large inputs much more efficiently.
+  Reservoir sampling is used to limit memory usage based on the number of
+  outputs, rather than the number of inputs.
+
+  shred increases the default write block size from 12KiB to 64KiB
+  to align with other utilities and reduce the system call overhead.
+
+  split --line-bytes=SIZE, now only allocates memory as needed rather
+  than allocating SIZE bytes at program start.
+
+  stty now supports configuring "stick" (mark/space) parity where available.
+
+** Build-related
+
+  factor now builds on aarch64 based systems [bug introduced in coreutils-8.20]
+</textarea></div>
+    </content>
+    <updated>2013-12-13T17:16:33Z</updated>
+    <author>
+      <name>Pádraig Brady</name>
+    </author>
+    <source>
+      <id>http://savannah.gnu.org/news/atom.php?group=coreutils</id>
+      <link href="http://savannah.gnu.org/news/atom.php?group=coreutils" rel="self" type="application/atom+xml"/>
+      <title>GNU Core Utilities - News</title>
+      <updated>2013-12-13T17:18:41Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://savannah.gnu.org/forum/forum.php?forum_id=7814</id>
+    <link href="http://savannah.gnu.org/forum/forum.php?forum_id=7814" rel="alternate" type="text/html"/>
+    <title>FreeIPMI 1.3.4 Released</title>
+    <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p><a href="http://ftp.gnu.org/gnu/freeipmi/freeipmi-1.3.4.tar.gz">http://ftp.gnu.org/gnu/freeipmi/freeipmi-1.3.4.tar.gz</a>
+<br/>
+</p>
+<p>o Support 'solchannelsupport' workraound in ipmiconsole /
+<br/>
+  IPMICONSOLE_WORKAROUND_SKIP_CHANNEL_PAYLOAD_SUPPORT workaround flag in
+<br/>
+  libipmiconsole.
+<br/>
+o Fix SDR cache workaround for motherboards with invalid SDR record
+<br/>
+  counts listed.
+<br/>
+o Workaround Supermicro bug in bmc-watchdog. 
+<br/>
+o Fix error checks in sensor decoding functions, leading to possible
+<br/>
+  problems in ipmi-sensors-config.
+<br/>
+o Update documentation with additional workarounds for motherboards.
+<br/>
+o Fix various minor bugs.<br/>
+</p></div>
+    </content>
+    <updated>2013-12-13T01:00:46Z</updated>
+    <author>
+      <name>Albert Chu</name>
+    </author>
+    <source>
+      <id>http://savannah.gnu.org/news/atom.php?group=freeipmi</id>
+      <link href="http://savannah.gnu.org/news/atom.php?group=freeipmi" rel="self" type="application/atom+xml"/>
+      <title>GNU FreeIPMI - News</title>
+      <updated>2013-12-13T18:57:45Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/blogs/directory/friday-free-software-directory-irc-meetup-december-13</id>
+    <link href="http://www.fsf.org/blogs/directory/friday-free-software-directory-irc-meetup-december-13" rel="alternate" type="text/html"/>
+    <title>Friday Free Software Directory IRC meetup: December 13</title>
+    <updated>2013-12-12T17:58:06Z</updated>
+    <source>
+      <id>http://www.fsf.org/blogs/recent-blog-posts</id>
+      <author>
+        <name>FSF Blogs</name>
+      </author>
+      <link href="http://www.fsf.org/blogs/recent-blog-posts" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/blogs.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Writing by representatives of the Free Software Foundation.</subtitle>
+      <title>FSF's blog</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>tag:blogger.com,1999:blog-15746899.post-1184364361269465567</id>
+    <link href="http://multixden.blogspot.com/feeds/1184364361269465567/comments/default" rel="replies" title="Post Comments" type="application/atom+xml"/>
+    <link href="http://www.blogger.com/comment.g?blogID=15746899&amp;postID=1184364361269465567" rel="replies" title="0 Comments" type="text/html"/>
+    <link href="http://www.blogger.com/feeds/15746899/posts/default/1184364361269465567" rel="edit" type="application/atom+xml"/>
+    <link href="http://www.blogger.com/feeds/15746899/posts/default/1184364361269465567" rel="self" type="application/atom+xml"/>
+    <link href="http://multixden.blogspot.com/2013/12/gworkspace-how-to-easily-mountunmount.html" rel="alternate" title="GWorkspace, how to easily mount/unmount volumes" type="text/html"/>
+    <title>GWorkspace, how to easily mount/unmount volumes</title>
+    <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><a href="http://www.gnustep.org/experience/GWorkspace.html">GWorkspace</a> allows for easy mounting and unmounting of volumes (disks, usb sticks, CD-ROMs) like you would do manually on console, without the requirement of daemons or other tools.<br/><br/>Here is how.<br/><br/>First, be sure your underlying operating system is correctly configured to allow you to do that. I'll show as example how I configured my Debian system.<br/><br/>Your current user needs to have the permissions to mount the volume(s), this is usually done by being part of the correct group. For Debian we find cdrom and floppy as ready groups<br/><span><br/></span><span style="font-size: x-small;"><span>cdrom:x:24:multix</span></span><br/><br/>The predefined mount-point for the cdrom is /mnt/cdrom, since I usually handle with USB sticks I added a mount point for it:<br/><br/><span style="font-size: x-small;"><span>$ ls -l /media/<br/>total 8<br/>lrwxrwxrwx 1 root root    6 Jan  1  1970 cdrom -&gt; cdrom0<br/>drwxr-xr-x 2 root root 4096 Jan  1  1970 cdrom0<br/>drwxr-xr-x 2 root root 4096 Nov 27 14:01 usb</span></span><br/><br/>Now, let's add the correct lines to /etc/fstab for our usb entry. The cdrom entry is usually already configured by Debian.<br/><br/><span>/dev/hdc        /media/cdrom0   udf,iso9660 user,noauto     0       0<br/>/dev/sdb        /media/usb      auto    defaults,users  0       0</span><br/><br/>I <i>auto</i> shall determine the file system automagically, while <i>users</i> allows for user permissions for the mounted files. You can check if everything is configured fine if you can "mount" from the command line with your current user.<br/><br/>Then open <a href="http://www.gnustep.org/experience/systempreferences.html">SystemPreferences </a>and configure the managed paths as shown here:<br/><br/><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-hlHesBoGaX4/Uqm4UDoWJ5I/AAAAAAAAAvs/wpt0EHk6b98/s1600/syspref_volumes.png" style="margin-left: auto; margin-right: auto;"><img border="0" height="240" src="http://3.bp.blogspot.com/-hlHesBoGaX4/Uqm4UDoWJ5I/AAAAAAAAAvs/wpt0EHk6b98/s320/syspref_volumes.png" width="320"/></a></td></tr><tr><td class="tr-caption" style="text-align: center;">SystemPreferences - Mount points</td></tr></tbody></table>Configure the <i>mount points for removable media</i>, here I have enabled the cdrom and the usb mount points. The mtab path is currently ignored by GWorkspace, so don't bother and the default value is anyway correct for Linux.<br/><br/>Now, in GWorkspace we can select <i>Check for disks</i> under the <i>Tools</i> menu.<br/><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-KMQt77KUz9o/UqnX_LkS7AI/AAAAAAAAAv8/KJHi5bfvjD8/s1600/gwsp_check_disks.png" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="http://4.bp.blogspot.com/-KMQt77KUz9o/UqnX_LkS7AI/AAAAAAAAAv8/KJHi5bfvjD8/s320/gwsp_check_disks.png" width="235"/></a></td></tr><tr><td class="tr-caption" style="text-align: center;">GWorkspace - check for disks</td></tr></tbody></table>If everything goes well, voilà, your volume will get mounted. It will appear on the destkop if you have the Desktop enabled and you can show its content. In any case it shall be visible in the File Viewer in its mount place.<br/><br/><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-GqOtpJY1kTY/UqnYn4NKwuI/AAAAAAAAAwE/K_WFUSU0hqE/s1600/usb_content.png" style="margin-left: auto; margin-right: auto;"><img border="0" height="296" src="http://2.bp.blogspot.com/-GqOtpJY1kTY/UqnYn4NKwuI/AAAAAAAAAwE/K_WFUSU0hqE/s320/usb_content.png" width="320"/></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Usb stick contents</td></tr></tbody></table><br/><br/><br/><br/>If all options are set correctly as suggested, the volume is readable, writable as you can check with the <i>Attributes Inspector</i>. Also we can open the .zip file with <a href="http://gap.nongnu.org/zipper/index.html">Zipper</a> easily.<br/><br/><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-z3vSI43Fy9A/UqnY2HkIl2I/AAAAAAAAAwM/l0EfKZtzhqk/s1600/zipper_inspector.png" style="margin-left: auto; margin-right: auto;"><img border="0" height="211" src="http://2.bp.blogspot.com/-z3vSI43Fy9A/UqnY2HkIl2I/AAAAAAAAAwM/l0EfKZtzhqk/s320/zipper_inspector.png" width="320"/></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Zipper and Attributes</td></tr></tbody></table><br/><br/>To unmount a volume, just drag its icon to the Recycle Bin.</div>
+    </content>
+    <updated>2013-12-12T15:50:17Z</updated>
+    <published>2013-12-12T15:42:00Z</published>
+    <category scheme="http://www.blogger.com/atom/ns#" term="cdrom"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="GNUstep"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="GWorkspace"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="Linux"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="mounting"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="tutorial"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="usb"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="volume"/>
+    <author>
+      <name>Riccardo</name>
+      <email>noreply@blogger.com</email>
+      <uri>http://www.blogger.com/profile/03313094807656717004</uri>
+    </author>
+    <source>
+      <id>tag:blogger.com,1999:blog-15746899</id>
+      <category term="GNUstep"/>
+      <category term="GAP"/>
+      <category term="GNUstep Application Project"/>
+      <category term="DataBasin"/>
+      <category term="GWorkspace"/>
+      <category term="salesforce"/>
+      <category term="windows"/>
+      <category term="FTP"/>
+      <category term="Graphos"/>
+      <category term="Vespucci"/>
+      <category term="soap"/>
+      <category term="SalesForce.com"/>
+      <category term="SimpleWebKit"/>
+      <category term="battery monitor"/>
+      <category term="browser"/>
+      <category term="theming"/>
+      <category term="batmon"/>
+      <category term="cocoa"/>
+      <category term="vector drawing"/>
+      <category term="PRICE"/>
+      <category term="ProjectCenter"/>
+      <category term="systempreferences"/>
+      <category term="theme"/>
+      <category term="Cynthiune"/>
+      <category term="GShisen"/>
+      <category term="GSpdf"/>
+      <category term="Grr"/>
+      <category term="HURD"/>
+      <category term="LaternaMagica"/>
+      <category term="Letux"/>
+      <category term="Mac"/>
+      <category term="Objective-C"/>
+      <category term="OresmeKit"/>
+      <category term="SWK"/>
+      <category term="Workspace"/>
+      <category term="development"/>
+      <category term="drawing"/>
+      <category term="imaging"/>
+      <category term="meeting"/>
+      <category term="plotting"/>
+      <category term="port"/>
+      <category term="API"/>
+      <category term="Application"/>
+      <category term="Debian"/>
+      <category term="FreeBSD"/>
+      <category term="GDraw"/>
+      <category term="GMastermind"/>
+      <category term="IDE"/>
+      <category term="LapisPuzzle"/>
+      <category term="Linux"/>
+      <category term="NSWorkspace"/>
+      <category term="Neos"/>
+      <category term="NetBSD"/>
+      <category term="PowerPC"/>
+      <category term="RSS"/>
+      <category term="Terminal"/>
+      <category term="WebServices"/>
+      <category term="alemanniastep"/>
+      <category term="charting"/>
+      <category term="color scheme"/>
+      <category term="desktop"/>
+      <category term="game"/>
+      <category term="gmines"/>
+      <category term="gnustep software"/>
+      <category term="gorm"/>
+      <category term="graphing"/>
+      <category term="gstheme"/>
+      <category term="icons"/>
+      <category term="image viewer"/>
+      <category term="look"/>
+      <category term="mingw"/>
+      <category term="sleek"/>
+      <category term="software"/>
+      <category term="sudoku"/>
+      <category term="2007"/>
+      <category term="ACPI"/>
+      <category term="GMines released"/>
+      <category term="GNU"/>
+      <category term="GPL"/>
+      <category term="GSWS"/>
+      <category term="Internet Module"/>
+      <category term="Leo Laporte"/>
+      <category term="LoginPanel"/>
+      <category term="MIPS"/>
+      <category term="Macintosh"/>
+      <category term="OpenBSD"/>
+      <category term="OpenOffice Microsoft Office incomatibility OpenSource"/>
+      <category term="Randal Schwartz"/>
+      <category term="SOQL"/>
+      <category term="Themes"/>
+      <category term="TimeMon"/>
+      <category term="XML"/>
+      <category term="Zipper"/>
+      <category term="addressmanager"/>
+      <category term="alpenstep"/>
+      <category term="apps"/>
+      <category term="battery"/>
+      <category term="bezier paths"/>
+      <category term="bilinear"/>
+      <category term="bookmarks"/>
+      <category term="bug fix"/>
+      <category term="cdrom"/>
+      <category term="control point"/>
+      <category term="curves"/>
+      <category term="cusp"/>
+      <category term="defaults"/>
+      <category term="describe"/>
+      <category term="drawning"/>
+      <category term="filtering"/>
+      <category term="flexisheet"/>
+      <category term="floss"/>
+      <category term="folders"/>
+      <category term="games"/>
+      <category term="gnustep macintosh cocoa GShisen port windows game gap"/>
+      <category term="gnustep windows mingw game graphics events"/>
+      <category term="graphics"/>
+      <category term="image"/>
+      <category term="login"/>
+      <category term="menu style"/>
+      <category term="monitor"/>
+      <category term="mount"/>
+      <category term="mount volumes"/>
+      <category term="mounting"/>
+      <category term="music"/>
+      <category term="netbook"/>
+      <category term="orobienstep"/>
+      <category term="player"/>
+      <category term="plists"/>
+      <category term="portability"/>
+      <category term="power mac"/>
+      <category term="preferences"/>
+      <category term="printing"/>
+      <category term="property list"/>
+      <category term="query"/>
+      <category term="radio"/>
+      <category term="record type"/>
+      <category term="safari"/>
+      <category term="screen"/>
+      <category term="screenshot"/>
+      <category term="session"/>
+      <category term="tutorial"/>
+      <category term="twit"/>
+      <category term="undo"/>
+      <category term="unix"/>
+      <category term="usb"/>
+      <category term="vector"/>
+      <category term="volume"/>
+      <category term="web"/>
+      <category term="yap"/>
+      <author>
+        <name>Riccardo</name>
+        <email>noreply@blogger.com</email>
+        <uri>http://www.blogger.com/profile/03313094807656717004</uri>
+      </author>
+      <link href="http://multixden.blogspot.com/feeds/posts/default" rel="http://schemas.google.com/g/2005#feed" type="application/atom+xml"/>
+      <link href="http://www.blogger.com/feeds/15746899/posts/default" rel="self" type="application/atom+xml"/>
+      <link href="http://multixden.blogspot.com/" rel="alternate" type="text/html"/>
+      <link href="http://pubsubhubbub.appspot.com/" rel="hub" type="text/html"/>
+      <link href="http://www.blogger.com/feeds/15746899/posts/default?start-index=26&amp;max-results=25" rel="next" type="application/atom+xml"/>
+      <subtitle>The Den of Multix (aka grey gandalf)</subtitle>
+      <title>The Art is Long</title>
+      <updated>2013-12-16T14:54:00Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>tag:blogger.com,1999:blog-15746899.post-7885636324895551497</id>
+    <link href="http://multixden.blogspot.com/feeds/7885636324895551497/comments/default" rel="replies" title="Post Comments" type="application/atom+xml"/>
+    <link href="http://www.blogger.com/comment.g?blogID=15746899&amp;postID=7885636324895551497" rel="replies" title="0 Comments" type="text/html"/>
+    <link href="http://www.blogger.com/feeds/15746899/posts/default/7885636324895551497" rel="edit" type="application/atom+xml"/>
+    <link href="http://www.blogger.com/feeds/15746899/posts/default/7885636324895551497" rel="self" type="application/atom+xml"/>
+    <link href="http://multixden.blogspot.com/2013/12/gworkspace-fixed-mount-bug-on-linux.html" rel="alternate" title="GWorkspace, fixed mount bug on Linux" type="text/html"/>
+    <title>GWorkspace, fixed mount bug on Linux</title>
+    <content>Fixed a nasty bug (I was using the wrong macro) that was causing GWorkspace not to mount removable volumes (like an USB key) on Linux.</content>
+    <updated>2013-12-12T08:35:37Z</updated>
+    <published>2013-12-12T08:35:00Z</published>
+    <category scheme="http://www.blogger.com/atom/ns#" term="bug fix"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="GNUstep"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="GWorkspace"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="Linux"/>
+    <category scheme="http://www.blogger.com/atom/ns#" term="mount volumes"/>
+    <author>
+      <name>Riccardo</name>
+      <email>noreply@blogger.com</email>
+      <uri>http://www.blogger.com/profile/03313094807656717004</uri>
+    </author>
+    <source>
+      <id>tag:blogger.com,1999:blog-15746899</id>
+      <category term="GNUstep"/>
+      <category term="GAP"/>
+      <category term="GNUstep Application Project"/>
+      <category term="DataBasin"/>
+      <category term="GWorkspace"/>
+      <category term="salesforce"/>
+      <category term="windows"/>
+      <category term="FTP"/>
+      <category term="Graphos"/>
+      <category term="Vespucci"/>
+      <category term="soap"/>
+      <category term="SalesForce.com"/>
+      <category term="SimpleWebKit"/>
+      <category term="battery monitor"/>
+      <category term="browser"/>
+      <category term="theming"/>
+      <category term="batmon"/>
+      <category term="cocoa"/>
+      <category term="vector drawing"/>
+      <category term="PRICE"/>
+      <category term="ProjectCenter"/>
+      <category term="systempreferences"/>
+      <category term="theme"/>
+      <category term="Cynthiune"/>
+      <category term="GShisen"/>
+      <category term="GSpdf"/>
+      <category term="Grr"/>
+      <category term="HURD"/>
+      <category term="LaternaMagica"/>
+      <category term="Letux"/>
+      <category term="Mac"/>
+      <category term="Objective-C"/>
+      <category term="OresmeKit"/>
+      <category term="SWK"/>
+      <category term="Workspace"/>
+      <category term="development"/>
+      <category term="drawing"/>
+      <category term="imaging"/>
+      <category term="meeting"/>
+      <category term="plotting"/>
+      <category term="port"/>
+      <category term="API"/>
+      <category term="Application"/>
+      <category term="Debian"/>
+      <category term="FreeBSD"/>
+      <category term="GDraw"/>
+      <category term="GMastermind"/>
+      <category term="IDE"/>
+      <category term="LapisPuzzle"/>
+      <category term="Linux"/>
+      <category term="NSWorkspace"/>
+      <category term="Neos"/>
+      <category term="NetBSD"/>
+      <category term="PowerPC"/>
+      <category term="RSS"/>
+      <category term="Terminal"/>
+      <category term="WebServices"/>
+      <category term="alemanniastep"/>
+      <category term="charting"/>
+      <category term="color scheme"/>
+      <category term="desktop"/>
+      <category term="game"/>
+      <category term="gmines"/>
+      <category term="gnustep software"/>
+      <category term="gorm"/>
+      <category term="graphing"/>
+      <category term="gstheme"/>
+      <category term="icons"/>
+      <category term="image viewer"/>
+      <category term="look"/>
+      <category term="mingw"/>
+      <category term="sleek"/>
+      <category term="software"/>
+      <category term="sudoku"/>
+      <category term="2007"/>
+      <category term="ACPI"/>
+      <category term="GMines released"/>
+      <category term="GNU"/>
+      <category term="GPL"/>
+      <category term="GSWS"/>
+      <category term="Internet Module"/>
+      <category term="Leo Laporte"/>
+      <category term="LoginPanel"/>
+      <category term="MIPS"/>
+      <category term="Macintosh"/>
+      <category term="OpenBSD"/>
+      <category term="OpenOffice Microsoft Office incomatibility OpenSource"/>
+      <category term="Randal Schwartz"/>
+      <category term="SOQL"/>
+      <category term="Themes"/>
+      <category term="TimeMon"/>
+      <category term="XML"/>
+      <category term="Zipper"/>
+      <category term="addressmanager"/>
+      <category term="alpenstep"/>
+      <category term="apps"/>
+      <category term="battery"/>
+      <category term="bezier paths"/>
+      <category term="bilinear"/>
+      <category term="bookmarks"/>
+      <category term="bug fix"/>
+      <category term="cdrom"/>
+      <category term="control point"/>
+      <category term="curves"/>
+      <category term="cusp"/>
+      <category term="defaults"/>
+      <category term="describe"/>
+      <category term="drawning"/>
+      <category term="filtering"/>
+      <category term="flexisheet"/>
+      <category term="floss"/>
+      <category term="folders"/>
+      <category term="games"/>
+      <category term="gnustep macintosh cocoa GShisen port windows game gap"/>
+      <category term="gnustep windows mingw game graphics events"/>
+      <category term="graphics"/>
+      <category term="image"/>
+      <category term="login"/>
+      <category term="menu style"/>
+      <category term="monitor"/>
+      <category term="mount"/>
+      <category term="mount volumes"/>
+      <category term="mounting"/>
+      <category term="music"/>
+      <category term="netbook"/>
+      <category term="orobienstep"/>
+      <category term="player"/>
+      <category term="plists"/>
+      <category term="portability"/>
+      <category term="power mac"/>
+      <category term="preferences"/>
+      <category term="printing"/>
+      <category term="property list"/>
+      <category term="query"/>
+      <category term="radio"/>
+      <category term="record type"/>
+      <category term="safari"/>
+      <category term="screen"/>
+      <category term="screenshot"/>
+      <category term="session"/>
+      <category term="tutorial"/>
+      <category term="twit"/>
+      <category term="undo"/>
+      <category term="unix"/>
+      <category term="usb"/>
+      <category term="vector"/>
+      <category term="volume"/>
+      <category term="web"/>
+      <category term="yap"/>
+      <author>
+        <name>Riccardo</name>
+        <email>noreply@blogger.com</email>
+        <uri>http://www.blogger.com/profile/03313094807656717004</uri>
+      </author>
+      <link href="http://multixden.blogspot.com/feeds/posts/default" rel="http://schemas.google.com/g/2005#feed" type="application/atom+xml"/>
+      <link href="http://www.blogger.com/feeds/15746899/posts/default" rel="self" type="application/atom+xml"/>
+      <link href="http://multixden.blogspot.com/" rel="alternate" type="text/html"/>
+      <link href="http://pubsubhubbub.appspot.com/" rel="hub" type="text/html"/>
+      <link href="http://www.blogger.com/feeds/15746899/posts/default?start-index=26&amp;max-results=25" rel="next" type="application/atom+xml"/>
+      <subtitle>The Den of Multix (aka grey gandalf)</subtitle>
+      <title>The Art is Long</title>
+      <updated>2013-12-16T14:54:00Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/news/reform-corporate-surveillance</id>
+    <link href="http://www.fsf.org/news/reform-corporate-surveillance" rel="alternate" type="text/html"/>
+    <title>Reform corporate surveillance</title>
+    <summary>The FSF issued the following statement in response to the recent open letter on government surveillance published by AOL, Apple, Facebook, Google, LinkedIn, Microsoft, Twitter, and Yahoo.</summary>
+    <updated>2013-12-11T22:24:05Z</updated>
+    <source>
+      <id>http://www.fsf.org/news/aggregator</id>
+      <author>
+        <name>FSF News</name>
+      </author>
+      <link href="http://www.fsf.org/news/aggregator" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/news.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Latest news from the Free Software Foundation</subtitle>
+      <title>FSF News</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://savannah.gnu.org/forum/forum.php?forum_id=7813</id>
+    <link href="http://savannah.gnu.org/forum/forum.php?forum_id=7813" rel="alternate" type="text/html"/>
+    <title>GNU Guix 0.5 released</title>
+    <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>We are pleased to announce the fifth alpha release of <a href="http://www.gnu.org/software/guix">GNU Guix</a>.
+<br/>
+</p>
+<p>The highlights are:
+<br/>
+</p>
+<ul>
+<li>Port to the Loongson MIPS64 processors, using the n32 ABI.
+</li>
+<li>New <a href="http://www.gnu.org/software/guix/manual/guix.html#The-Store-Monad">monad interface</a> to handle operations on the store.
+</li>
+<li>New <a href="http://www.gnu.org/software/guix/manual/guix.html#System-Configuration">whole-system configuration API</a>, allowing users to declare and instantiate a machine's settings.
+</li>
+<li>110 new packages, including "big ones" such as <a href="http://www.gnu.org/software/gnuzilla/">GNU IceCat</a> and hacker's favorites such as <a href="http://www.markwitmer.com/guile-xcb/guile-wm.html">Guile-WM</a>.  ;-)
+</li>
+</ul>
+<p>An updated QEMU virtual machine is provided, featuring Guix 0.5 and <a href="http://www.gnu.org/software/dmd">dmd</a> 0.1.
+<br/>
+</p>
+<p>See <a href="https://lists.gnu.org/archive/html/guix-devel/2013-12/msg00061.html">the original announcement</a> for details.<br/>
+</p></div>
+    </content>
+    <updated>2013-12-11T13:45:57Z</updated>
+    <author>
+      <name>Ludovic Courtès</name>
+    </author>
+    <source>
+      <id>http://savannah.gnu.org/news/atom.php?group=guix</id>
+      <link href="http://savannah.gnu.org/news/atom.php?group=guix" rel="self" type="application/atom+xml"/>
+      <title>GNU Guix - News</title>
+      <updated>2013-12-11T17:13:18Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/blogs/licensing/computer-science-education-week-2013</id>
+    <link href="http://www.fsf.org/blogs/licensing/computer-science-education-week-2013" rel="alternate" type="text/html"/>
+    <title>Celebrate Computer Science Education Week with free software</title>
+    <summary>By Ben Cook, FSF licensing intern</summary>
+    <updated>2013-12-10T23:25:00Z</updated>
+    <source>
+      <id>http://www.fsf.org/blogs/recent-blog-posts</id>
+      <author>
+        <name>FSF Blogs</name>
+      </author>
+      <link href="http://www.fsf.org/blogs/recent-blog-posts" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/blogs.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Writing by representatives of the Free Software Foundation.</subtitle>
+      <title>FSF's blog</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry>
+    <id>http://www.fsf.org/blogs/gnu-press/gnu-press-announces-gray-gplv3-hoodies</id>
+    <link href="http://www.fsf.org/blogs/gnu-press/gnu-press-announces-gray-gplv3-hoodies" rel="alternate" type="text/html"/>
+    <title>GNU Press announces gray GPLv3 hoodies; plus members enjoy up to 30% holiday discount at the shop!</title>
+    <summary>Support the FSF and look good while doing it</summary>
+    <updated>2013-12-10T22:30:00Z</updated>
+    <source>
+      <id>http://www.fsf.org/blogs/recent-blog-posts</id>
+      <author>
+        <name>FSF Blogs</name>
+      </author>
+      <link href="http://www.fsf.org/blogs/recent-blog-posts" rel="alternate" type="text/html"/>
+      <link href="http://www.fsf.org/static/fsforg/rss/blogs.xml" rel="self" type="application/rdf+xml"/>
+      <subtitle>Writing by representatives of the Free Software Foundation.</subtitle>
+      <title>FSF's blog</title>
+      <updated>2013-12-26T15:15:28Z</updated>
+    </source>
+  </entry>
+
+  <entry xml:lang="en">
+    <id>https://gnunet.org/2204 at https://gnunet.org</id>
+    <link href="https://gnunet.org/knock" rel="alternate" type="text/html"/>
+    <title xml:lang="en">Knock: Practical and Secure Stealthy Servers</title>
+    <summary type="xhtml" xml:lang="en"><div xmlns="http://www.w3.org/1999/xhtml"><div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>
+Knock is a kernel patch that implements a new NAT-compatible, TCP option for stealthy port knocking with a few new twists for improved security.
+</p></div></div></div></div>
+    </summary>
+    <updated>2013-12-10T18:12:46Z</updated>
+    <author>
+      <name>Christian Grothoff</name>
+    </author>
+    <source>
+      <id>https://gnunet.org/frontpage</id>
+      <link href="https://gnunet.org/frontpage" rel="alternate" type="text/html"/>
+      <link href="https://gnunet.org/rss.xml" rel="self" type="application/rss+xml"/>
+      <title xml:lang="en">GNUnet - GNU's Framework for Secure Peer-to-Peer Networking</title>
+      <updated>2013-12-26T15:15:10Z</updated>
+    </source>
+  </entry>
+</feed>
