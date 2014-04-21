@@ -246,62 +246,27 @@ xhtml_extract (xmlNodePtr xml, gint xhtmlMode, const gchar *defaultBase)
 	return result;
 }
 
-static xmlEntityPtr
-xml_process_entities (void *ctxt, const xmlChar *name)
+/*
+	Just to suppress output from libxml2
+*/
+void
+error_func (void * ctx, const char * msg, ...)
 {
-	gchar *path;
-	xmlEntityPtr entity;
-	xmlEntityPtr found;
-	xmlChar *tmp;
-	static xmlDocPtr entities = NULL;
-
-	entity = xmlGetPredefinedEntity (name);
-
-	if (!entity) {
-		if (!entities) {
-			/* loading HTML entities from external DTD file */
-			entities = xmlNewDoc (BAD_CAST "1.0");
-			path = g_build_filename (g_get_user_data_dir (), PACKAGE, "/dtd/html.ent", NULL);
-			xmlCreateIntSubset (entities, BAD_CAST "HTML entities", NULL, BAD_CAST path);
-			g_free (path);
-			entities->extSubset = xmlParseDTD (entities->intSubset->ExternalID, entities->intSubset->SystemID);
-		}
-
-		if (NULL != (found = xmlGetDocEntity (entities, name))) {
-			/* returning as faked predefined entity... */
-			tmp = xmlStrdup (found->content);
-			tmp = BAD_CAST unhtmlize ((gchar*) tmp);	/* arghh ... slow... */
-			entity = (xmlEntityPtr) g_new0 (xmlEntity, 1);
-			entity->type = XML_ENTITY_DECL;
-			entity->name = name;
-			entity->orig = NULL;
-			entity->content = tmp;
-			entity->length = g_utf8_strlen ((gchar*) tmp, -1);
-			entity->etype = XML_INTERNAL_PREDEFINED_ENTITY;
-		}
-	}
-
-	return entity;
+	return;
 }
 
 xmlDocPtr
 content_to_xml (const gchar *contents, gsize size)
 {
-	xmlParserCtxtPtr ctxt;
-	xmlDocPtr doc;
-
-	ctxt = xmlNewParserCtxt ();
-	ctxt->sax->getEntity = xml_process_entities;
-	doc = xmlSAXParseMemory (ctxt->sax, contents, size, 1);
-	xmlFreeParserCtxt (ctxt);
-
-	return doc;
+	xmlSetGenericErrorFunc (NULL, error_func);
+	return xmlParseMemory (contents, size);
 }
 
 xmlDocPtr
 file_to_xml (const gchar *path)
 {
-	return xmlReadFile (path, NULL, XML_PARSE_RECOVER | XML_PARSE_NOBLANKS);
+	xmlSetGenericErrorFunc (NULL, error_func);
+	return xmlParseFile (path);
 }
 
 /* in theory, we'd need only the RFC822 timezones here
