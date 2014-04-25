@@ -30,7 +30,6 @@
  * @short_description: a feed
  *
  * #GrssFeedChannel rappresents a single feed which may be fetched and parsed.
- * It mostly is a passive container for attributes.
  */
 
 typedef struct {
@@ -180,12 +179,15 @@ grss_feed_channel_new_from_xml (xmlDocPtr doc, GError **error)
 {
 	GrssFeedParser *parser;
 	GrssFeedChannel *ret;
+	GError *myerror;
 
 	ret = g_object_new (GRSS_FEED_CHANNEL_TYPE, NULL);
 	parser = grss_feed_parser_new ();
 
-	grss_feed_parser_parse_channel (parser, ret, doc, error);
-	if (error != NULL) {
+	myerror = NULL;
+	grss_feed_parser_parse_channel (parser, ret, doc, &myerror);
+	if (myerror != NULL) {
+		g_propagate_error (error, myerror);
 		g_object_unref (ret);
 		ret = NULL;
 	}
