@@ -28,10 +28,13 @@ sources_private_h = \
 
 sources_public_h = \
 	libgrss.h                       \
+	feed-atom-formatter.h           \
 	feed-channel.h                  \
 	feed-enclosure.h                \
+	feed-formatter.h                \
 	feed-item.h                     \
 	feed-parser.h                   \
+	feed-rss-formatter.h            \
 	feeds-group.h                   \
 	feeds-pool.h                    \
 	feeds-publisher.h               \
@@ -39,10 +42,13 @@ sources_public_h = \
 	feeds-subscriber.h
 
 sources_public_c = \
+	feed-atom-formatter.c           \
 	feed-channel.c                  \
 	feed-enclosure.c                \
+	feed-formatter.c                \
 	feed-item.c                     \
 	feed-parser.c                   \
+	feed-rss-formatter.c            \
 	feeds-group.c                   \
 	feeds-pool.c                    \
 	feeds-publisher.c               \

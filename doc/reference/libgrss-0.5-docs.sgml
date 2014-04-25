@@ -39,6 +39,9 @@
     <xi:include href="xml/feeds-pool.xml"/>
     <xi:include href="xml/feeds-group.xml"/>
     <xi:include href="xml/feeds-subscriber.xml"/>
+    <xi:include href="xml/feed-formatter.xml"/>
+    <xi:include href="xml/feed-rss-formatter.xml"/>
+    <xi:include href="xml/feed-atom-formatter.xml"/>
     <xi:include href="xml/feeds-publisher.xml"/>
     <xi:include href="xml/feeds-store.xml"/>
   </part>

@@ -226,7 +226,7 @@ parse_channel (FeedRssHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xml
 			}
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"description")) {
- 			tmp = xhtml_extract (cur, 0, NULL);
+			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, TRUE);
 			if (tmp) {
 				grss_feed_channel_set_description (feed, tmp);
 				g_free (tmp);

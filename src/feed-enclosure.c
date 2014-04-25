@@ -52,7 +52,8 @@ feed_enclosure_error_quark ()
 	return g_quark_from_static_string ("feed_enclosure_error");
 }
 
-static void grss_feed_enclosure_finalize (GObject *obj)
+static void
+grss_feed_enclosure_finalize (GObject *obj)
 {
 	GrssFeedEnclosure *enclosure;
 
@@ -61,7 +62,8 @@ static void grss_feed_enclosure_finalize (GObject *obj)
 	FREE_STRING (enclosure->priv->type);
 }
 
-static void grss_feed_enclosure_class_init (GrssFeedEnclosureClass *klass)
+static void
+grss_feed_enclosure_class_init (GrssFeedEnclosureClass *klass)
 {
 	GObjectClass *gobject_class;
 
@@ -71,7 +73,8 @@ static void grss_feed_enclosure_class_init (GrssFeedEnclosureClass *klass)
 	gobject_class->finalize = grss_feed_enclosure_finalize;
 }
 
-static void grss_feed_enclosure_init (GrssFeedEnclosure *node)
+static void
+grss_feed_enclosure_init (GrssFeedEnclosure *node)
 {
 	node->priv = FEED_ENCLOSURE_GET_PRIVATE (node);
 	memset (node->priv, 0, sizeof (GrssFeedEnclosurePrivate));
@@ -85,7 +88,8 @@ static void grss_feed_enclosure_init (GrssFeedEnclosure *node)
  *
  * Return value: a new #GrssFeedEnclosure.
  */
-GrssFeedEnclosure* grss_feed_enclosure_new (gchar *url)
+GrssFeedEnclosure*
+grss_feed_enclosure_new (gchar *url)
 {
 	GrssFeedEnclosure *ret;
 
@@ -102,7 +106,8 @@ GrssFeedEnclosure* grss_feed_enclosure_new (gchar *url)
  *
  * Return value: the URL where the enclosure may be found.
  */
-const gchar* grss_feed_enclosure_get_url (GrssFeedEnclosure *enclosure)
+const gchar*
+grss_feed_enclosure_get_url (GrssFeedEnclosure *enclosure)
 {
 	return (const gchar*) enclosure->priv->url;
 }
@@ -114,7 +119,8 @@ const gchar* grss_feed_enclosure_get_url (GrssFeedEnclosure *enclosure)
  *
  * To set the type of the external file.
  */
-void grss_feed_enclosure_set_format (GrssFeedEnclosure *enclosure, gchar *type)
+void
+grss_feed_enclosure_set_format (GrssFeedEnclosure *enclosure, gchar *type)
 {
 	FREE_STRING (enclosure->priv->type);
 	enclosure->priv->type = g_strdup (type);
@@ -128,7 +134,8 @@ void grss_feed_enclosure_set_format (GrssFeedEnclosure *enclosure, gchar *type)
  *
  * Return value: type of @enclosure.
  */
-const gchar* grss_feed_enclosure_get_format (GrssFeedEnclosure *enclosure)
+const gchar*
+grss_feed_enclosure_get_format (GrssFeedEnclosure *enclosure)
 {
 	return (const gchar*) enclosure->priv->type;
 }
@@ -140,7 +147,8 @@ const gchar* grss_feed_enclosure_get_format (GrssFeedEnclosure *enclosure)
  *
  * To set the size of the embedded @enclosure.
  */
-void grss_feed_enclosure_set_length (GrssFeedEnclosure *enclosure, gsize length)
+void
+grss_feed_enclosure_set_length (GrssFeedEnclosure *enclosure, gsize length)
 {
 	enclosure->priv->length = length;
 }
@@ -153,7 +161,8 @@ void grss_feed_enclosure_set_length (GrssFeedEnclosure *enclosure, gsize length)
  *
  * Return value: size of the @enclosure, in bytes.
  */
-gsize grss_feed_enclosure_get_length (GrssFeedEnclosure *enclosure)
+gsize
+grss_feed_enclosure_get_length (GrssFeedEnclosure *enclosure)
 {
 	return enclosure->priv->length;
 }

@@ -760,6 +760,7 @@ atom10_parse_feed_updated (xmlNodePtr cur, GrssFeedChannel *feed)
 	if (timestamp) {
 		t = date_parse_ISO8601 (timestamp);
 		grss_feed_channel_set_update_time (feed, t);
+		grss_feed_channel_set_publish_time (feed, t);
 		g_free (timestamp);
 	}
 }
