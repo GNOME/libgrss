@@ -8,12 +8,11 @@ REQUIREMENTS
 -------------------------------------------------------------------------------
 libgrss depends on:
 
-  - libglib2 >= 2.32.4
-  - gtk-doc-tools >= 1.18
-  - gnome-doc-utils >= 0.20.10
-  - libxml2 >= 2.7.8
-  - libsoup-2.4 >= 2.38.1
-  - libgirepository1.0-dev >= 1.32
+  - libglib2 >= 2.42.1
+  - gtk-doc-tools >= 1.21
+  - libxml2 >= 2.9.2
+  - libsoup-2.4 >= 2.48.0
+  - libgirepository1.0-dev >= 1.42
 
 INSTALLATION
 -------------------------------------------------------------------------------
@@ -24,4 +23,4 @@ COPYRIGHT AND LICENSING
 libgrss is released under the terms of the GNU Lesser General Public License,
 version 3 or, at your option, any later version.
 
-libgrss is Copyright (C) 2009/2012  Roberto Guido, Michele Tameni.
+libgrss is Copyright (C) 2009/2015  Roberto Guido, Michele Tameni.

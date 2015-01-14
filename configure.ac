@@ -1,9 +1,9 @@
 AC_PREREQ(2.62)
 
 m4_define([grss_major_version], [0])
-m4_define([grss_minor_version], [5])
+m4_define([grss_minor_version], [6])
 m4_define([grss_micro_version], [0])
-m4_define([grss_api_version], [0.5])
+m4_define([grss_api_version], [0.6])
 m4_define([grss_version],
           [grss_major_version.grss_minor_version.grss_micro_version])
 
@@ -67,9 +67,9 @@ AC_CHECK_LIBM
 AC_SUBST(LIBM)
 
 PKG_CHECK_MODULES([LIBGRSS],[
-	glib-2.0 >= 2.32.4
-	libsoup-2.4 >= 2.38.1
-	libxml-2.0 >= 2.7.8
+	glib-2.0 >= 2.42.1
+	libsoup-2.4 >= 2.48.0
+	libxml-2.0 >= 2.9.2
 ])
 
 ##################################################

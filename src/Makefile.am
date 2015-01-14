@@ -82,19 +82,19 @@ feed-marshal.c: feed-marshal.list
 	echo "#include \"feed-marshal.h\"" > $@ &&    \
 		$(GLIB_GENMARSHAL) $< --prefix=feed_marshal --body >> $@
 
-lib_LTLIBRARIES = libgrss-0.5.la
+lib_LTLIBRARIES = libgrss-0.6.la
 
-libgrss_0_5_la_LIBADD = $(LIBGRSS_LIBS)
-libgrss_0_5_la_SOURCES = \
+libgrss_0_6_la_LIBADD = $(LIBGRSS_LIBS)
+libgrss_0_6_la_SOURCES = \
 	$(sources_public_h) \
 	$(sources_private_h) \
 	$(sources_public_c) \
 	$(sources_private_c) \
 	$(NULL)
-libgrss_0_5_la_LDFLAGS = $(LDADD)
+libgrss_0_6_la_LDFLAGS = $(LDADD)
 
-libgrss_0_5_ladir = $(includedir)/libgrss-@LIBGRSS_API_VERSION@
-libgrss_0_5_la_HEADERS = $(sources_public_h)
+libgrss_0_6_ladir = $(includedir)/libgrss-@LIBGRSS_API_VERSION@
+libgrss_0_6_la_HEADERS = $(sources_public_h)
 
 CLEANFILES = $(pcfile_DATA)
 
@@ -117,17 +117,17 @@ introspection_sources = \
 	$(sources_public_c) \
 	$(NULL)
 
-Grss-0.5.gir: libgrss-0.5.la
-Grss_0_5_gir_INCLUDES = GObject-2.0 Gio-2.0 Soup-2.4 libxml2-2.0
-Grss_0_5_gir_CFLAGS = $(INCLUDES)
-Grss_0_5_gir_LIBS = libgrss-0.5.la
-Grss_0_5_gir_FILES = $(introspection_sources)
-INTROSPECTION_GIRS += Grss-0.5.gir
+Grss-0.6.gir: libgrss-0.6.la
+Grss_0_6_gir_INCLUDES = GObject-2.0 Gio-2.0 Soup-2.4 libxml2-2.0
+Grss_0_6_gir_CFLAGS = $(INCLUDES)
+Grss_0_6_gir_LIBS = libgrss-0.6.la
+Grss_0_6_gir_FILES = $(introspection_sources)
+INTROSPECTION_GIRS += Grss-0.6.gir
 
-girdir = $(datadir)/gir-0.5
+girdir = $(datadir)/gir-0.6
 gir_DATA = $(INTROSPECTION_GIRS)
 
-typelibdir = $(libdir)/girepository-0.5
+typelibdir = $(libdir)/girepository-0.6
 typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
 CLEANFILES += $(gir_DATA) $(typelib_DATA)

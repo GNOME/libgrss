@@ -1,3 +1,11 @@
+libgrss 0.6
+==============================================================================
+- Added GrssFeedFormatter and related subclasses to format a GrssFeedChannel in plain rappresentation
+- More utility functions
+- Support for GObject Introspection
+- Introduction of basic test suite
+- Bugfixes
+
 libgrss 0.5
 ==============================================================================
 - Complete API break: all object and function names moved to "grss" namespace

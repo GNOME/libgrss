@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012, Roberto Guido <rguido@src.gnome.org>
+ * Copyright (C) 2010-2015, Roberto Guido <rguido@src.gnome.org>
  *                          Michele Tameni <michele@amdplanet.it>
  *
  * This library is free software; you can redistribute it and/or
