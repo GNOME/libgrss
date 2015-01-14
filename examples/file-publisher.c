@@ -29,8 +29,6 @@ int main ()
 	GrssFeedItem *item;
 	GrssFeedsPublisher *publisher;
 
-	g_type_init ();
-
 	list = NULL;
 
 	feed = grss_feed_channel_new ();

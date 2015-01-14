@@ -72,8 +72,6 @@ static gboolean do_work (gpointer useless)
 
 int main ()
 {
-	g_type_init ();
-
 	loop = g_main_loop_new (NULL, FALSE);
 	g_idle_add (do_work, NULL);
 

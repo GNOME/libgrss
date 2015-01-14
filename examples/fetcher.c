@@ -55,8 +55,6 @@ int main ()
 	GrssFeedChannel *feed;
 	GrssFeedsPool *pool;
 
-	g_type_init ();
-
 	list = NULL;
 
 	for (i = 0; example_feeds [i] != NULL; i++) {

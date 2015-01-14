@@ -42,8 +42,6 @@ main (int argc, char **argv)
 		exit (1);
 	}
 
-	g_type_init ();
-
 	parser = grss_feeds_group_new ();
 
 	error = NULL;

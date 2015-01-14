@@ -54,8 +54,6 @@ main ()
 	GrssFeedChannel *feed;
 	GrssFeedsSubscriber *sub;
 
-	g_type_init ();
-
 	list = NULL;
 	printf ("Initing, please wait...\n");
 	printf ("... fetching feeds...\n");
