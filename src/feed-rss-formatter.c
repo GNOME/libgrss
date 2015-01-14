@@ -20,6 +20,14 @@
 #include "feed-rss-formatter.h"
 #include "utils.h"
 
+/**
+ * SECTION: feed-rss-formatter
+ * @short_description: able to format a feed in RSS
+ *
+ * #GrssFeedRssFormatter is an implementation on #GrssFeedFormatter able to
+ * handle RSS format
+ */
+
 G_DEFINE_TYPE (GrssFeedRssFormatter, grss_feed_rss_formatter, GRSS_FEED_FORMATTER_TYPE);
 
 static gchar*

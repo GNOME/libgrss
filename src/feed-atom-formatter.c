@@ -20,6 +20,14 @@
 #include "feed-atom-formatter.h"
 #include "utils.h"
 
+/**
+ * SECTION: feed-atom-formatter
+ * @short_description: able to format a feed in Atom
+ *
+ * #GrssFeedAtomFormatter is an implementation of #GrssFeedFormatter able to
+ * handle Atom format
+ */
+
 G_DEFINE_TYPE (GrssFeedAtomFormatter, grss_feed_atom_formatter, GRSS_FEED_FORMATTER_TYPE);
 
 static gchar*
