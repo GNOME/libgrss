@@ -236,6 +236,8 @@ grss_feeds_publisher_new ()
  * 
  * Return value: a newly allocated string holding the formatted feed, to be
  * freed when no longer in use.
+ *
+ * Deprecated: 0.6: Use grss_feed_formatter_format() instead.
  */
 gchar*
 grss_feeds_publisher_format_content (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, GError **error)

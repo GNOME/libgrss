@@ -61,12 +61,27 @@ static guint signals [LAST_SIGNAL] = {0};
 G_DEFINE_TYPE (GrssFeedsPool, grss_feeds_pool, G_TYPE_OBJECT);
 
 static void
+cancel_all_pending (GrssFeedsPool *pool)
+{
+	GList *iter;
+	GrssFeedChannelWrap *wrap;
+
+	if (pool->priv->feeds_list != NULL) {
+		for (iter = pool->priv->feeds_list; iter; iter = g_list_next (iter)) {
+			wrap = (GrssFeedChannelWrap*) iter->data;
+			grss_feed_channel_fetch_cancel (wrap->channel);
+		}
+	}
+}
+
+static void
 remove_currently_listened (GrssFeedsPool *pool)
 {
 	GList *iter;
 	GrssFeedChannelWrap *wrap;
 
 	soup_session_abort (pool->priv->soupsession);
+	cancel_all_pending (pool);
 
 	if (pool->priv->feeds_list != NULL) {
 		for (iter = pool->priv->feeds_list; iter; iter = g_list_next (iter)) {
@@ -368,6 +383,7 @@ grss_feeds_pool_switch (GrssFeedsPool *pool, gboolean run)
 		else {
 			if (pool->priv->scheduler != 0)
 				g_source_remove (pool->priv->scheduler);
+			cancel_all_pending (pool);
 		}
 	}
 }

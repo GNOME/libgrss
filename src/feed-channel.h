@@ -101,5 +101,6 @@ gboolean		grss_feed_channel_fetch_finish		(GrssFeedChannel *channel, GAsyncResul
 GList*			grss_feed_channel_fetch_all		(GrssFeedChannel *channel, GError **error);
 void			grss_feed_channel_fetch_all_async	(GrssFeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data);
 GList*			grss_feed_channel_fetch_all_finish	(GrssFeedChannel *channel, GAsyncResult *res, GError **error);
+gboolean		grss_feed_channel_fetch_cancel		(GrssFeedChannel *channel);
 
 #endif /* __FEED_CHANNEL_H__ */

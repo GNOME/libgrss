@@ -66,6 +66,8 @@ struct _GrssFeedChannelPrivate {
 	time_t		pub_time;
 	time_t		update_time;
 	int		update_interval;
+
+	GCancellable	*fetchcancel;
 };
 
 enum {
@@ -1047,6 +1049,7 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 	}
 
 	g_simple_async_result_complete_in_idle (result);
+	g_object_unref (channel->priv->fetchcancel);
 	g_object_unref (result);
 }
 
@@ -1072,6 +1075,13 @@ grss_feed_channel_fetch_finish (GrssFeedChannel *channel, GAsyncResult *res, GEr
 		return TRUE;
 }
 
+static void
+do_prefetch (GrssFeedChannel *channel)
+{
+	grss_feed_channel_fetch_cancel (channel);
+	channel->priv->fetchcancel = g_cancellable_new ();
+}
+
 /**
  * grss_feed_channel_fetch_async:
  * @channel: a #GrssFeedChannel.
@@ -1087,7 +1097,13 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
 	SoupMessage *msg;
 	SoupSession *session;
 
+	/*
+		TODO: if the source is not valid, call anyway the callback with an error
+	*/
+
+	do_prefetch (channel);
 	result = g_simple_async_result_new (G_OBJECT (channel), callback, user_data, grss_feed_channel_fetch_async);
+	g_simple_async_result_set_check_cancellable (result, channel->priv->fetchcancel);
 
 	session = soup_session_async_new ();
 	init_soup_session (session, channel);
@@ -1183,6 +1199,7 @@ feed_downloaded_return_items (SoupSession *session, SoupMessage *msg, gpointer u
 	}
 
 	g_simple_async_result_complete_in_idle (result);
+	g_object_unref (channel->priv->fetchcancel);
 	g_object_unref (result);
 }
 
@@ -1201,7 +1218,9 @@ grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback
 	SoupMessage *msg;
 	SoupSession *session;
 
+	do_prefetch (channel);
 	result = g_simple_async_result_new (G_OBJECT (channel), callback, user_data, grss_feed_channel_fetch_async);
+	g_simple_async_result_set_check_cancellable (result, channel->priv->fetchcancel);
 
 	session = soup_session_async_new ();
 	init_soup_session (session, channel);
@@ -1235,3 +1254,27 @@ grss_feed_channel_fetch_all_finish (GrssFeedChannel *channel, GAsyncResult *res,
 	else
 		return (GList*) g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (res));
 }
+
+/**
+ * grss_feed_channel_fetch_cancel:
+ * @channel: a #GrssFeedChannel.
+ *
+ * If a fetch operation was scheduled with grss_feed_channel_fetch_async() or
+ * grss_feed_channel_fetch_all_async(), cancel it.
+ * 
+ * Return value: %TRUE if a fetch was scheduled (and now cancelled), %FALSE if
+ * this function had nothing to do
+ */
+gboolean
+grss_feed_channel_fetch_cancel (GrssFeedChannel *channel)
+{
+	if (channel->priv->fetchcancel != NULL) {
+		g_cancellable_cancel (channel->priv->fetchcancel);
+		g_object_unref (channel->priv->fetchcancel);
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
+}
+
