@@ -124,10 +124,10 @@ Grss_0_6_gir_LIBS = libgrss-0.6.la
 Grss_0_6_gir_FILES = $(introspection_sources)
 INTROSPECTION_GIRS += Grss-0.6.gir
 
-girdir = $(datadir)/gir-0.6
+girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)
 
-typelibdir = $(libdir)/girepository-0.6
+typelibdir = $(libdir)/girepository-1.0
 typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
 CLEANFILES += $(gir_DATA) $(typelib_DATA)
