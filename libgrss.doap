@@ -6,6 +6,12 @@
 
   <name xml:lang="en">libgrss</name>
   <shortdesc xml:lang="en">A Glib-based library to manage RSS and Atom feeds</shortdesc>
+  <homepage rdf:resource="https://wiki.gnome.org/Projects/Libgrss" />
+  <download-page rdf:resource="http://download.gnome.org/sources/libgrss/" />
+  <bug-database rdf:resource="https://bugzilla.gnome.org/browse.cgi?product=libgrss" />
+
+  <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
+  <programming-language>C</programming-language>
 
   <maintainer>
     <foaf:Person>
