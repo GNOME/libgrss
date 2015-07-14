@@ -6,8 +6,10 @@ m4_define([grss_micro_version], [0])
 m4_define([grss_api_version], [0.6])
 m4_define([grss_version],
           [grss_major_version.grss_minor_version.grss_micro_version])
+m4_define([grss_bugreport_url],
+          [https://bugzilla.gnome.org/enter_bug.cgi?product=libgrss])
 
-AC_INIT([libgrss], [grss_version], [])
+AC_INIT([libgrss], [grss_version], [grss_bugreport_url])
 
 AC_CONFIG_HEADERS(config.h)
 
