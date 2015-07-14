@@ -146,7 +146,7 @@ grss_feeds_pool_class_init (GrssFeedsPoolClass *klass)
 	 * GrssFeedsPool::feed-ready:
 	 * @pool: the #GrssFeedsPool emitting the signal.
 	 * @feed: the #GrssFeedChannel which has been fetched and parsed.
-	 * @items: list of #GrssFeedItem obtained parsing the feed.
+	 * @items: (type GLib.List) (element-type GrssFeedItem) (transfer none): list of #GrssFeedItem obtained parsing the feed.
 	 *
 	 * Emitted when a #GrssFeedChannel assigned to the @pool has been fetched
 	 * and parsed. All parsed items are exposed in the array, with no
