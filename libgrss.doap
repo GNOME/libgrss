@@ -19,4 +19,11 @@
       <gnome:userid>rguido</gnome:userid>
     </foaf:Person>
   </maintainer>
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Igor Gnatenko</foaf:name>
+      <foaf:mbox rdf:resource="mailto:ignatenko@src.gnome.org" />
+      <gnome:userid>ignatenko</gnome:userid>
+    </foaf:Person>
+  </maintainer>
 </Project>
