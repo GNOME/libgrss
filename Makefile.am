@@ -26,6 +26,7 @@ GITIGNOREFILES = \
 	ltmain.sh \
 	missing \
 	INSTALL \
+	test-driver \
 	$(NULL)
 
 libgrss-$(LIBGRSS_API_VERSION).pc: libgrss.pc
