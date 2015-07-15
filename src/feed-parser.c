@@ -117,7 +117,7 @@ feed_parsers_get_list (GrssFeedParser *parser)
  *
  * Allocates a new #GrssFeedParser.
  *
- * Return value: a new #GrssFeedParser.
+ * Returns: a new #GrssFeedParser.
  */
 GrssFeedParser*
 grss_feed_parser_new ()
@@ -197,7 +197,7 @@ init_parsing (GrssFeedParser *parser, xmlDocPtr doc, GError **error)
  * Parses the given XML @doc, belonging to the given @feed, to obtain a list
  * of #GrssFeedItem.
  *
- * Return value: (element-type GrssFeedItem) (transfer full): a list of
+ * Returns: (element-type GrssFeedItem) (transfer full): a list of
  * #GrssFeedItem, to be freed when no longer in use, or NULL if anerror occours
  * and @error is set.
  */

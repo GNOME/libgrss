@@ -215,7 +215,7 @@ grss_feeds_publisher_init (GrssFeedsPublisher *node)
  *
  * Allocates a new #GrssFeedsPublisher.
  *
- * Return value: a new #GrssFeedsPublisher.
+ * Returns: a new #GrssFeedsPublisher.
  */
 GrssFeedsPublisher*
 grss_feeds_publisher_new ()
@@ -234,7 +234,7 @@ grss_feeds_publisher_new ()
  * 
  * Format a #GrssFeedChannel in Atom and returns the resulting string.
  * 
- * Return value: a newly allocated string holding the formatted feed, to be
+ * Returns: a newly allocated string holding the formatted feed, to be
  * freed when no longer in use.
  *
  * Deprecated: 0.6: Use grss_feed_formatter_format() instead.
@@ -505,7 +505,7 @@ feed_required_by_web_cb (SoupServer *server, SoupMessage *msg, const char *path,
  * grss_feeds_publisher_hub_switch()) this function exposes the given @channel
  * as an Atom formatted file avalable to http://[LOCAL_IP:DEFINED_PORT]/@id .
  * 
- * Return value: %TRUE if the file is successfully written, %FALSE otherwise.
+ * Returns: %TRUE if the file is successfully written, %FALSE otherwise.
  */
 gboolean
 grss_feeds_publisher_publish_web (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *id, GError **error)
@@ -543,7 +543,7 @@ grss_feeds_publisher_publish_web (GrssFeedsPublisher *pub, GrssFeedChannel *chan
  * notifies remote subscribers about the new items which has been added since
  * previous invocation of this function for the same #GrssFeedChannel.
  * 
- * Return value: %TRUE if the file is successfully written, %FALSE otherwise.
+ * Returns: %TRUE if the file is successfully written, %FALSE otherwise.
  */
 gboolean
 grss_feeds_publisher_publish_file (GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *uri, GError **error)

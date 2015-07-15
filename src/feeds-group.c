@@ -102,7 +102,7 @@ feeds_groups_get_list (GrssFeedsGroup *group)
  *
  * Allocates a new #GrssFeedsGroup.
  *
- * Return value: a new #GrssFeedsGroup.
+ * Returns: a new #GrssFeedsGroup.
  */
 GrssFeedsGroup*
 grss_feeds_group_new ()
@@ -139,7 +139,7 @@ retrieve_group_handler (GrssFeedsGroup *group, xmlDocPtr doc, xmlNodePtr cur)
  *
  * Returns the list of supported file formats.
  *
- * Return value: (element-type utf8) (transfer container): a list of
+ * Returns: (element-type utf8) (transfer container): a list of
  * constant strings with names of supported formats. The list must be
  * freed when no longer used
  */
@@ -172,7 +172,7 @@ grss_feeds_group_get_formats (GrssFeedsGroup *group)
  *
  * Parses the given file to obtain list of listed feeds.
  *
- * Return value: (element-type GrssFeedChannel) (transfer full): a list
+ * Returns: (element-type GrssFeedChannel) (transfer full): a list
  * of #GrssFeedChannels, or NULL if an error occours and @error is
  * set.
  */
@@ -240,7 +240,7 @@ grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **
  * Creates a new file with the list of @channels rappresented in the required
  * @format. It a file already exists at the @uri location, it is overwritten.
  *
- * Return value: %TRUE if the file is created correctly, or %FALSE if an error
+ * Returns: %TRUE if the file is created correctly, or %FALSE if an error
  * occours and @error is set.
  */
 gboolean

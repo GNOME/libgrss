@@ -80,7 +80,7 @@ grss_feed_formatter_set_channel (GrssFeedFormatter *formatter, GrssFeedChannel *
  *
  * Gets the current #GrssFeedChannel assigned to the @formatter.
  *
- * Return value: (transfer none): a #GrssFeedChannel, or %NULL if none has been
+ * Returns: (transfer none): a #GrssFeedChannel, or %NULL if none has been
  * assigned.
  */
 GrssFeedChannel*
@@ -134,7 +134,7 @@ grss_feed_formatter_add_items (GrssFeedFormatter *formatter, GList *items)
  *
  * Gets the current #GrssFeedItems assigned to the @formatter.
  *
- * Return value:  (element-type GrssFeedItem) (transfer none): a list of
+ * Returns:  (element-type GrssFeedItem) (transfer none): a list of
  * #GrssFeedItems, or %NULL if none has been assigned.
  */
 GList*
@@ -172,7 +172,7 @@ grss_feed_formatter_reset (GrssFeedFormatter *formatter)
  * Formats the assigned #GrssFeedChannel and #GrssFeedItems into a plain text
  * string, accordly to the current #GrssFeedFormatter instance.
  *
- * Return value: (transfer full): a string containing the plain text
+ * Returns: (transfer full): a string containing the plain text
  * rappresentation of the given channel containing the given items.
  */
 gchar*

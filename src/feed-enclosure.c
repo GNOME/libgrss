@@ -86,7 +86,7 @@ grss_feed_enclosure_init (GrssFeedEnclosure *node)
  *
  * Allocates a new #GrssFeedEnclosure, to be downloaded separately.
  *
- * Return value: a new #GrssFeedEnclosure.
+ * Returns: a new #GrssFeedEnclosure.
  */
 GrssFeedEnclosure*
 grss_feed_enclosure_new (gchar *url)
@@ -104,7 +104,7 @@ grss_feed_enclosure_new (gchar *url)
  *
  * Retrieves the URL of the @enclosure.
  *
- * Return value: the URL where the enclosure may be found.
+ * Returns: the URL where the enclosure may be found.
  */
 const gchar*
 grss_feed_enclosure_get_url (GrssFeedEnclosure *enclosure)
@@ -132,7 +132,7 @@ grss_feed_enclosure_set_format (GrssFeedEnclosure *enclosure, gchar *type)
  *
  * Retrieves the format of the enclosed file.
  *
- * Return value: type of @enclosure.
+ * Returns: type of @enclosure.
  */
 const gchar*
 grss_feed_enclosure_get_format (GrssFeedEnclosure *enclosure)
@@ -159,7 +159,7 @@ grss_feed_enclosure_set_length (GrssFeedEnclosure *enclosure, gsize length)
  *
  * Retrieves the size of the embedded file.
  *
- * Return value: size of the @enclosure, in bytes.
+ * Returns: size of the @enclosure, in bytes.
  */
 gsize
 grss_feed_enclosure_get_length (GrssFeedEnclosure *enclosure)
@@ -204,7 +204,7 @@ msg_to_internal_file (GrssFeedEnclosure *enclosure, SoupMessage *msg, GError **e
  * #GFile, which is suggested to move on a permanent location to keep it over
  * time.
  *
- * Return value: (transfer full): temporary file where the contents have been
+ * Returns: (transfer full): temporary file where the contents have been
  * written, or %NULL if an error occours.
  */
 GFile*
@@ -297,7 +297,7 @@ grss_feed_enclosure_fetch_async (GrssFeedEnclosure *enclosure, GAsyncReadyCallba
  * Finalizes an asyncronous operation started with
  * grss_feed_enclosure_fetch_async().
  *
- * Return value: (transfer full): temporary file where the contents have been
+ * Returns: (transfer full): temporary file where the contents have been
  * written, or %NULL if an error occours.
  */
 GFile*

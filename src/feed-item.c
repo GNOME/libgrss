@@ -125,7 +125,7 @@ grss_feed_item_init (GrssFeedItem *node)
  *
  * To allocate a new empty #GrssFeedItem.
  *
- * Return value: a new #GrssFeedItem.
+ * Returns: a new #GrssFeedItem.
  */
 GrssFeedItem*
 grss_feed_item_new (GrssFeedChannel *parent)
@@ -144,7 +144,7 @@ grss_feed_item_new (GrssFeedChannel *parent)
  *
  * Retrieves the feed from which the item belongs.
  *
- * Return value: (transfer none): the parent feed, as set in grss_feed_item_new().
+ * Returns: (transfer none): the parent feed, as set in grss_feed_item_new().
  */
 GrssFeedChannel*
 grss_feed_item_get_parent (GrssFeedItem *item)
@@ -186,7 +186,7 @@ grss_feed_item_set_id (GrssFeedItem *item, gchar *id)
  * Pay attention to the fact this library do not check uniqueness of assigned
  * IDs.
  *
- * Return value: ID of the item.
+ * Returns: ID of the item.
  */
 const gchar*
 grss_feed_item_get_id (GrssFeedItem *item)
@@ -217,7 +217,7 @@ grss_feed_item_set_title (GrssFeedItem *item, gchar *title)
  *
  * Retrieves the title assigned to @item.
  *
- * Return value: title of the element.
+ * Returns: title of the element.
  */
 const gchar*
 grss_feed_item_get_title (GrssFeedItem *item)
@@ -245,7 +245,7 @@ grss_feed_item_set_description (GrssFeedItem *item, gchar *description)
  *
  * Retrieves the description of the @item.
  *
- * Return value: description of @item.
+ * Returns: description of @item.
  */
 const gchar*
 grss_feed_item_get_description (GrssFeedItem *item)
@@ -280,7 +280,7 @@ grss_feed_item_add_category (GrssFeedItem *item, gchar *category)
  *
  * Retrieves list of categories assigned to the @item.
  *
- * Return value: (element-type utf8) (transfer none): list of strings,
+ * Returns: (element-type utf8) (transfer none): list of strings,
  * one for assigned category. Do not free or modify this list.
  */
 const GList*
@@ -296,7 +296,7 @@ grss_feed_item_get_categories (GrssFeedItem *item)
  *
  * To set the source of the @item.
  * 
- * Return value: %TRUE if @source is a valid URL, %FALSE otherwise
+ * Returns: %TRUE if @source is a valid URL, %FALSE otherwise
  */
 gboolean
 grss_feed_item_set_source (GrssFeedItem *item, gchar *source)
@@ -318,7 +318,7 @@ grss_feed_item_set_source (GrssFeedItem *item, gchar *source)
  *
  * Retrieves the URL where the @item can be found.
  *
- * Return value: URL of the item, or %NULL.
+ * Returns: URL of the item, or %NULL.
  */
 const gchar*
 grss_feed_item_get_source (GrssFeedItem *item)
@@ -335,7 +335,7 @@ grss_feed_item_get_source (GrssFeedItem *item)
  * To set an alternative real source for @item. This parameter is used by web
  * aggregators to explicit the origin of a content reproduced in them.
  * 
- * Return value: %TRUE if @realsource is a valid URL, %FALSE otherwise
+ * Returns: %TRUE if @realsource is a valid URL, %FALSE otherwise
  */
 gboolean
 grss_feed_item_set_real_source (GrssFeedItem *item, gchar *realsource, gchar *title)
@@ -390,7 +390,7 @@ grss_feed_item_set_related (GrssFeedItem *item, gchar *related)
  *
  * Retrieves indication about posts related to @item.
  *
- * Return value: related posts, or %NULL.
+ * Returns: related posts, or %NULL.
  */
 const gchar*
 grss_feed_item_get_related (GrssFeedItem *item)
@@ -418,7 +418,7 @@ grss_feed_item_set_copyright (GrssFeedItem *item, gchar *copyright)
  *
  * Retrieves copyright reference for the @item.
  *
- * Return value: copyright mark, or %NULL.
+ * Returns: copyright mark, or %NULL.
  */
 const gchar*
 grss_feed_item_get_copyright (GrssFeedItem *item)
@@ -446,7 +446,7 @@ grss_feed_item_set_author (GrssFeedItem *item, gchar *author)
  *
  * Retrieves the author of @item.
  *
- * Return value: author of the item, or %NULL.
+ * Returns: author of the item, or %NULL.
  */
 const gchar*
 grss_feed_item_get_author (GrssFeedItem *item)
@@ -480,7 +480,7 @@ grss_feed_item_add_contributor (GrssFeedItem *item, gchar *contributor)
  *
  * Retrieves contributors for @item.
  *
- * Return value: (element-type utf8) (transfer none): list of contributors to
+ * Returns: (element-type utf8) (transfer none): list of contributors to
  * the item.
  */
 const GList*
@@ -496,7 +496,7 @@ grss_feed_item_get_contributors (GrssFeedItem *item)
  *
  * To assign the URL where to fetch comments for the item.
  * 
- * Return value: %TRUE if @url is a valid URL, %FALSE otherwise
+ * Returns: %TRUE if @url is a valid URL, %FALSE otherwise
  */
 gboolean
 grss_feed_item_set_comments_url (GrssFeedItem *item, gchar *url)
@@ -518,7 +518,7 @@ grss_feed_item_set_comments_url (GrssFeedItem *item, gchar *url)
  *
  * Retrieves the URL where to catch comments to the @item.
  *
- * Return value: URL to parse to read comments for @item, or %NULL.
+ * Returns: URL to parse to read comments for @item, or %NULL.
  */
 const gchar*
 grss_feed_item_get_comments_url (GrssFeedItem *item)
@@ -560,7 +560,7 @@ grss_feed_item_set_geo_point (GrssFeedItem *item, double latitude, double longit
  *
  * Retrieves the geo reference of the @item.
  *
- * Return value: %TRUE if @item has geographic coordinates assigned and
+ * Returns: %TRUE if @item has geographic coordinates assigned and
  * @latitude and @longitude have been set, %FALSE if @item has not geo
  * reference.
  */
@@ -596,7 +596,7 @@ grss_feed_item_set_publish_time (GrssFeedItem *item, time_t publish)
  * current timestamp assigned when creating the #GrssFeedItem, and may be
  * changed with grss_feed_item_set_publish_time().
  *
- * Return value: publish time of @item.
+ * Returns: publish time of @item.
  */
 time_t
 grss_feed_item_get_publish_time (GrssFeedItem *item)
@@ -628,7 +628,7 @@ grss_feed_item_add_enclosure (GrssFeedItem *item, GrssFeedEnclosure *enclosure)
  *
  * Retrieves the list of enclosures added with grss_feed_item_add_enclosure().
  *
- * Return value: (element-type GrssFeedEnclosure) (transfer none): a list of
+ * Returns: (element-type GrssFeedEnclosure) (transfer none): a list of
  * #GrssFeedEnclosure. This is a direct reference to the internal list, do not
  * free or modify it.
  */

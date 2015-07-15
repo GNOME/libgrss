@@ -185,7 +185,7 @@ grss_feeds_pool_init (GrssFeedsPool *node)
  *
  * Allocates a new #GrssFeedsPool.
  *
- * Return value: a new #GrssFeedsPool.
+ * Returns: a new #GrssFeedsPool.
  */
 GrssFeedsPool*
 grss_feeds_pool_new ()
@@ -249,7 +249,7 @@ grss_feeds_pool_listen (GrssFeedsPool *pool, GList *feeds)
  * time and resources consuming task: if you only need to know how many feeds
  * are currently handled, check grss_feeds_pool_get_listened_num().
  *
- * Return value: (element-type GrssFeedChannel) (transfer container): a
+ * Returns: (element-type GrssFeedChannel) (transfer container): a
  * list of #GrssFeedChannel, to be freed with g_list_free() when no longer in
  * use. Do not modify elements found in this list.
  */
@@ -275,7 +275,7 @@ grss_feeds_pool_get_listened (GrssFeedsPool *pool)
  * grss_feeds_pool_listen(). To get the complete list of those feeds, check
  * grss_feeds_pool_get_listened().
  *
- * Return value: number of feeds currently managed by the #GrssFeedsPool.
+ * Returns: number of feeds currently managed by the #GrssFeedsPool.
  */
 int
 grss_feeds_pool_get_listened_num (GrssFeedsPool *pool)
@@ -394,7 +394,7 @@ grss_feeds_pool_switch (GrssFeedsPool *pool, gboolean run)
  *
  * To access the internal #SoupSession used by the @pool to fetch items.
  *
- * Return value: (transfer none): instance of #SoupSession. Do not free it.
+ * Returns: (transfer none): instance of #SoupSession. Do not free it.
  */
 SoupSession*
 grss_feeds_pool_get_session (GrssFeedsPool *pool)

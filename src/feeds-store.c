@@ -59,7 +59,7 @@ grss_feeds_store_init (GrssFeedsStore *node)
  *
  * To retrieve list of feeds permanently saved into the store.
  *
- * Return value: (element-type GrssFeedChannel) (transfer none): list
+ * Returns: (element-type GrssFeedChannel) (transfer none): list
  * of #GrssFeedChannel found in the @store. Do not modify or free it.
  */
 GList*
@@ -76,7 +76,7 @@ grss_feeds_store_get_channels (GrssFeedsStore *store)
  * To retrieve list of items saved into the store, assigned to the given
  * @channel.
  *
- * Return value: (element-type GrssFeedItem) (transfer none): list of
+ * Returns: (element-type GrssFeedItem) (transfer none): list of
  * #GrssFeedItem found in the @store. Do not modify or free it.
  */
 GList*
@@ -93,7 +93,7 @@ grss_feeds_store_get_items_by_channel (GrssFeedsStore *store, GrssFeedChannel *c
  *
  * To retrieve an item into a feed, given his unique ID.
  *
- * Return value: %TRUE if the specified item exists, %FALSE otherwise.
+ * Returns: %TRUE if the specified item exists, %FALSE otherwise.
  */
 gboolean
 grss_feeds_store_has_item (GrssFeedsStore *store, GrssFeedChannel *channel, const gchar *id)
