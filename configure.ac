@@ -33,8 +33,6 @@ AC_SUBST(LIBGRSS_VERSION)
 LT_PREREQ([2.2.6])
 LT_INIT([dlopen disable-static])
 
-IT_PROG_INTLTOOL([0.40.6])
-
 AC_PROG_CC
 
 GNOME_COMPILE_WARNINGS([maximum])
@@ -48,17 +46,6 @@ if test "x$enable_deprecation_flags" = "xyes"; then
    DISABLE_DEPRECATED_CFLAGS=$DISABLE_DEPRECATED
    AC_SUBST(DISABLE_DEPRECATED_CFLAGS)
 fi
-
-GETTEXT_PACKAGE=libgrss
-AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Package name])
-
-AM_GLIB_GNU_GETTEXT
-
-# AM_GLIB_GNU_GETTEXT above substs $DATADIRNAME
-# this is the directory where the *.{mo,gmo} files are installed
-grsslocaledir='${prefix}/${DATADIRNAME}/locale'
-AC_SUBST(grsslocaledir)
 
 AC_PATH_PROG(PKG_CONFIG, pkg-config)
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
@@ -87,7 +74,6 @@ AC_OUTPUT([
 	doc/Makefile
 	doc/reference/Makefile
 	doc/reference/version.xml
-	po/Makefile.in
 	libgrss.pc
 ])
 
