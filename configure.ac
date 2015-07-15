@@ -66,6 +66,9 @@ PKG_CHECK_MODULES([LIBGRSS],[
 ##################################################
 GTK_DOC_CHECK([1.9])
 
+GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
+AC_SUBST(GLIB_PREFIX)
+
 GOBJECT_INTROSPECTION_CHECK([1.30.0])
 
 AC_OUTPUT([
