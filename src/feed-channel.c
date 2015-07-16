@@ -1049,7 +1049,7 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 	}
 
 	g_simple_async_result_complete_in_idle (result);
-	g_object_unref (channel->priv->fetchcancel);
+	g_clear_object (&channel->priv->fetchcancel);
 	g_object_unref (result);
 }
 
@@ -1199,7 +1199,7 @@ feed_downloaded_return_items (SoupSession *session, SoupMessage *msg, gpointer u
 	}
 
 	g_simple_async_result_complete_in_idle (result);
-	g_object_unref (channel->priv->fetchcancel);
+	g_clear_object (&channel->priv->fetchcancel);
 	g_object_unref (result);
 }
 
