@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2009-2015, Roberto Guido <rguido@src.gnome.org>
  *                          Michele Tameni <michele@amdplanet.it>
+ * Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -267,10 +268,10 @@ atom10_parse_text_construct (xmlNodePtr cur, gboolean htmlified)
 	return ret;
 }
 
-static gchar *
+static GrssPerson *
 atom10_parse_person_construct (xmlNodePtr cur)
 {
-	gchar *tmp = NULL;
+	GrssPerson *person;
 	gchar *name = NULL;
 	gchar *uri = NULL;
 	gchar *email = NULL;
@@ -290,16 +291,12 @@ atom10_parse_person_construct (xmlNodePtr cur)
 
 			if (xmlStrEqual (cur->name, BAD_CAST"email")) {
 				g_free (email);
-				tmp = (gchar *)xmlNodeListGetString(cur->doc, cur->xmlChildrenNode, 1);
-				email = g_strdup_printf(" - <a href=\"mailto:%s\">%s</a>", tmp, tmp);
-				g_free(tmp);
+				email = (gchar *)xmlNodeListGetString(cur->doc, cur->xmlChildrenNode, 1);
 			}
 
 			if (xmlStrEqual (cur->name, BAD_CAST"uri")) {
 				g_free (uri);
-				tmp = (gchar *)xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
-				uri = g_strdup_printf (" (<a href=\"%s\">Website</a>)", tmp);
-				g_free (tmp);
+				uri = (gchar *)xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 			}
 		}
 		else {
@@ -312,7 +309,7 @@ atom10_parse_person_construct (xmlNodePtr cur)
 	if (!name)
 		name = g_strdup ("Invalid Atom feed: unknown author");
 
-	tmp = g_strdup_printf ("%s%s%s", name, uri ? uri : "", email ? email : "");
+	person = grss_person_new (name, email, uri);
 
 	if (uri)
 		g_free (uri);
@@ -321,7 +318,7 @@ atom10_parse_person_construct (xmlNodePtr cur)
 		g_free (email);
 
 	g_free (name);
-	return tmp;
+	return person;
 }
 
 /* Note: this function is called for both item and feed context */
@@ -413,13 +410,11 @@ atom10_parse_link (xmlNodePtr cur, GrssFeedChannel *feed, GrssFeedItem *item)
 static void
 atom10_parse_entry_author (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
-	gchar *author;
+	GrssPerson *author;
 
 	author = atom10_parse_person_construct (cur);
-	if (author) {
+	if (author)
 		grss_feed_item_set_author (item, author);
-		g_free (author);
-	}
 }
 
 static void
@@ -454,13 +449,11 @@ atom10_parse_entry_content (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel 
 static void
 atom10_parse_entry_contributor (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *feed)
 {
-	gchar *contributor;
+	GrssPerson *contributor;
 
 	contributor = atom10_parse_person_construct (cur);
-	if (contributor) {
+	if (contributor)
 		grss_feed_item_add_contributor (item, contributor);
-		g_free (contributor);
-	}
 }
 
 static void
@@ -599,13 +592,11 @@ atom10_parse_entry (FeedHandler *self, GrssFeedChannel *feed, xmlNodePtr cur)
 static void
 atom10_parse_feed_author (xmlNodePtr cur, GrssFeedChannel *feed)
 {
-	gchar *author;
+	GrssPerson *author;
 
 	author = atom10_parse_person_construct (cur);
-	if (author) {
+	if (author)
 		grss_feed_channel_set_editor (feed, author);
-		g_free (author);
-	}
 }
 
 static void
@@ -629,13 +620,11 @@ static void
 atom10_parse_feed_contributor (xmlNodePtr cur, GrssFeedChannel *feed)
 {
 	/* parse feed contributors */
-	gchar *contributer;
+	GrssPerson *contributor;
 
-	contributer = atom10_parse_person_construct (cur);
-	if (contributer) {
-		grss_feed_channel_add_contributor (feed, contributer);
-		g_free (contributer);
-	}
+	contributor = atom10_parse_person_construct (cur);
+	if (contributor)
+		grss_feed_channel_add_contributor (feed, contributor);
 }
 
 static void

@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2009-2015, Roberto Guido <rguido@src.gnome.org>
  *                          Michele Tameni <michele@amdplanet.it>
+ * Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,6 +22,7 @@
 #ifndef __FEED_ITEM_H__
 #define __FEED_ITEM_H__
 
+#include "person.h"
 #include "libgrss.h"
 
 #define GRSS_FEED_ITEM_TYPE		(grss_feed_item_get_type())
@@ -65,9 +67,9 @@ const gchar*		grss_feed_item_get_related	(GrssFeedItem *item);
 
 void			grss_feed_item_set_copyright	(GrssFeedItem *item, gchar *copyright);
 const gchar*		grss_feed_item_get_copyright	(GrssFeedItem *item);
-void			grss_feed_item_set_author	(GrssFeedItem *item, gchar *author);
-const gchar*		grss_feed_item_get_author	(GrssFeedItem *item);
-void			grss_feed_item_add_contributor	(GrssFeedItem *item, gchar *contributor);
+void			grss_feed_item_set_author	(GrssFeedItem *item, GrssPerson *author);
+GrssPerson*		grss_feed_item_get_author	(GrssFeedItem *item);
+void			grss_feed_item_add_contributor	(GrssFeedItem *item, GrssPerson *contributor);
 const GList*		grss_feed_item_get_contributors	(GrssFeedItem *item);
 gboolean		grss_feed_item_set_comments_url	(GrssFeedItem *item, gchar *url);
 const gchar*		grss_feed_item_get_comments_url	(GrssFeedItem *item);

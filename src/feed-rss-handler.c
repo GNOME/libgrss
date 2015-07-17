@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2009-2015, Roberto Guido <rguido@src.gnome.org>
  *                          Michele Tameni <michele@amdplanet.it>
+ * Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -178,7 +179,7 @@ parse_channel (FeedRssHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xml
 		else if (!xmlStrcmp (cur->name, BAD_CAST"managingEditor")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				grss_feed_channel_set_editor (feed, tmp);
+				grss_feed_channel_set_editor (feed, grss_person_new (tmp, NULL, NULL));
 				g_free (tmp);
 			}
 		}
@@ -287,7 +288,8 @@ parse_rss_item (FeedRssHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xm
 		else if (!xmlStrcmp (cur->name, BAD_CAST"author")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				grss_feed_item_set_author (item, tmp);
+				grss_feed_item_set_author (item,
+				                           grss_person_new (tmp, NULL, NULL));
 				g_free (tmp);
 			}
 		}

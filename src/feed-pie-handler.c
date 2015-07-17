@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2009-2015, Roberto Guido <rguido@src.gnome.org>
  *                          Michele Tameni <michele@amdplanet.it>
+ * Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -150,11 +151,12 @@ pie_parse_content_construct (xmlNodePtr cur) {
 	return ret;
 }
 
-static gchar*
+static GrssPerson *
 parseAuthor (xmlNodePtr cur) {
-	gchar *tmp = NULL;
-	gchar *tmp2;
-	gchar *tmp3;
+	GrssPerson *person;
+	gchar *name = NULL;
+	gchar *email = NULL;
+	gchar *uri = NULL;
 
 	g_assert (NULL != cur);
 	cur = cur->xmlChildrenNode;
@@ -167,28 +169,29 @@ parseAuthor (xmlNodePtr cur) {
 		}
 
 		if (!xmlStrcmp (cur->name, BAD_CAST"name"))
-			tmp = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
+			name = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 
-		if (!xmlStrcmp (cur->name, BAD_CAST"email")) {
-			tmp2 = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
-			tmp3 = g_strdup_printf("%s <a href=\"mailto:%s\">%s</a>", tmp, tmp2, tmp2);
-			g_free (tmp);
-			g_free (tmp2);
-			tmp = tmp3;
-		}
+		if (!xmlStrcmp (cur->name, BAD_CAST"email"))
+			email = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 
-		if (!xmlStrcmp (cur->name, BAD_CAST"url")) {
-			tmp2 = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
-			tmp3 = g_strdup_printf("%s (<a href=\"%s\">Website</a>)", tmp, tmp2);
-			g_free (tmp);
-			g_free (tmp2);
-			tmp = tmp3;
-		}
+		if (!xmlStrcmp (cur->name, BAD_CAST"url"))
+			uri = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 
 		cur = cur->next;
 	}
 
-	return tmp;
+	if (name == NULL)
+		name = g_strdup ("Invalid author");
+
+	person = grss_person_new (name, email, uri);
+
+	g_free (name);
+	if (email != NULL)
+		g_free (email);
+	if (email != NULL)
+		g_free (email);
+
+	return person;
 }
 
 GrssFeedItem*
@@ -196,6 +199,7 @@ parse_entry (FeedPieHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xmlNo
 	xmlChar *xtmp;
 	gchar *tmp2;
 	gchar *tmp;
+	GrssPerson *person;
 	GrssFeedItem *item;
 
 	g_assert (NULL != cur);
@@ -246,15 +250,13 @@ parse_entry (FeedPieHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xmlNo
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"author")) {
 			/* parse feed author */
-			tmp =  parseAuthor (cur);
-			grss_feed_item_set_author (item, tmp);
-			g_free (tmp);
+			person = parseAuthor (cur);
+			grss_feed_item_set_author (item, person);
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"contributor")) {
 			/* parse feed contributors */
-			tmp = parseAuthor (cur);
-			grss_feed_item_add_contributor (item, tmp);
-			g_free (tmp);
+			person = parseAuthor (cur);
+			grss_feed_item_add_contributor (item, person);
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"id")) {
 			if (NULL != (tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1))) {
@@ -311,6 +313,7 @@ feed_pie_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 	GList *items;
 	GrssFeedItem *item;
 	FeedPieHandler *parser;
+	GrssPerson *person;
 
 	items = NULL;
 	now = time (NULL);
@@ -373,11 +376,9 @@ feed_pie_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 			/* parse feed author */
 			else if (!xmlStrcmp (cur->name, BAD_CAST"author")) {
 				/* parse feed author */
-				tmp = parseAuthor (cur);
-				if (tmp) {
-					grss_feed_channel_set_editor (feed, tmp);
-					g_free (tmp);
-				}
+				person = parseAuthor (cur);
+				if (person)
+					grss_feed_channel_set_editor (feed, person);
 			}
 			else if (!xmlStrcmp (cur->name, BAD_CAST"tagline")) {
 				tmp = pie_parse_content_construct (cur);
@@ -434,11 +435,9 @@ feed_pie_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 				}
 			}
 			else if (!xmlStrcmp (cur->name, BAD_CAST"contributor")) {
-				tmp = parseAuthor (cur);
-				if (tmp) {
-					grss_feed_channel_add_contributor (feed, tmp);
-					g_free (tmp);
-				}
+				person = parseAuthor (cur);
+				if (person)
+					grss_feed_channel_add_contributor (feed, person);
 			}
 			else if (do_items == TRUE && (!xmlStrcmp (cur->name, BAD_CAST"entry"))) {
 				item = parse_entry (parser, feed, doc, cur);

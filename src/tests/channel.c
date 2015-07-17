@@ -42,7 +42,7 @@ test_parse_valid_rss ()
 	g_assert_cmpstr (grss_feed_channel_get_homepage (channel), ==, "http://slashdot.org/");
 	g_assert_cmpstr (grss_feed_channel_get_title (channel), ==, "Slashdot");
 	g_assert_cmpstr (grss_feed_channel_get_language (channel), ==, "en-us");
-	g_assert_cmpstr (grss_feed_channel_get_editor (channel), ==, "help@slashdot.org");
+	g_assert_cmpstr (grss_person_get_name (grss_feed_channel_get_editor (channel)), ==, "help@slashdot.org");
 
 	g_object_unref (channel);
 }

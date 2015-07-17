@@ -30,6 +30,7 @@ sources_private_h = \
 
 sources_public_h = \
 	libgrss.h                       \
+	person.h                        \
 	feed-atom-formatter.h           \
 	feed-channel.h                  \
 	feed-enclosure.h                \
@@ -44,6 +45,7 @@ sources_public_h = \
 	feeds-subscriber.h
 
 sources_public_c = \
+	person.c                        \
 	feed-atom-formatter.c           \
 	feed-channel.c                  \
 	feed-enclosure.c                \

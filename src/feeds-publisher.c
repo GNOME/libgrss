@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2010-2015, Roberto Guido <rguido@src.gnome.org>
  *                          Michele Tameni <michele@amdplanet.it>
+ * Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -249,6 +250,7 @@ grss_feeds_publisher_format_content (GrssFeedsPublisher *pub, GrssFeedChannel *c
 	const GList *list;
 	GString *text;
 	GrssFeedItem *item;
+	GrssPerson *person;
 
 	/*
 		TODO	Provide a GrssFeedFormatter to permit Atom and RSS
@@ -273,9 +275,10 @@ grss_feeds_publisher_format_content (GrssFeedsPublisher *pub, GrssFeedChannel *c
 	if (str != NULL)
 		g_string_append_printf (text, "\t<author>%s</author>\n", str);
 
-	str = grss_feed_channel_get_editor (channel);
-	if (str != NULL)
-		g_string_append_printf (text, "\t<rights>%s</rights>\n", str);
+	person = grss_feed_channel_get_editor (channel);
+	if (person != NULL)
+		// TODO: implement handling additional attrs
+		g_string_append_printf (text, "\t<rights>%s</rights>\n", grss_person_get_name (person));
 
 	str = grss_feed_channel_get_generator (channel);
 	if (str != NULL)
@@ -322,9 +325,10 @@ grss_feeds_publisher_format_content (GrssFeedsPublisher *pub, GrssFeedChannel *c
 		if (str != NULL)
 			g_string_append_printf (text, "\t\t<summary>%s</summary>\n", str);
 
-		str = grss_feed_item_get_author (item);
-		if (str != NULL)
-			g_string_append_printf (text, "\t\t<author>%s</author>\n", str);
+		person = grss_feed_item_get_author (item);
+		if (person != NULL)
+			// TODO: implement handling additional attrs
+			g_string_append_printf (text, "\t\t<author>%s</author>\n", grss_person_get_name (person));
 
 		str = grss_feed_item_get_copyright (item);
 		if (str != NULL)
@@ -332,7 +336,8 @@ grss_feeds_publisher_format_content (GrssFeedsPublisher *pub, GrssFeedChannel *c
 
 		list = grss_feed_item_get_contributors (item);
 		while (list != NULL) {
-			g_string_append_printf (text, "\t\t<contributor>%s</contributor>\n", (gchar*) list->data);
+			// TODO: implement handling additional attrs
+			g_string_append_printf (text, "\t\t<contributor>%s</contributor>\n", grss_person_get_name (list->data));
 			list = list->next;
 		}
 

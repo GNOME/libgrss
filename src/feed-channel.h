@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2009-2015, Roberto Guido <rguido@src.gnome.org>
  *                          Michele Tameni <michele@amdplanet.it>
+ * Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,6 +22,7 @@
 #ifndef __FEED_CHANNEL_H__
 #define __FEED_CHANNEL_H__
 
+#include "person.h"
 #include "libgrss.h"
 
 #define GRSS_FEED_CHANNEL_TYPE		(grss_feed_channel_get_type())
@@ -75,9 +77,9 @@ gboolean		grss_feed_channel_get_rsscloud		(GrssFeedChannel *channel, gchar **pat
 
 void			grss_feed_channel_set_copyright		(GrssFeedChannel *channel, gchar *copyright);
 const gchar*		grss_feed_channel_get_copyright		(GrssFeedChannel *channel);
-void			grss_feed_channel_set_editor		(GrssFeedChannel *channel, gchar *editor);
-const gchar*		grss_feed_channel_get_editor		(GrssFeedChannel *channel);
-void			grss_feed_channel_add_contributor	(GrssFeedChannel *channel, gchar *contributor);
+void			grss_feed_channel_set_editor		(GrssFeedChannel *channel, GrssPerson *editor);
+GrssPerson*		grss_feed_channel_get_editor		(GrssFeedChannel *channel);
+void			grss_feed_channel_add_contributor	(GrssFeedChannel *channel, GrssPerson *contributor);
 const GList*		grss_feed_channel_get_contributors	(GrssFeedChannel *channel);
 void			grss_feed_channel_add_cookie		(GrssFeedChannel *channel, SoupCookie *cookie);
 GSList*			grss_feed_channel_get_cookies		(GrssFeedChannel *channel);

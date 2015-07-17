@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2009-2015, Roberto Guido <rguido@src.gnome.org>
  *                          Michele Tameni <michele@amdplanet.it>
+ * Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -56,7 +57,7 @@ struct _GrssFeedChannelPrivate {
 	RSSCloud	rsscloud;
 
 	gchar		*copyright;
-	gchar		*editor;
+	GrssPerson	*editor;
 	GList		*contributors;
 	SoupCookieJar   *jar;
 	gchar		*webmaster;
@@ -102,13 +103,14 @@ grss_feed_channel_finalize (GObject *obj)
 	FREE_STRING (chan->priv->rsscloud.path);
 	FREE_STRING (chan->priv->rsscloud.protocol);
 	FREE_STRING (chan->priv->copyright);
-	FREE_STRING (chan->priv->editor);
+	if (chan->priv->editor)
+		grss_person_unref (chan->priv->editor);
 	FREE_STRING (chan->priv->webmaster);
 	FREE_STRING (chan->priv->generator);
 
 	if (chan->priv->contributors != NULL) {
 		for (iter = chan->priv->contributors; iter; iter = g_list_next (iter))
-			g_free (iter->data);
+			grss_person_unref (iter->data);
 		g_list_free (chan->priv->contributors);
 	}
 
@@ -668,15 +670,17 @@ grss_feed_channel_get_copyright (GrssFeedChannel *channel)
 /**
  * grss_feed_channel_set_editor:
  * @channel: a #GrssFeedChannel.
- * @editor: editor of the feed.
+ * @editor: a #GrssPerson.
  *
  * To set the editor of the @channel.
  */
 void
-grss_feed_channel_set_editor (GrssFeedChannel *channel, gchar *editor)
+grss_feed_channel_set_editor (GrssFeedChannel *channel,
+                              GrssPerson      *editor)
 {
-	FREE_STRING (channel->priv->editor);
-	channel->priv->editor = g_strdup (editor);
+	if (channel->priv->editor != NULL)
+		grss_person_unref (channel->priv->editor);
+	channel->priv->editor = editor;
 }
 
 /**
@@ -685,32 +689,31 @@ grss_feed_channel_set_editor (GrssFeedChannel *channel, gchar *editor)
  *
  * Retrieves reference to the editor or the @channel.
  *
- * Returns: editor of the feed, or %NULL.
+ * Returns: #GrssPerson, or %NULL.
  */
-const gchar*
+GrssPerson*
 grss_feed_channel_get_editor (GrssFeedChannel *channel)
 {
-	return (const gchar*) channel->priv->editor;
+	return channel->priv->editor;
 }
 
 /**
  * grss_feed_channel_add_contributor:
  * @channel: a #GrssFeedChannel.
- * @contributor: contributor of the feed.
+ * @contributor: a #GrssPerson.
  *
  * To add a contributor to the @channel.
  */
 void
-grss_feed_channel_add_contributor (GrssFeedChannel *channel, gchar *contributor)
+grss_feed_channel_add_contributor (GrssFeedChannel *channel,
+                                   GrssPerson      *contributor)
 {
-	gchar *con;
-
-	con = g_strdup (contributor);
-
 	if (channel->priv->contributors == NULL)
-		channel->priv->contributors = g_list_prepend (channel->priv->contributors, con);
+		channel->priv->contributors = g_list_prepend (channel->priv->contributors,
+		                                              contributor);
 	else
-		channel->priv->contributors = g_list_append (channel->priv->contributors, con);
+		channel->priv->contributors = g_list_append (channel->priv->contributors,
+		                                             contributor);
 }
 
 /**
@@ -719,7 +722,7 @@ grss_feed_channel_add_contributor (GrssFeedChannel *channel, gchar *contributor)
  *
  * Retrieves reference to the contributors of the @channel.
  *
- * Returns: (element-type utf8) (transfer none): list of contributors to
+ * Returns: (element-type GrssPerson) (transfer none): list of contributors to
  * the channel, or %NULL.
  */
 const GList*

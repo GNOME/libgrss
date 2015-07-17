@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014, Roberto Guido <rguido@src.gnome.org>
+ * Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -38,6 +39,7 @@ feed_atom_formatter_format (GrssFeedFormatter *formatter)
 	time_t date;
 	GList *iter;
 	GList *items;
+        GrssPerson *person;
 	const GList *list;
 	GString *text;
 	GrssFeedChannel *channel;
@@ -65,9 +67,10 @@ feed_atom_formatter_format (GrssFeedFormatter *formatter)
 		if (str != NULL)
 			g_string_append_printf (text, "\t<rights>%s</rights>\n", str);
 
-		str = grss_feed_channel_get_editor (channel);
-		if (str != NULL)
-			g_string_append_printf (text, "\t<author>%s</author>\n", str);
+		person = grss_feed_channel_get_editor (channel);
+		if (person != NULL)
+			// TODO: implement printing details
+			g_string_append_printf (text, "\t<author>%s</author>\n", grss_person_get_name (person));
 
 		str = grss_feed_channel_get_generator (channel);
 		if (str != NULL)
@@ -75,7 +78,7 @@ feed_atom_formatter_format (GrssFeedFormatter *formatter)
 
 		list = grss_feed_channel_get_contributors (channel);
 		while (list != NULL) {
-			g_string_append_printf (text, "\t<contributor>%s</contributor>\n", (gchar*) list->data);
+			g_string_append_printf (text, "\t<contributor>%s</contributor>\n", grss_person_get_name (list->data));
 			list = list->next;
 		}
 
@@ -115,9 +118,10 @@ feed_atom_formatter_format (GrssFeedFormatter *formatter)
 			if (str != NULL)
 				g_string_append_printf (text, "\t\t<summary>%s</summary>\n", str);
 
-			str = grss_feed_item_get_author (item);
-			if (str != NULL)
-				g_string_append_printf (text, "\t\t<author>%s</author>\n", str);
+			person = grss_feed_item_get_author (item);
+			if (person != NULL)
+				// TODO: implement handling additional attributes
+				g_string_append_printf (text, "\t\t<author>%s</author>\n", grss_person_get_name (person));
 
 			str = grss_feed_item_get_copyright (item);
 			if (str != NULL)
@@ -125,7 +129,7 @@ feed_atom_formatter_format (GrssFeedFormatter *formatter)
 
 			list = grss_feed_item_get_contributors (item);
 			while (list != NULL) {
-				g_string_append_printf (text, "\t\t<contributor>%s</contributor>\n", (gchar*) list->data);
+				g_string_append_printf (text, "\t\t<contributor>%s</contributor>\n", grss_person_get_name (list->data));
 				list = list->next;
 			}
 

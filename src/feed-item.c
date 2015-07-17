@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2009-2015, Roberto Guido <rguido@src.gnome.org>
  *                          Michele Tameni <michele@amdplanet.it>
+ * Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -52,7 +53,7 @@ struct _GrssFeedItemPrivate {
 	gchar		*related;
 
 	gchar		*copyright;
-	gchar		*author;
+	GrssPerson	*author;
 	GList		*contributors;
 	gchar		*comments_url;
 
@@ -79,7 +80,8 @@ grss_feed_item_finalize (GObject *obj)
 	FREE_STRING (item->priv->real_source_title);
 	FREE_STRING (item->priv->related);
 	FREE_STRING (item->priv->copyright);
-	FREE_STRING (item->priv->author);
+	if (item->priv->author)
+		grss_person_unref (item->priv->author);
 	FREE_STRING (item->priv->comments_url);
 
 	if (item->priv->enclosures != NULL) {
@@ -96,7 +98,7 @@ grss_feed_item_finalize (GObject *obj)
 
 	if (item->priv->contributors != NULL) {
 		for (iter = item->priv->contributors; iter; iter = g_list_next (iter))
-			g_free (iter->data);
+			grss_person_unref (iter->data);
 		g_list_free (item->priv->contributors);
 	}
 }
@@ -429,15 +431,17 @@ grss_feed_item_get_copyright (GrssFeedItem *item)
 /**
  * grss_feed_item_set_author:
  * @item: a #GrssFeedItem.
- * @author: name of the author.
+ * @author: a #GrssPerson.
  *
  * To assign an author to the @item.
  */
 void
-grss_feed_item_set_author (GrssFeedItem *item, gchar *author)
+grss_feed_item_set_author (GrssFeedItem *item,
+                           GrssPerson   *author)
 {
-	FREE_STRING (item->priv->author);
-	item->priv->author = g_strdup (author);
+	if (item->priv->author)
+		grss_person_unref (item->priv->author);
+	item->priv->author = author;
 }
 
 /**
@@ -446,32 +450,31 @@ grss_feed_item_set_author (GrssFeedItem *item, gchar *author)
  *
  * Retrieves the author of @item.
  *
- * Returns: author of the item, or %NULL.
+ * Returns: #GrssPerson, or %NULL.
  */
-const gchar*
+GrssPerson *
 grss_feed_item_get_author (GrssFeedItem *item)
 {
-	return (const gchar*) item->priv->author;
+	return item->priv->author;
 }
 
 /**
  * grss_feed_item_add_contributor:
  * @item: a #GrssFeedItem.
- * @contributor: name of the contributor for the item.
+ * @contributor: a #GrssPerson.
  *
  * To add a contributor to the @item.
  */
 void
-grss_feed_item_add_contributor (GrssFeedItem *item, gchar *contributor)
+grss_feed_item_add_contributor (GrssFeedItem *item,
+                                GrssPerson   *contributor)
 {
-	gchar *con;
-
-	con = g_strdup (contributor);
-
-	if (item->priv->contributors == NULL)
-		item->priv->contributors = g_list_prepend (item->priv->contributors, con);
-	else
-		item->priv->contributors = g_list_append (item->priv->contributors, con);
+  if (item->priv->contributors == NULL)
+    item->priv->contributors = g_list_prepend (item->priv->contributors,
+                                               contributor);
+  else
+    item->priv->contributors = g_list_append (item->priv->contributors,
+                                              contributor);
 }
 
 /**
@@ -480,8 +483,8 @@ grss_feed_item_add_contributor (GrssFeedItem *item, gchar *contributor)
  *
  * Retrieves contributors for @item.
  *
- * Returns: (element-type utf8) (transfer none): list of contributors to
- * the item.
+ * Returns: (element-type GrssPerson) (transfer none): list of
+ *          contributors to the item.
  */
 const GList*
 grss_feed_item_get_contributors (GrssFeedItem *item)

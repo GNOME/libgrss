@@ -1,6 +1,7 @@
 /*
- * Copyright (C) 20092015, Roberto Guido <rguido@src.gnome.org>
+ * Copyright (C) 2009-2015, Roberto Guido <rguido@src.gnome.org>
  *                          Michele Tameni <michele@amdplanet.it>
+ * Copyright (C) 2015 Igor Gnatenko <ignatenko@src.gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,6 +32,7 @@
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
 
+#include "person.h"
 #include "feed-channel.h"
 #include "feed-enclosure.h"
 #include "feed-item.h"
