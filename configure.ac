@@ -16,6 +16,7 @@ AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz tar-ustar])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_CONFIG_MACRO_DIR([m4])
+AC_REQUIRE_AUX_FILE([tap-driver.sh])
 
 GNOME_MAINTAINER_MODE_DEFINES
 
@@ -68,9 +69,12 @@ GTK_DOC_CHECK([1.9])
 
 GOBJECT_INTROSPECTION_CHECK([1.30.0])
 
+GLIB_TESTS
+
 AC_OUTPUT([
 	Makefile
 	src/Makefile
+	src/tests/Makefile
 	doc/Makefile
 	doc/reference/Makefile
 	doc/reference/version.xml

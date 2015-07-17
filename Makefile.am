@@ -27,6 +27,7 @@ GITIGNOREFILES = \
 	missing \
 	INSTALL \
 	test-driver \
+	tap-driver.sh \
 	$(NULL)
 
 libgrss-$(LIBGRSS_API_VERSION).pc: libgrss.pc
