@@ -5,8 +5,6 @@ m4_define([grss_minor_version], [7])
 m4_define([grss_micro_version], [0])
 m4_define([grss_version],
           [grss_major_version.grss_minor_version.grss_micro_version])
-m4_define([grss_bugreport_url],
-          [https://bugzilla.gnome.org/enter_bug.cgi?product=libgrss])
 
 # bump up by 1 for every micro release with no API changes, otherwise
 # set to 0. after release, bump up by 1
@@ -43,12 +41,10 @@ GRSS_MAJOR_VERSION=grss_major_version
 GRSS_MINOR_VERSION=grss_minor_version
 GRSS_MICRO_VERSION=grss_micro_version
 GRSS_VERSION=grss_version
-GRSS_RELEASE_STATUS=grss_release_status
 AC_SUBST(GRSS_MAJOR_VERSION)
 AC_SUBST(GRSS_MICRO_VERSION)
 AC_SUBST(GRSS_MINOR_VERSION)
 AC_SUBST(GRSS_VERSION)
-AC_SUBST(GRSS_RELEASE_STATUS)
 
 GRSS_LT_CURRENT=lt_current
 GRSS_LT_REVISION=lt_revision
