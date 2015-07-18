@@ -1,7 +1,7 @@
 include $(top_srcdir)/glib-tap.mk
 
 AM_CFLAGS = -g $(LIBGRSS_CFLAGS)
-LDADD = $(top_builddir)/src/libgrss-@LIBGRSS_API_VERSION@.la $(LIBGRSS_LIBS)
+LDADD = $(top_builddir)/src/libgrss.la $(LIBGRSS_LIBS)
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/src \
 	$(NULL)

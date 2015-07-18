@@ -1,10 +1,10 @@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src doc
 EXTRA_DIST = AUTHORS
-CLEANFILES = libgrss-$(LIBGRSS_API_VERSION).pc
+CLEANFILES = libgrss.pc
 
 pcfiledir = $(libdir)/pkgconfig
-pcfile_DATA = libgrss-$(LIBGRSS_API_VERSION).pc
+pcfile_DATA = libgrss.pc
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-introspection
 
@@ -29,9 +29,6 @@ GITIGNOREFILES = \
 	test-driver \
 	tap-driver.sh \
 	$(NULL)
-
-libgrss-$(LIBGRSS_API_VERSION).pc: libgrss.pc
-	@cp -f $< $@
 
 AUTHORS:
 	@if test -d "$(srcdir)/.git"; \

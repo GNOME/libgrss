@@ -2,15 +2,16 @@ SUBDIRS = tests
 
 NULL =
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir)/src         \
 	-DPREFIX=\""$(prefix)"\"    \
 	-DLIBDIR=\""$(libdir)"\"    \
 	-DG_DISABLE_DEPRECATED      \
+	$(WARN_CFLAGS)              \
 	$(LIBGRSS_CFLAGS)           \
 	$(NULL)
 
-LDADD = $(LIBGRSS_LT_LDFLAGS) -export-dynamic -rpath $(libdir)
+LDADD = -export-dynamic -rpath $(libdir)
 
 sources_private_h = \
 	feed-atom-handler.h             \
@@ -86,19 +87,23 @@ feed-marshal.c: feed-marshal.list
 	echo "#include \"feed-marshal.h\"" > $@ &&    \
 		$(GLIB_GENMARSHAL) $< --prefix=feed_marshal --body >> $@
 
-lib_LTLIBRARIES = libgrss-0.6.la
+lib_LTLIBRARIES = libgrss.la
 
-libgrss_0_6_la_LIBADD = $(LIBGRSS_LIBS)
-libgrss_0_6_la_SOURCES = \
+libgrss_la_LIBADD = $(LIBGRSS_LIBS)
+libgrss_la_SOURCES = \
 	$(sources_public_h) \
 	$(sources_private_h) \
 	$(sources_public_c) \
 	$(sources_private_c) \
 	$(NULL)
-libgrss_0_6_la_LDFLAGS = $(LDADD)
+libgrss_la_LDFLAGS = \
+	$(GRSS_LT_LDFLAGS) \
+	$(WARN_LDFLAGS) \
+	$(LDADD) \
+	$(NULL)
 
-libgrss_0_6_ladir = $(includedir)/libgrss-@LIBGRSS_API_VERSION@
-libgrss_0_6_la_HEADERS = $(sources_public_h)
+libgrss_ladir = $(includedir)/libgrss
+libgrss_la_HEADERS = $(sources_public_h)
 
 CLEANFILES = $(pcfile_DATA)
 
@@ -121,12 +126,12 @@ introspection_sources = \
 	$(sources_public_c) \
 	$(NULL)
 
-Grss-0.6.gir: libgrss-0.6.la
-Grss_0_6_gir_INCLUDES = GObject-2.0 Gio-2.0 Soup-2.4 libxml2-2.0
-Grss_0_6_gir_CFLAGS = $(INCLUDES)
-Grss_0_6_gir_LIBS = libgrss-0.6.la
-Grss_0_6_gir_FILES = $(introspection_sources)
-INTROSPECTION_GIRS += Grss-0.6.gir
+Grss-0.7.gir: libgrss.la
+Grss_0_7_gir_INCLUDES = GObject-2.0 Gio-2.0 Soup-2.4 libxml2-2.0
+Grss_0_7_gir_CFLAGS = $(INCLUDES)
+Grss_0_7_gir_LIBS = libgrss.la
+Grss_0_7_gir_FILES = $(introspection_sources)
+INTROSPECTION_GIRS += Grss-0.7.gir
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)
