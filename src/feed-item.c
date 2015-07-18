@@ -439,6 +439,8 @@ void
 grss_feed_item_set_author (GrssFeedItem *item,
                            GrssPerson   *author)
 {
+	if (author)
+		grss_person_ref (author);
 	if (item->priv->author)
 		grss_person_unref (item->priv->author);
 	item->priv->author = author;
@@ -469,12 +471,12 @@ void
 grss_feed_item_add_contributor (GrssFeedItem *item,
                                 GrssPerson   *contributor)
 {
-  if (item->priv->contributors == NULL)
-    item->priv->contributors = g_list_prepend (item->priv->contributors,
-                                               contributor);
-  else
-    item->priv->contributors = g_list_append (item->priv->contributors,
-                                              contributor);
+	if (item->priv->contributors == NULL)
+		item->priv->contributors = g_list_prepend (item->priv->contributors,
+							   grss_person_ref (contributor));
+	else
+		item->priv->contributors = g_list_append (item->priv->contributors,
+							  grss_person_ref (contributor));
 }
 
 /**

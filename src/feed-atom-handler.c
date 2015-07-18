@@ -413,8 +413,10 @@ atom10_parse_entry_author (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChannel *
 	GrssPerson *author;
 
 	author = atom10_parse_person_construct (cur);
-	if (author)
+	if (author) {
 		grss_feed_item_set_author (item, author);
+		grss_person_unref (author);
+	}
 }
 
 static void
@@ -452,8 +454,10 @@ atom10_parse_entry_contributor (xmlNodePtr cur, GrssFeedItem *item, GrssFeedChan
 	GrssPerson *contributor;
 
 	contributor = atom10_parse_person_construct (cur);
-	if (contributor)
+	if (contributor) {
 		grss_feed_item_add_contributor (item, contributor);
+		grss_person_unref (contributor);
+	}
 }
 
 static void
@@ -595,8 +599,10 @@ atom10_parse_feed_author (xmlNodePtr cur, GrssFeedChannel *feed)
 	GrssPerson *author;
 
 	author = atom10_parse_person_construct (cur);
-	if (author)
+	if (author) {
 		grss_feed_channel_set_editor (feed, author);
+		grss_person_unref (author);
+	}
 }
 
 static void
@@ -623,8 +629,10 @@ atom10_parse_feed_contributor (xmlNodePtr cur, GrssFeedChannel *feed)
 	GrssPerson *contributor;
 
 	contributor = atom10_parse_person_construct (cur);
-	if (contributor)
+	if (contributor) {
 		grss_feed_channel_add_contributor (feed, contributor);
+		grss_person_unref (contributor);
+	}
 }
 
 static void

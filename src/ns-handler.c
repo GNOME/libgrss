@@ -110,7 +110,9 @@ ns_dc_item (GrssFeedItem *item, xmlNodePtr cur)
 			grss_feed_item_set_title (item, value);
 		}
 		else if (!xmlStrcmp (BAD_CAST "creator", cur->name)) {
-			grss_feed_item_set_author (item, grss_person_new (value, NULL, NULL));
+			GrssPerson *person = grss_person_new (value, NULL, NULL);
+			grss_feed_item_set_author (item, person);
+			grss_person_unref (person);
 		}
 		else if (!xmlStrcmp (BAD_CAST "subject", cur->name)) {
 			grss_feed_item_add_category (item, value);
@@ -119,7 +121,9 @@ ns_dc_item (GrssFeedItem *item, xmlNodePtr cur)
 			grss_feed_item_set_description (item, value);
 		}
 		else if (!xmlStrcmp (BAD_CAST "contributor", cur->name)) {
-			grss_feed_item_add_contributor (item, grss_person_new (value, NULL, NULL));
+			GrssPerson *person = grss_person_new (value, NULL, NULL);
+			grss_feed_item_add_contributor (item, person);
+			grss_person_unref (person);
 		}
 		else if (!xmlStrcmp (BAD_CAST "rights", cur->name)) {
 			grss_feed_item_set_copyright (item, value);
@@ -144,7 +148,9 @@ ns_dc_channel (GrssFeedChannel *feed, xmlNodePtr cur)
 			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "creator", cur->name)) {
-			grss_feed_channel_set_editor (feed, grss_person_new (value, NULL, NULL));
+			GrssPerson *person = grss_person_new (value, NULL, NULL);
+			grss_feed_channel_set_editor (feed, person);
+			grss_person_unref (person);
 			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "subject", cur->name)) {
@@ -160,7 +166,9 @@ ns_dc_channel (GrssFeedChannel *feed, xmlNodePtr cur)
 			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "contributor", cur->name)) {
-			grss_feed_channel_add_contributor (feed, grss_person_new (value, NULL, NULL));
+			GrssPerson *person = grss_person_new (value, NULL, NULL);
+			grss_feed_channel_add_contributor (feed, person);
+			grss_person_unref (person);
 			ret = TRUE;
 		}
 		else if (!xmlStrcmp (BAD_CAST "rights", cur->name)) {
@@ -235,7 +243,9 @@ ns_itunes_item (GrssFeedItem *item, xmlNodePtr cur)
 	if (!xmlStrcmp (cur->name, BAD_CAST"author")) {
 		tmp = (gchar*) xmlNodeListGetString (cur->doc, cur->xmlChildrenNode, 1);
 		if (tmp) {
-			grss_feed_item_set_author (item, grss_person_new (tmp, NULL, NULL));
+			GrssPerson *person = grss_person_new (tmp, NULL, NULL);
+			grss_feed_item_set_author (item, person);
+			grss_person_unref (person);
 			g_free (tmp);
 		}
 	}

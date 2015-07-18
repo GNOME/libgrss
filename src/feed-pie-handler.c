@@ -252,11 +252,13 @@ parse_entry (FeedPieHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xmlNo
 			/* parse feed author */
 			person = parseAuthor (cur);
 			grss_feed_item_set_author (item, person);
+			grss_person_unref (person);
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"contributor")) {
 			/* parse feed contributors */
 			person = parseAuthor (cur);
 			grss_feed_item_add_contributor (item, person);
+			grss_person_unref (person);
 		}
 		else if (!xmlStrcmp (cur->name, BAD_CAST"id")) {
 			if (NULL != (tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1))) {
@@ -377,8 +379,10 @@ feed_pie_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 			else if (!xmlStrcmp (cur->name, BAD_CAST"author")) {
 				/* parse feed author */
 				person = parseAuthor (cur);
-				if (person)
+				if (person) {
 					grss_feed_channel_set_editor (feed, person);
+					grss_person_unref (person);
+				}
 			}
 			else if (!xmlStrcmp (cur->name, BAD_CAST"tagline")) {
 				tmp = pie_parse_content_construct (cur);
@@ -436,8 +440,10 @@ feed_pie_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 			}
 			else if (!xmlStrcmp (cur->name, BAD_CAST"contributor")) {
 				person = parseAuthor (cur);
-				if (person)
+				if (person) {
 					grss_feed_channel_add_contributor (feed, person);
+					grss_person_unref (person);
+				}
 			}
 			else if (do_items == TRUE && (!xmlStrcmp (cur->name, BAD_CAST"entry"))) {
 				item = parse_entry (parser, feed, doc, cur);

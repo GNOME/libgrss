@@ -678,6 +678,8 @@ void
 grss_feed_channel_set_editor (GrssFeedChannel *channel,
                               GrssPerson      *editor)
 {
+	if (editor)
+		grss_person_ref (editor);
 	if (channel->priv->editor != NULL)
 		grss_person_unref (channel->priv->editor);
 	channel->priv->editor = editor;
@@ -710,10 +712,10 @@ grss_feed_channel_add_contributor (GrssFeedChannel *channel,
 {
 	if (channel->priv->contributors == NULL)
 		channel->priv->contributors = g_list_prepend (channel->priv->contributors,
-		                                              contributor);
+		                                              grss_person_ref (contributor));
 	else
 		channel->priv->contributors = g_list_append (channel->priv->contributors,
-		                                             contributor);
+		                                             grss_person_ref (contributor));
 }
 
 /**

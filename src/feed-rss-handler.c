@@ -179,7 +179,11 @@ parse_channel (FeedRssHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xml
 		else if (!xmlStrcmp (cur->name, BAD_CAST"managingEditor")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				grss_feed_channel_set_editor (feed, grss_person_new (tmp, NULL, NULL));
+				GrssPerson *person;
+
+				person = grss_person_new (tmp, NULL, NULL);
+				grss_feed_channel_set_editor (feed, person);
+				grss_person_unref (person);
 				g_free (tmp);
 			}
 		}
@@ -288,8 +292,11 @@ parse_rss_item (FeedRssHandler *parser, GrssFeedChannel *feed, xmlDocPtr doc, xm
 		else if (!xmlStrcmp (cur->name, BAD_CAST"author")) {
  			tmp = (gchar*) xmlNodeListGetString (doc, cur->xmlChildrenNode, 1);
 			if (tmp) {
-				grss_feed_item_set_author (item,
-				                           grss_person_new (tmp, NULL, NULL));
+				GrssPerson *person;
+
+				person = grss_person_new (tmp, NULL, NULL);
+				grss_feed_item_set_author (item, person);
+				grss_person_unref (person);
 				g_free (tmp);
 			}
 		}
