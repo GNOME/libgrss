@@ -2,13 +2,13 @@
 # bump micro_version to the next odd number after each release
 m4_define([grss_major_version], [0])
 m4_define([grss_minor_version], [7])
-m4_define([grss_micro_version], [0])
+m4_define([grss_micro_version], [1])
 m4_define([grss_version],
           [grss_major_version.grss_minor_version.grss_micro_version])
 
 # bump up by 1 for every micro release with no API changes, otherwise
 # set to 0. after release, bump up by 1
-m4_define([grss_interface_age], [0])
+m4_define([grss_interface_age], [1])
 m4_define([grss_binary_age], [m4_eval(100 * grss_minor_version + grss_micro_version)])
 
 m4_define([lt_current], [m4_eval(100 * grss_minor_version + grss_micro_version - grss_interface_age)])
