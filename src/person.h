@@ -19,7 +19,7 @@
 #ifndef GRSS_PERSON_H
 #define GRSS_PERSON_H
 
-#include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
@@ -32,6 +32,8 @@ G_BEGIN_DECLS
  * Since: 0.7
  */
 typedef struct _GrssPerson GrssPerson;
+
+GType grss_person_get_type (void) G_GNUC_CONST;
 
 void grss_person_unref (GrssPerson *person);
 GrssPerson *grss_person_ref (GrssPerson *person);

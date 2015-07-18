@@ -45,6 +45,8 @@ struct _GrssPerson
   volatile gint ref_count;
 };
 
+G_DEFINE_BOXED_TYPE (GrssPerson, grss_person, grss_person_ref, grss_person_unref)
+
 static GrssPerson *
 grss_person_alloc (void)
 {
