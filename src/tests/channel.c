@@ -35,8 +35,9 @@ static void
 test_parse_valid_rss ()
 {
 	GrssFeedChannel *channel;
+	gchar *path = g_test_build_filename (G_TEST_DIST, "test.rss.xml", NULL);
 
-	channel = grss_feed_channel_new_from_file ("test.rss.xml", NULL);
+	channel = grss_feed_channel_new_from_file (path, NULL);
 
 	g_assert (channel != NULL);
 	g_assert_cmpstr (grss_feed_channel_get_homepage (channel), ==, "http://slashdot.org/");
@@ -44,6 +45,7 @@ test_parse_valid_rss ()
 	g_assert_cmpstr (grss_feed_channel_get_language (channel), ==, "en-us");
 	g_assert_cmpstr (grss_person_get_name (grss_feed_channel_get_editor (channel)), ==, "help@slashdot.org");
 
+	g_free (path);
 	g_object_unref (channel);
 }
 
@@ -51,12 +53,14 @@ static void
 test_parse_valid_atom ()
 {
 	GrssFeedChannel *channel;
+	gchar *path = g_test_build_filename (G_TEST_DIST, "test.atom.xml", NULL);
 
-	channel = grss_feed_channel_new_from_file ("test.atom.xml", NULL);
+	channel = grss_feed_channel_new_from_file (path, NULL);
 
 	g_assert (channel != NULL);
 	g_assert_cmpstr (grss_feed_channel_get_title (channel), ==, "Planet GNU");
 
+	g_free (path);
 	g_object_unref (channel);
 }
 
