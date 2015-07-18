@@ -1,3 +1,15 @@
+libgrss 0.7
+==============================================================================
+- Added new type GrssPerson which stores name, email and website URI. All
+  author/contributors stuff now uses it.
+- Fixes in GObject Introspection
+- Documentation now contains more
+- Library now names as libgrss.so with sover
+- pkg-config file no more versioned, this will allow to not monkey-patching
+  dependent programs
+- Autotools configs was updated
+- No bugfixes more ;)
+
 libgrss 0.6
 ==============================================================================
 - Added GrssFeedFormatter and related subclasses to format a GrssFeedChannel in plain rappresentation
