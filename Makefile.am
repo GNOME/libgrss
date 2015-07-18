@@ -1,7 +1,9 @@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src doc
-EXTRA_DIST = AUTHORS
-CLEANFILES = libgrss.pc
+EXTRA_DIST = \
+	AUTHORS \
+	tap-test \
+	$(NULL)
 
 pcfiledir = $(libdir)/pkgconfig
 pcfile_DATA = libgrss.pc
