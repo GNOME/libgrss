@@ -136,7 +136,6 @@ grss_feed_item_new (GrssFeedChannel *parent)
 
 	item = GRSS_FEED_ITEM (g_object_new (GRSS_FEED_ITEM_TYPE, NULL));
 	item->priv->parent = parent;
-	item->priv->pub_time = time (NULL);
 	return item;
 }
 
