@@ -298,7 +298,7 @@ grss_feed_channel_get_format (GrssFeedChannel *channel)
  * @source: URL of the feed.
  *
  * To assign the URL where to fetch the feed.
- * 
+ *
  * Returns: %TRUE if @source is a valid URL, %FALSE otherwise
  */
 gboolean
@@ -363,7 +363,7 @@ grss_feed_channel_get_title (GrssFeedChannel *channel)
  * @homepage: homepage for the main website.
  *
  * To set the homepage of the site the @channel belongs.
- * 
+ *
  * Returns: %TRUE if @homepage is a valid URL, %FALSE otherwise
  */
 gboolean
@@ -428,7 +428,7 @@ grss_feed_channel_get_description (GrssFeedChannel *channel)
  * @image: URL of the image.
  *
  * To set a rappresentative image to @channel.
- * 
+ *
  * Returns: %TRUE if @image is a valid URL, %FALSE otherwise
  */
 gboolean
@@ -465,7 +465,7 @@ grss_feed_channel_get_image (GrssFeedChannel *channel)
  * @icon: URL where to retrieve the favicon.
  *
  * To set the URL of the icon rappresenting @channel.
- * 
+ *
  * Returns: %TRUE if @icon is a valid URL, %FALSE otherwise
  */
 gboolean
@@ -560,7 +560,7 @@ grss_feed_channel_get_category (GrssFeedChannel *channel)
  *
  * To set information about PubSubHubbub for the channel. To unset the hub,
  * pass %NULL as parameter.
- * 
+ *
  * Returns: %TRUE if @hub is a valid URL, %FALSE otherwise
  */
 gboolean
@@ -737,7 +737,7 @@ grss_feed_channel_get_contributors (GrssFeedChannel *channel)
  * grss_feed_channel_add_cookie:
  * @channel: a #GrssFeedChannel.
  * @cookie: HTML cookie to add to the #GrssFeedChannel's cookie jar
- * 
+ *
  * To add a cookie related to the @channel, will be involved in HTTP sessions
  * while fetching it. More cookie can be added to every #GrssFeedChannel
  */
@@ -831,7 +831,7 @@ grss_feed_channel_get_generator (GrssFeedChannel *channel)
  * grss_feed_channel_set_gzip_compression:
  * @channel: a #GrssFeedChannel.
  * @value: %TRUE to enable GZIP compression when fetching the channel
- * 
+ *
  * Set the GZIP compression for the channel to on or off.
  */
 void
@@ -1036,26 +1036,27 @@ grss_feed_channel_fetch (GrssFeedChannel *channel, GError **error)
 static void
 feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 	guint status;
-	GSimpleAsyncResult *result;
+	GTask *task;
 	GrssFeedChannel *channel;
 
-	result = user_data;
-	channel = GRSS_FEED_CHANNEL (g_async_result_get_source_object (G_ASYNC_RESULT (result)));
+	task = user_data;
+	channel = GRSS_FEED_CHANNEL (g_task_get_source_object (task));
 	g_object_get (msg, "status-code", &status, NULL);
 
 	if (status >= 200 && status <= 299) {
 		if (quick_and_dirty_parse (channel, msg, NULL) == FALSE)
-			g_simple_async_result_set_error (result, FEED_CHANNEL_ERROR, FEED_CHANNEL_PARSE_ERROR,
+			g_task_return_new_error (task, FEED_CHANNEL_ERROR, FEED_CHANNEL_PARSE_ERROR,
 						 "Unable to parse feed from %s", grss_feed_channel_get_source (channel));
+		else
+			g_task_return_boolean (task, TRUE);
 	}
 	else {
-		g_simple_async_result_set_error (result, FEED_CHANNEL_ERROR, FEED_CHANNEL_FETCH_ERROR,
+		g_task_return_new_error (task, FEED_CHANNEL_ERROR, FEED_CHANNEL_FETCH_ERROR,
 						 "Unable to download from %s", grss_feed_channel_get_source (channel));
 	}
 
-	g_simple_async_result_complete_in_idle (result);
 	g_clear_object (&channel->priv->fetchcancel);
-	g_object_unref (result);
+	g_object_unref (task);
 }
 
 /**
@@ -1074,10 +1075,7 @@ feed_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data) {
 gboolean
 grss_feed_channel_fetch_finish (GrssFeedChannel *channel, GAsyncResult *res, GError **error)
 {
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (res), error))
-		return FALSE;
-	else
-		return TRUE;
+	return g_task_propagate_boolean (G_TASK (res), error);
 }
 
 static void
@@ -1098,7 +1096,7 @@ do_prefetch (GrssFeedChannel *channel)
 void
 grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data)
 {
-	GSimpleAsyncResult *result;
+	GTask *task;
 	SoupMessage *msg;
 	SoupSession *session;
 
@@ -1107,8 +1105,7 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
 	*/
 
 	do_prefetch (channel);
-	result = g_simple_async_result_new (G_OBJECT (channel), callback, user_data, grss_feed_channel_fetch_async);
-	g_simple_async_result_set_check_cancellable (result, channel->priv->fetchcancel);
+	task = g_task_new (channel, channel->priv->fetchcancel, callback, user_data);
 
 	session = soup_session_async_new ();
 	init_soup_session (session, channel);
@@ -1116,7 +1113,7 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
 	init_soup_message (msg, channel);
 
-	soup_session_queue_message (session, msg, feed_downloaded, result);
+	soup_session_queue_message (session, msg, feed_downloaded, task);
 }
 
 /**
@@ -1182,30 +1179,29 @@ feed_downloaded_return_items (SoupSession *session, SoupMessage *msg, gpointer u
 {
 	guint status;
 	GList *items;
-	GSimpleAsyncResult *result;
+	GTask *task;
 	GrssFeedChannel *channel;
 
-	result = user_data;
-	channel = GRSS_FEED_CHANNEL (g_async_result_get_source_object (G_ASYNC_RESULT (result)));
+	task = user_data;
+	channel = GRSS_FEED_CHANNEL (g_task_get_source_object (task));
 	g_object_get (msg, "status-code", &status, NULL);
 
 	if (status >= 200 && status <= 299) {
 		items = NULL;
 
 		if (quick_and_dirty_parse (channel, msg, &items) == TRUE)
-			g_simple_async_result_set_op_res_gpointer (result, items, free_items_list);
+			g_task_return_pointer (task, items, free_items_list);
 		else
-			g_simple_async_result_set_error (result, FEED_CHANNEL_ERROR, FEED_CHANNEL_PARSE_ERROR,
+			g_task_return_new_error (task, FEED_CHANNEL_ERROR, FEED_CHANNEL_PARSE_ERROR,
 						 "Unable to parse feed from %s", grss_feed_channel_get_source (channel));
 	}
 	else {
-		g_simple_async_result_set_error (result, FEED_CHANNEL_ERROR, FEED_CHANNEL_FETCH_ERROR,
+		g_task_return_new_error (task, FEED_CHANNEL_ERROR, FEED_CHANNEL_FETCH_ERROR,
 						 "Unable to download from %s", grss_feed_channel_get_source (channel));
 	}
 
-	g_simple_async_result_complete_in_idle (result);
 	g_clear_object (&channel->priv->fetchcancel);
-	g_object_unref (result);
+	g_object_unref (task);
 }
 
 /**
@@ -1219,13 +1215,12 @@ feed_downloaded_return_items (SoupSession *session, SoupMessage *msg, gpointer u
 void
 grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback callback, gpointer user_data)
 {
-	GSimpleAsyncResult *result;
+	GTask *task;
 	SoupMessage *msg;
 	SoupSession *session;
 
 	do_prefetch (channel);
-	result = g_simple_async_result_new (G_OBJECT (channel), callback, user_data, grss_feed_channel_fetch_async);
-	g_simple_async_result_set_check_cancellable (result, channel->priv->fetchcancel);
+	task = g_task_new (channel, channel->priv->fetchcancel, callback, user_data);
 
 	session = soup_session_async_new ();
 	init_soup_session (session, channel);
@@ -1233,7 +1228,7 @@ grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
 	init_soup_message (msg, channel);
 
-	soup_session_queue_message (session, msg, feed_downloaded_return_items, result);
+	soup_session_queue_message (session, msg, feed_downloaded_return_items, task);
 }
 
 /**
@@ -1254,10 +1249,7 @@ grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback
 GList*
 grss_feed_channel_fetch_all_finish (GrssFeedChannel *channel, GAsyncResult *res, GError **error)
 {
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (res), error))
-		return NULL;
-	else
-		return (GList*) g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (res));
+	return g_task_propagate_pointer (G_TASK (res), error);
 }
 
 /**
@@ -1266,7 +1258,7 @@ grss_feed_channel_fetch_all_finish (GrssFeedChannel *channel, GAsyncResult *res,
  *
  * If a fetch operation was scheduled with grss_feed_channel_fetch_async() or
  * grss_feed_channel_fetch_all_async(), cancel it.
- * 
+ *
  * Returns: %TRUE if a fetch was scheduled (and now cancelled), %FALSE if
  * this function had nothing to do
  */
@@ -1282,4 +1274,3 @@ grss_feed_channel_fetch_cancel (GrssFeedChannel *channel)
 		return FALSE;
 	}
 }
-

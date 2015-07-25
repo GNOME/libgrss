@@ -239,12 +239,12 @@ enclosure_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data
 	guint status;
 	const gchar *url;
 	GFile *file;
-	GSimpleAsyncResult *result;
+	GTask *task;
 	GrssFeedEnclosure *enclosure;
 	GError *error;
 
-	result = user_data;
-	enclosure = GRSS_FEED_ENCLOSURE (g_async_result_get_source_object (G_ASYNC_RESULT (result)));
+	task = user_data;
+	enclosure = GRSS_FEED_ENCLOSURE (g_task_get_source_object (task));
 	url = grss_feed_enclosure_get_url (enclosure);
 	g_object_get (msg, "status-code", &status, NULL);
 
@@ -253,17 +253,16 @@ enclosure_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data
 		file = msg_to_internal_file (enclosure, msg, &error);
 
 		if (file != NULL)
-			g_simple_async_result_set_op_res_gpointer (result, file, g_object_unref);
+			g_task_return_pointer (task, file, g_object_unref);
 		else
-			g_simple_async_result_take_error (result, error);
+			g_task_return_error (task, error);
 	}
 	else {
-		g_simple_async_result_set_error (result, FEED_ENCLOSURE_ERROR, FEED_ENCLOSURE_FETCH_ERROR,
+		g_task_return_new_error (task, FEED_ENCLOSURE_ERROR, FEED_ENCLOSURE_FETCH_ERROR,
 						 "Unable to download from %s", url);
 	}
 
-	g_simple_async_result_complete_in_idle (result);
-	g_object_unref (result);
+	g_object_unref (task);
 }
 
 /**
@@ -277,14 +276,14 @@ enclosure_downloaded (SoupSession *session, SoupMessage *msg, gpointer user_data
 void
 grss_feed_enclosure_fetch_async (GrssFeedEnclosure *enclosure, GAsyncReadyCallback callback, gpointer user_data)
 {
-	GSimpleAsyncResult *result;
+	GTask *task;
 	SoupMessage *msg;
 	SoupSession *session;
 
-	result = g_simple_async_result_new (G_OBJECT (enclosure), callback, user_data, grss_feed_enclosure_fetch_async);
+	task = g_task_new (enclosure, NULL, callback, user_data);
 	session = soup_session_async_new ();
 	msg = soup_message_new ("GET", grss_feed_enclosure_get_url (enclosure));
-	soup_session_queue_message (session, msg, enclosure_downloaded, result);
+	soup_session_queue_message (session, msg, enclosure_downloaded, task);
 }
 
 /**
@@ -303,8 +302,5 @@ grss_feed_enclosure_fetch_async (GrssFeedEnclosure *enclosure, GAsyncReadyCallba
 GFile*
 grss_feed_enclosure_fetch_finish (GrssFeedEnclosure *enclosure, GAsyncResult *res, GError **error)
 {
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (res), error))
-		return NULL;
-	else
-		return (GFile*) g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (res));
+	return g_task_propagate_pointer (G_TASK (res), error);
 }
