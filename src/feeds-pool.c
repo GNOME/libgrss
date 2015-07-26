@@ -291,19 +291,21 @@ feed_downloaded (GObject *source, GAsyncResult *res, gpointer user_data)
 {
 	GList *items;
 	GrssFeedChannelWrap *feed;
+	GError *error = NULL;
 
 	feed = (GrssFeedChannelWrap*) user_data;
 	if (feed->pool->priv->running == FALSE)
 		return;
 
-	items = grss_feed_channel_fetch_all_finish (GRSS_FEED_CHANNEL (source), res, NULL);
+	items = grss_feed_channel_fetch_all_finish (GRSS_FEED_CHANNEL (source), res, &error);
 
-	if (items != NULL)
+	if (error == NULL)
 		g_signal_emit (feed->pool, signals [FEED_READY], 0, feed->channel, items, NULL);
 	else
 		g_signal_emit (feed->pool, signals [FEED_FAIL], 0, feed->channel, NULL);
 
 	feed->next_fetch = time (NULL) + (grss_feed_channel_get_update_interval (feed->channel) * 60);
+	g_clear_error (&error);
 }
 
 static gboolean
@@ -324,8 +326,10 @@ fetch_feeds (gpointer data)
 
 	for (iter = pool->priv->feeds_list; iter; iter = g_list_next (iter)) {
 		feed = (GrssFeedChannelWrap*) iter->data;
-		if (feed->next_fetch <= now)
+		if (feed->next_fetch <= now) {
+			g_signal_emit (feed->pool, signals[FEED_FETCHING], 0, feed->channel);
 			grss_feed_channel_fetch_all_async (feed->channel, feed_downloaded, feed);
+		}
 	}
 
 	return TRUE;
