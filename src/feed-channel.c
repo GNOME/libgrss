@@ -1275,7 +1275,7 @@ grss_feed_channel_fetch_cancel (GrssFeedChannel *channel)
 {
 	if (channel->priv->fetchcancel != NULL) {
 		g_cancellable_cancel (channel->priv->fetchcancel);
-		g_object_unref (channel->priv->fetchcancel);
+		g_clear_object (&channel->priv->fetchcancel);
 		return TRUE;
 	}
 	else {
