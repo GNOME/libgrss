@@ -45,5 +45,6 @@
 #include "feeds-subscriber.h"
 #include "feeds-publisher.h"
 #include "feeds-group.h"
+#include "grss-autodiscovery.h"
 
 #endif /* __LIBGRSS_H__ */

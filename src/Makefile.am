@@ -43,7 +43,9 @@ sources_public_h = \
 	feeds-pool.h                    \
 	feeds-publisher.h               \
 	feeds-store.h                   \
-	feeds-subscriber.h
+	feeds-subscriber.h              \
+	grss-autodiscovery.h            \
+	$(NULL)
 
 sources_public_c = \
 	person.c                        \
@@ -58,7 +60,9 @@ sources_public_c = \
 	feeds-pool.c                    \
 	feeds-publisher.c               \
 	feeds-store.c                   \
-	feeds-subscriber.c
+	feeds-subscriber.c              \
+	grss-autodiscovery.c            \
+	$(NULL)
 
 sources_private_c = \
 	$(marshal_source)               \

@@ -44,6 +44,7 @@
   <part id="libgrss-useful">
     <title>Useful Objects</title>
 
+    <xi:include href="xml/autodiscovery.xml"/>
     <xi:include href="xml/feeds-pool.xml"/>
     <xi:include href="xml/feeds-group.xml"/>
     <xi:include href="xml/feeds-subscriber.xml"/>
