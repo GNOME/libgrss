@@ -8,7 +8,11 @@ test -z "$srcdir" && srcdir=.
         exit 1
 }
 
+olddir=`pwd`
+
 PKG_NAME=`autoconf --trace 'AC_INIT:$1' "$srcdir/configure.ac"`
+
+cd "$srcdir"
 
 touch ChangeLog
 touch INSTALL
@@ -27,6 +31,8 @@ gtkdocize --copy || exit 1
 intltoolize --force --copy --automake || exit 1
 autoreconf --verbose --force --install -Wno-portability || exit 1
 { set +x; } 2>/dev/null
+
+cd "$olddir"
 
 if [ "$NOCONFIGURE" = "" ]; then
         set -x
