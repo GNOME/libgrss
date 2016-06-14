@@ -55,7 +55,6 @@
 
     <xi:include href="xml/feed-atom-handler.xml"/>
     <xi:include href="xml/feed-handler.xml"/>
-    <xi:include href="xml/feed-marshal.xml"/>
     <xi:include href="xml/feed-pie-handler.xml"/>
     <xi:include href="xml/feed-rss-handler.xml"/>
     <xi:include href="xml/feeds-group-handler.xml"/>
