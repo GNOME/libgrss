@@ -840,12 +840,17 @@ handle_incoming_requests_cb (SoupServer *server, SoupMessage *msg, const char *p
 			}
 		}
 		else if (strcmp (mode, "unsubscribe") == 0) {
-			client = search_subscriber_by_topic_and_callback (pub, topic, callback);
-			if (client != NULL)
-				client->status = REMOTE_UNSUBSCRIBING;
+			if (callback == NULL) {
+				soup_message_set_status (msg, 400);
+			}
+			else {
+				client = search_subscriber_by_topic_and_callback (pub, topic, callback);
+				if (client != NULL)
+					client->status = REMOTE_UNSUBSCRIBING;
+			}
 		}
 
-		if (client != NULL) {
+		if (client != NULL && verify != NULL) {
 			verify_msg = verification_message_for_client (client);
 
 			if (strcmp (verify, "sync") == 0) {
@@ -858,6 +863,9 @@ handle_incoming_requests_cb (SoupServer *server, SoupMessage *msg, const char *p
 				soup_session_queue_message (pub->priv->soupsession, verify_msg, subscribe_verify_cb, client);
 				soup_message_set_status (msg, 202);
 			}
+		}
+		else if (client != NULL) {
+			soup_message_set_status (msg, 400);
 		}
 	}
 
