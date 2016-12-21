@@ -559,7 +559,7 @@ detect_internet_address ()
 		return NULL;
 
 	sockfd = socket (AF_INET, SOCK_DGRAM, 0);
-	if (!sockfd)
+	if (sockfd < 0)
 		return NULL;
 
 	if (connect (sockfd, (struct sockaddr*) &serv_add, sizeof (serv_add)) == -1) {
