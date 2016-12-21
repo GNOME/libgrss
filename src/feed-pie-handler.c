@@ -326,7 +326,7 @@ feed_pie_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 		cur = cur->next;
 
 	while (TRUE) {
-		if (xmlStrcmp (cur->name, BAD_CAST"feed")) {
+		if (!cur || xmlStrcmp (cur->name, BAD_CAST"feed")) {
 			g_set_error (error, FEED_PIE_HANDLER_ERROR, FEED_PIE_HANDLER_PARSE_ERROR, "Could not find Atom/PIE header!");
 			break;
 		}

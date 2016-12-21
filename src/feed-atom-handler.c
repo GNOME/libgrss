@@ -782,7 +782,7 @@ feed_atom_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc
 	parser = FEED_ATOM_HANDLER (self);
 
 	while (TRUE) {
-		if (xmlStrcmp (cur->name, BAD_CAST"feed")) {
+		if (!cur || xmlStrcmp (cur->name, BAD_CAST"feed")) {
 			g_set_error (error, FEED_ATOM_HANDLER_ERROR, FEED_ATOM_HANDLER_PARSE_ERROR, "Could not find Atom 1.0 header!");
 			break;
 		}

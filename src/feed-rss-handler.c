@@ -452,16 +452,17 @@ feed_rss_handler_parse (FeedHandler *self, GrssFeedChannel *feed, xmlDocPtr doc,
 	while (cur && xmlIsBlankNode (cur))
 		cur = cur->next;
 
-	if (!xmlStrcmp (cur->name, BAD_CAST"rss")) {
+	if (cur && !xmlStrcmp (cur->name, BAD_CAST"rss")) {
 		cur = cur->xmlChildrenNode;
 		rdf = FALSE;
 	}
-	else if (!xmlStrcmp (cur->name, BAD_CAST"rdf") ||
-	         !xmlStrcmp (cur->name, BAD_CAST"RDF")) {
+	else if (cur &&
+	         (!xmlStrcmp (cur->name, BAD_CAST"rdf") ||
+	          !xmlStrcmp (cur->name, BAD_CAST"RDF"))) {
 		cur = cur->xmlChildrenNode;
 		rdf = TRUE;
 	}
-	else if (!xmlStrcmp (cur->name, BAD_CAST"Channel")) {
+	else if (cur && !xmlStrcmp (cur->name, BAD_CAST"Channel")) {
 		rdf = FALSE;
 	}
 	else {
