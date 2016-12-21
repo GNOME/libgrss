@@ -329,6 +329,8 @@ atom10_parse_link (xmlNodePtr cur, GrssFeedChannel *feed, GrssFeedItem *item)
 	const gchar *home;
 	gchar *alternate = NULL;
 
+	g_return_val_if_fail (GRSS_IS_FEED_CHANNEL (feed), NULL);
+
 	href = (gchar*) xmlGetNsProp (cur, BAD_CAST"href", NULL);
 
 	if (href) {
@@ -384,12 +386,10 @@ atom10_parse_link (xmlNodePtr cur, GrssFeedChannel *feed, GrssFeedItem *item)
 			*/
 		}
 		else if (g_str_equal (relation, "hub")) {
-			if (feed != NULL)
-				grss_feed_channel_set_pubsubhub (feed, url);
+			grss_feed_channel_set_pubsubhub (feed, url);
 		}
 		else if (g_str_equal (relation, "self")) {
-			if (feed != NULL)
-				grss_feed_channel_set_source (feed, url);
+			grss_feed_channel_set_source (feed, url);
 		}
 
 		xmlFree (title);
