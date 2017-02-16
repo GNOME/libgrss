@@ -102,7 +102,7 @@ enum {
 G_DEFINE_TYPE (GrssFeedsPublisher, grss_feeds_publisher, G_TYPE_OBJECT);
 
 static GQuark
-feeds_publisher_error_quark ()
+feeds_publisher_error_quark (void)
 {
 	return g_quark_from_static_string ("feeds_publisher_error");
 }
@@ -219,7 +219,7 @@ grss_feeds_publisher_init (GrssFeedsPublisher *node)
  * Returns: a new #GrssFeedsPublisher.
  */
 GrssFeedsPublisher*
-grss_feeds_publisher_new ()
+grss_feeds_publisher_new (void)
 {
 	return g_object_new (FEEDS_PUBLISHER_TYPE, NULL);
 }
@@ -624,7 +624,7 @@ remove_client_to_topic (GrssFeedsPublisher *pub, RemoteSubscriber *client)
 }
 
 static gchar*
-random_string ()
+random_string (void)
 {
 	register int i;
 	gchar str [50];

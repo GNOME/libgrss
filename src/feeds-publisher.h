@@ -45,9 +45,9 @@ typedef struct {
 	void (*delete_subscription) (GrssFeedsPublisher *pub, GrssFeedChannel *topic, gchar *callback);
 } GrssFeedsPublisherClass;
 
-GType			grss_feeds_publisher_get_type		() G_GNUC_CONST;
+GType			grss_feeds_publisher_get_type		(void) G_GNUC_CONST;
 
-GrssFeedsPublisher*	grss_feeds_publisher_new		();
+GrssFeedsPublisher*	grss_feeds_publisher_new		(void);
 
 gchar*			grss_feeds_publisher_format_content	(GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, GError **error);
 gboolean		grss_feeds_publisher_publish_web	(GrssFeedsPublisher *pub, GrssFeedChannel *channel, GList *items, const gchar *id, GError **error);
