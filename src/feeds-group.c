@@ -273,7 +273,7 @@ grss_feeds_group_export_file (GrssFeedsGroup *group, GList *channels, const gcha
 			}
 
 			file = g_file_new_for_uri (uri);
-			stream = g_file_append_to (file, G_FILE_CREATE_NONE, NULL, &err);
+			stream = g_file_replace (file, NULL, TRUE, G_FILE_CREATE_REPLACE_DESTINATION, NULL, &err);
 
 			if (stream == NULL) {
 				g_propagate_error (error, err);
