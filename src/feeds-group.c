@@ -237,8 +237,8 @@ grss_feeds_group_parse_file (GrssFeedsGroup *group, const gchar *path, GError **
  * @uri: URI of the file to write.
  * @error: location for eventual errors.
  *
- * Creates a new file with the list of @channels rappresented in the required
- * @format. It a file already exists at the @uri location, it is overwritten.
+ * Creates a new file with the list of @channels represented in the required
+ * @format. If the file already exists at the @uri location, it is overwritten.
  *
  * Returns: %TRUE if the file is created correctly, or %FALSE if an error
  * occours and @error is set.
