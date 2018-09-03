@@ -1,0 +1,5 @@
+option('enable_gtk_doc',
+       type: 'boolean', value: false,
+       description: 'Whether to generate the API reference for GRss')
+option('with_introspection',
+       type: 'boolean', value: true)
