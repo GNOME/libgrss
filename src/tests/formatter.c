@@ -66,6 +66,9 @@ test_format_atom ()
 
 	formatter = grss_feed_atom_formatter_new ();
 	do_the_job (GRSS_FEED_FORMATTER (formatter));
+
+  grss_feed_formatter_reset (GRSS_FEED_FORMATTER (formatter));
+  g_object_unref (formatter);
 }
 
 static void
@@ -75,6 +78,9 @@ test_format_rss ()
 
 	formatter = grss_feed_rss_formatter_new ();
 	do_the_job (GRSS_FEED_FORMATTER (formatter));
+
+  grss_feed_formatter_reset (GRSS_FEED_FORMATTER (formatter));
+  g_object_unref (formatter);
 }
 
 int

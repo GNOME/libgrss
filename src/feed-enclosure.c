@@ -219,7 +219,7 @@ grss_feed_enclosure_fetch (GrssFeedEnclosure *enclosure, GError **error)
 	ret = NULL;
 	url = grss_feed_enclosure_get_url (enclosure);
 
-	session = soup_session_sync_new ();
+	session = soup_session_new ();
 	msg = soup_message_new ("GET", url);
 	status = soup_session_send_message (session, msg);
 
@@ -281,7 +281,7 @@ grss_feed_enclosure_fetch_async (GrssFeedEnclosure *enclosure, GAsyncReadyCallba
 	SoupSession *session;
 
 	task = g_task_new (enclosure, NULL, callback, user_data);
-	session = soup_session_async_new ();
+	session = soup_session_new ();
 	msg = soup_message_new ("GET", grss_feed_enclosure_get_url (enclosure));
 	soup_session_queue_message (session, msg, enclosure_downloaded, task);
 }

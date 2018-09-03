@@ -663,7 +663,7 @@ verification_message_for_client (RemoteSubscriber *client)
 			break;
 	}
 
-	body = g_strdup_printf ("%s?hub.mode=%s&hub.topic=%s&hub.challenge=%s&hub.lease_seconds=%lld",
+	body = g_strdup_printf ("%s?hub.mode=%s&hub.topic=%s&hub.challenge=%s&hub.lease_seconds=%ld",
 				client->callback, mode, client->topic, client->challenge, client->lease_interval);
 
 	ret = soup_message_new ("GET", body);
@@ -877,7 +877,7 @@ close_server (GrssFeedsPublisher *pub)
 {
 	if (pub->priv->server != NULL) {
 		soup_server_remove_handler (pub->priv->server, NULL);
-		soup_server_quit (pub->priv->server);
+		soup_server_disconnect (pub->priv->server);
 		g_object_unref (pub->priv->server);
 		pub->priv->server = NULL;
 	}
@@ -889,14 +889,14 @@ create_and_run_server (GrssFeedsPublisher *pub)
 	SoupAddress *soup_addr;
 
 	if (pub->priv->soupsession == NULL)
-		pub->priv->soupsession = soup_session_async_new ();
+		pub->priv->soupsession = soup_session_new ();
 
 	soup_addr = soup_address_new_any (SOUP_ADDRESS_FAMILY_IPV4, pub->priv->port);
 	pub->priv->server = soup_server_new ("port", pub->priv->port, "interface", soup_addr, NULL);
 	g_object_unref (soup_addr);
 
 	soup_server_add_handler (pub->priv->server, NULL, handle_incoming_requests_cb, pub, NULL);
-	soup_server_run_async (pub->priv->server);
+  soup_server_listen_all (pub->priv->server, pub->priv->port, SOUP_SERVER_LISTEN_IPV4_ONLY, NULL);
 }
 
 /**

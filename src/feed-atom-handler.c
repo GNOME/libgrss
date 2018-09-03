@@ -63,6 +63,12 @@ feed_atom_handler_error_quark ()
 static void
 feed_atom_handler_finalize (GObject *object)
 {
+  FeedAtomHandler *self = FEED_ATOM_HANDLER (object);
+
+  g_clear_object (&self->priv->handler);
+  g_hash_table_destroy (self->priv->feed_elements_hash);
+  g_hash_table_destroy (self->priv->entry_elements_hash);
+
 	G_OBJECT_CLASS (feed_atom_handler_parent_class)->finalize (object);
 }
 

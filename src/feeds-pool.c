@@ -177,7 +177,7 @@ grss_feeds_pool_init (GrssFeedsPool *node)
 	node->priv = FEEDS_POOL_GET_PRIVATE (node);
 	memset (node->priv, 0, sizeof (GrssFeedsPoolPrivate));
 	node->priv->parser = grss_feed_parser_new ();
-	node->priv->soupsession = soup_session_async_new ();
+	node->priv->soupsession = soup_session_new ();
 }
 
 /**

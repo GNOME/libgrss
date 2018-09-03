@@ -75,6 +75,10 @@ feed_rss_handler_error_quark ()
 static void
 feed_rss_handler_finalize (GObject *object)
 {
+  FeedRssHandler *self = FEED_RSS_HANDLER (object);
+
+  g_clear_object (&self->priv->handler);
+
 	G_OBJECT_CLASS (feed_rss_handler_parent_class)->finalize (object);
 }
 

@@ -389,7 +389,7 @@ close_server (GrssFeedsSubscriber *sub)
 {
 	if (sub->priv->server != NULL) {
 		unregister_handlers (sub);
-		soup_server_quit (sub->priv->server);
+		soup_server_disconnect (sub->priv->server);
 		g_object_unref (sub->priv->server);
 		sub->priv->server = NULL;
 	}
@@ -514,7 +514,7 @@ init_run_server (GrssFeedsSubscriber *sub)
 	GInetAddress *addr;
 
 	if (sub->priv->soupsession == NULL)
-		sub->priv->soupsession = soup_session_async_new ();
+		sub->priv->soupsession = soup_session_new ();
 
 	/*
 		Flow:

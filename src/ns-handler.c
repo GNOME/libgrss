@@ -502,7 +502,7 @@ ns_handler_init (NSHandler *node)
 	memset (node->priv, 0, sizeof (NSHandlerPrivate));
 
 	node->priv->href_handlers = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_free);
-	node->priv->prefix_handlers = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_free);
+	node->priv->prefix_handlers = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, NULL);
 
 	nsh = g_new0 (InternalNsHandler, 1);
 	nsh->handle_channel = ns_admin_channel;
@@ -545,7 +545,7 @@ ns_handler_init (NSHandler *node)
 	nsh->handle_item = ns_dc_item;
 	g_hash_table_insert (node->priv->prefix_handlers, "dc", nsh);
 	g_hash_table_insert (node->priv->href_handlers, "http://purl.org/dc/elements/1.1/", nsh);
-	g_hash_table_insert (node->priv->href_handlers, "http://purl.org/dc/elements/1.0/", nsh);
+	g_hash_table_insert (node->priv->href_handlers, "http://purl.org/dc/elements/1.0/", g_memdup (nsh, sizeof(InternalNsHandler)));
 
 	nsh = g_new0 (InternalNsHandler, 1);
 	nsh->handle_channel = NULL;

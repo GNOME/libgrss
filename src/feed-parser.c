@@ -65,6 +65,9 @@ grss_feed_parser_error_quark ()
 static void
 grss_feed_parser_finalize (GObject *object)
 {
+  GrssFeedParser *parser = GRSS_FEED_PARSER (object);
+  g_slist_free_full (parser->priv->handlers, g_object_unref);
+
 	G_OBJECT_CLASS (grss_feed_parser_parent_class)->finalize (object);
 }
 
@@ -89,25 +92,27 @@ feed_parsers_get_list (GrssFeedParser *parser)
 	FeedHandler *feed;
 	NSHandler *ns;
 
-	ns = ns_handler_new ();
-
 	if (parser->priv->handlers == NULL) {
 		/*
 			TODO	Parsers may be dinamically loaded and managed as external plugins
 		*/
+	  ns = ns_handler_new ();
 
 		feed = FEED_HANDLER (feed_rss_handler_new ());
-		feed_handler_set_ns_handler (feed, ns);
+		feed_handler_set_ns_handler (feed, g_object_ref (ns));
 		parser->priv->handlers = g_slist_append (parser->priv->handlers, feed);
 
 		feed = FEED_HANDLER (feed_atom_handler_new ());					/* Must be before pie */
-		feed_handler_set_ns_handler (feed, ns);
+		feed_handler_set_ns_handler (feed, g_object_ref (ns));
 		parser->priv->handlers = g_slist_append (parser->priv->handlers, feed);
 
 		feed = FEED_HANDLER (feed_pie_handler_new ());
-		feed_handler_set_ns_handler (feed, ns);
+		feed_handler_set_ns_handler (feed, g_object_ref (ns));
 		parser->priv->handlers = g_slist_append (parser->priv->handlers, feed);
+
+    g_object_unref (ns);
 	}
+
 
 	return parser->priv->handlers;
 }

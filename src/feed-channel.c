@@ -103,6 +103,8 @@ grss_feed_channel_finalize (GObject *obj)
 	FREE_STRING (chan->priv->rsscloud.path);
 	FREE_STRING (chan->priv->rsscloud.protocol);
 	FREE_STRING (chan->priv->copyright);
+	FREE_STRING (chan->priv->format);
+	FREE_STRING (chan->priv->source);
 	if (chan->priv->editor)
 		grss_person_unref (chan->priv->editor);
 	FREE_STRING (chan->priv->webmaster);
@@ -215,6 +217,7 @@ GrssFeedChannel*
 grss_feed_channel_new_from_memory (const gchar *data, GError **error)
 {
 	xmlDocPtr doc;
+  GrssFeedChannel *ret;
 
 	doc = content_to_xml (data, strlen (data));
 	if (doc == NULL) {
@@ -222,7 +225,11 @@ grss_feed_channel_new_from_memory (const gchar *data, GError **error)
 		return NULL;
 	}
 
-	return grss_feed_channel_new_from_xml (doc, error);
+	ret = grss_feed_channel_new_from_xml (doc, error);
+
+  xmlFreeDoc (doc);
+
+  return ret;
 }
 
 /**
@@ -944,7 +951,6 @@ static gboolean
 quick_and_dirty_parse (GrssFeedChannel *channel, SoupMessage *msg, GList **save_items)
 {
 	GList *items;
-	GList *iter;
 	xmlDocPtr doc;
 	GrssFeedParser *parser;
 
@@ -1010,7 +1016,7 @@ grss_feed_channel_fetch (GrssFeedChannel *channel, GError **error)
 
 	ret = FALSE;
 
-	session = soup_session_sync_new ();
+	session = soup_session_new ();
 	init_soup_session (session, channel);
 
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
@@ -1107,7 +1113,7 @@ grss_feed_channel_fetch_async (GrssFeedChannel *channel, GAsyncReadyCallback cal
 	do_prefetch (channel);
 	task = g_task_new (channel, channel->priv->fetchcancel, callback, user_data);
 
-	session = soup_session_async_new ();
+	session = soup_session_new ();
 	init_soup_session (session, channel);
 
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
@@ -1137,7 +1143,7 @@ grss_feed_channel_fetch_all (GrssFeedChannel *channel, GError **error)
 	SoupMessage *msg;
 	SoupSession *session;
 
-	session = soup_session_sync_new ();
+	session = soup_session_new ();
 	init_soup_session (session, channel);
 
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));
@@ -1222,7 +1228,7 @@ grss_feed_channel_fetch_all_async (GrssFeedChannel *channel, GAsyncReadyCallback
 	do_prefetch (channel);
 	task = g_task_new (channel, channel->priv->fetchcancel, callback, user_data);
 
-	session = soup_session_async_new ();
+	session = soup_session_new ();
 	init_soup_session (session, channel);
 
 	msg = soup_message_new ("GET", grss_feed_channel_get_source (channel));

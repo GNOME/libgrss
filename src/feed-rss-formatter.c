@@ -42,7 +42,6 @@ feed_rss_formatter_format (GrssFeedFormatter *formatter)
 	GList *iter;
 	GList *items;
         GrssPerson *person;
-	const GList *list;
 	GString *text;
 	GrssFeedChannel *channel;
 	GrssFeedItem *item;
