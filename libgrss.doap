@@ -11,7 +11,7 @@
   </description>
   <homepage rdf:resource="https://wiki.gnome.org/Projects/Libgrss" />
   <download-page rdf:resource="http://download.gnome.org/sources/libgrss/" />
-  <bug-database rdf:resource="https://bugzilla.gnome.org/browse.cgi?product=libgrss" />
+  <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/libgrss/issues/" />
 
   <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
   <programming-language>C</programming-language>
