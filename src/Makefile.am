@@ -128,6 +128,8 @@ introspection_sources = \
 
 Grss-0.7.gir: libgrss.la
 Grss_0_7_gir_INCLUDES = GObject-2.0 Gio-2.0 Soup-2.4 libxml2-2.0
+Grss_0_7_gir_C_INCLUDES = libgrss.h
+Grss_0_7_gir_EXPORT_PACKAGES = libgrss
 Grss_0_7_gir_CFLAGS = $(INCLUDES)
 Grss_0_7_gir_LIBS = libgrss.la
 Grss_0_7_gir_FILES = $(introspection_sources)
